@@ -1,7 +1,7 @@
 package edu.arhs.first1100.autoctl;
 
 import edu.arhs.first1100.util.SystemBase;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer; 
 
 public class AutonomousSystem extends SystemBase
 {
