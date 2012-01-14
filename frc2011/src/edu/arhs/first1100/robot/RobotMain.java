@@ -33,11 +33,11 @@ public class RobotMain extends SimpleRobot
     private static boolean autonomousWithCamera;
     private DiagnosticRobot diagRobot;
     public Compressor compressor;
-    //added by Akshay
+    //added by Alex
     
     public void robotInit()
     {        
-        //added by Akshay
+        //added by Ray
         Log.addClass(RobotMain.class, 3);
         Log.addClass(OperatorSystem.class, 4);
         Log.defcon3(this, "Robot Init");
