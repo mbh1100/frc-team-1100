@@ -1,5 +1,5 @@
 package edu.arhs.first1100.oopctl;
-import edu.arhs.first1100.log.Log;
+import edu.arhs.first1100.util.Log;
 
 public class ButtonHandler
 {

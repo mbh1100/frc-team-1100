@@ -1,6 +1,5 @@
 package edu.arhs.first1100.util;
 
-import edu.arhs.first1100.log.Log;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
