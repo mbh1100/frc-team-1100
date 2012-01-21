@@ -3,9 +3,9 @@ package edu.arhs.first1100.r2011.camera;
 import edu.arhs.first1100.r2011.drive.DriveSystem;
 import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.util.SystemBase;
-import edu.wpi.first.wpilibj.camera.*;
-import edu.wpi.first.wpilibj.image.ColorImage;
+import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.BinaryImage;
+import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 /**
