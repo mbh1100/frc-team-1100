@@ -2,6 +2,7 @@ package edu.arhs.first1100.r2012.camera;
 
 //util imports
 import edu.arhs.first1100.util.Log;
+import edu.arhs.first1100.util.SystemBase;
 
 //wpilib imports
 import edu.wpi.first.wpilibj.camera.*;
@@ -33,11 +34,11 @@ public class CameraSystem extends SystemBase {
     private ParticleAnalysisReport[] pRep = null;
     
     //SubHeirarchy Objects
-    private Light light = null;
+    //private Light light = null;
     
     public CameraSystem() {
         ac = AxisCamera.getInstance();
-        light = new Light(3);
+        //light = new Light(3);
 
         //Camera Settings
         ac.writeCompression(0);
@@ -62,13 +63,13 @@ public class CameraSystem extends SystemBase {
                 cImg = ac.getImage();
                 bImg = cImg.thresholdRGB(minRed, maxRed,minGreen, maxGreen, minBlue, maxBlue);
                 
-                pRep = bImg.getOrderedParticleAnalysisReports(PARTICLE_SIZE);
+                pRep = bImg.getOrderedParticleAnalysisReports(5/*temp*/);
                 
                 cImg.free();
                 bImg.free();
             }
             catch(Exception e){
-                Log.defcon3(this, e.getMessage());
+                //Log.defcon3(this, e.getMessage());
             }
         }
     }
