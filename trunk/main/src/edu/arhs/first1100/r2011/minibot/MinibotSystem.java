@@ -26,8 +26,8 @@ public class MinibotSystem extends SystemBase
     
     public MinibotSystem()
     {
-        armJaguar = new AdvJaguar(6, 1, true);
-        beltJaguar = new AdvJaguar(6, 2, true);
+        armJaguar = new AdvJaguar(2, 1, true);
+        beltJaguar = new AdvJaguar(2, 2, true);
         
         //beltBackSwitch = new DigitalInput(6, 3);
         //beltFrontSwitch = new DigitalInput(6, 4);
