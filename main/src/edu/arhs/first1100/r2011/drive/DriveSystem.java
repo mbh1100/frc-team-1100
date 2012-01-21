@@ -31,8 +31,8 @@ public class DriveSystem extends SystemBase
         steerPid = new SteerPid();
         powerPid = new DriveCamPid();
 
-        leftJaguars  = new AdvJaguar(4, 2, 4, false);
-        rightJaguars = new AdvJaguar(4, 1, 3, true);
+        leftJaguars  = new AdvJaguar(1, 2, 4, false);
+        rightJaguars = new AdvJaguar(1, 1, 3, true);
 
         gyro = new edu.wpi.first.wpilibj.Gyro(1);
         range = new AnalogChannel(2);
