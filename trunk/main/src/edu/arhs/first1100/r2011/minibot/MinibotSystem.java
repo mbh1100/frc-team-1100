@@ -1,10 +1,7 @@
 package edu.arhs.first1100.r2011.minibot;
 
-import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.util.AdvJaguar;
 import edu.arhs.first1100.util.SystemBase;
-import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class MinibotSystem extends SystemBase
 {
