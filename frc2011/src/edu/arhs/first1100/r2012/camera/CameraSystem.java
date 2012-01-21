@@ -85,7 +85,7 @@ public class CameraSystem extends SystemBase {
     */
     public synchronized void setThresholdRGB(int r, int R, int g, int G, int b, int B){
         minRed   = (r >= 0 && r <= 255 && r <= R)? r : 0;
-        maxRed   = (R >= 0 && R <= 255 && R >= r)? R : 255;
+        maxRed   = (R >= 0 && R <= 255 && R >= r)? R : 255; 
         minGreen = (g >= 0 && g <= 255 && g <= G)? g : 0;
         maxGreen = (G >= 0 && G <= 255 && G >= g)? G : 255;
         minBlue  = (b >= 0 && b <= 255 && b <= B)? b : 0;
