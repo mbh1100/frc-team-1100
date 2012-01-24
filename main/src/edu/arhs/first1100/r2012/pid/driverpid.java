@@ -14,7 +14,7 @@ class DriverSource implements PIDSource
         }
 }
 /**
- *
+ *Implements pid output for the right side motors of our dear robot.
  * @author Connor Moroney
  */
 class DriverOutput implements PIDOutput
@@ -26,12 +26,19 @@ class DriverOutput implements PIDOutput
     }
 }
 
+/**
+ *Sets up the generic driving pid for the left side of the robot.
+ * @author Connor Moroney
+ */
 public class driverpid extends edu.wpi.first.wpilibj.PIDController{
     static private final double P = 0.05;
     static private final double I = 0.01;
     static private final double D = 0.0;
 
-public driverpid(){
+    /**
+     *Just your generic constructor for our pid.
+     */
+    public driverpid(){
     super (P,I,D, new DriverSource(), new DriverOutput());
 
     }
