@@ -3,7 +3,6 @@ package edu.arhs.first1100.util;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
- *
  * @author team1100
  */
 public class SystemBase extends Thread

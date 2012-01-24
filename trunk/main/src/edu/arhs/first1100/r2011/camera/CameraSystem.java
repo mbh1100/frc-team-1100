@@ -44,7 +44,6 @@ public class CameraSystem extends SystemBase
         bImg = null;
         sleepTime = 200;
         light = new Light(3);
-
         //Camera Settings
         ac.writeCompression(0);
         ac.writeBrightness(50);
@@ -105,9 +104,6 @@ public class CameraSystem extends SystemBase
                 pRep = bImg.getOrderedParticleAnalysisReports(PARTICLE_SIZE);
                 System.out.println("Image Dimensions: " + bImg.getWidth() + "x" + bImg.getHeight());
                 
-                for(int i =0; i < pRep.length; i++){
-                    
-                }
                 
                 bImg.free();
                 cImg.free();
