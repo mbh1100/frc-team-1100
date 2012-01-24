@@ -5,6 +5,8 @@
 package edu.arhs.first1100.r2012.pid;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.arhs.first1100.util.PID;
+
 
 class DrivelSource implements PIDSource
 {
@@ -26,12 +28,19 @@ class DrivelOutput implements PIDOutput
     }
 }
 
+/**
+ *This is a generic pid for the left drive motors.
+ * @author Connor Moroney
+ */
 public class drivelpid extends edu.wpi.first.wpilibj.PIDController{
     static private final double P = 0.05;
     static private final double I = 0.01;
     static private final double D = 0.0;
 
-public drivelpid(){
+    /**
+     * Sets up the constructor for the left drive motors.
+     */
+    public drivelpid(){
     super (P,I,D, new DrivelSource(), new DrivelOutput());
 
     }

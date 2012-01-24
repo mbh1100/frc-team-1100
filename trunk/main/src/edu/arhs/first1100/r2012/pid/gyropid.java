@@ -23,7 +23,7 @@ class GyroOutput implements PIDOutput
     }
 }
 /**
- *
+ *Sets up the gyroscope pid.
  * @author Connor Moroney
  */
 public class gyropid extends edu.wpi.first.wpilibj.PIDController{
@@ -31,7 +31,10 @@ public class gyropid extends edu.wpi.first.wpilibj.PIDController{
     static private final double I = 0.01;
     static private final double D = 0.0;
 
-public gyropid(){
+    /**
+     *Just your generic pid constructor for a gyroscope.
+     */
+    public gyropid(){
     super (P,I,D, new GyroSource(), new GyroOutput());
 }
 }
