@@ -10,10 +10,13 @@ import edu.arhs.first1100.util.Log;
 
 import edu.wpi.first.wpilibj.SimpleRobot;
 
+import edu.arhs.first1100.r2012.camera.CameraSystem;
+
 public class RobotMain extends SimpleRobot {  
     public void robotInit() {
         //Set Loggin Levels
         Log.addClass(RobotMain.class, 3);
+        Log.addClass(CameraSystem.class, 1);
         
         
         Log.defcon3(this, "Robot Init");
@@ -39,6 +42,5 @@ public class RobotMain extends SimpleRobot {
     public void disabled() 
     {
         Log.defcon3(this, "Robot Disabled");
-        
     }
 }
