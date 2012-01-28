@@ -7,18 +7,22 @@
 package edu.arhs.first1100.r2012.robot;
 
 import edu.arhs.first1100.util.Log;
-
+import edu.arhs.first1100.r2012.routines.Balance;
+import edu.arhs.first1100.r2012.routines.VeloTest;
 import edu.wpi.first.wpilibj.SimpleRobot;
 
 import edu.arhs.first1100.r2012.camera.CameraSystem;
 
 public class RobotMain extends SimpleRobot {  
+     Balance b; 
+     //VeloTest v;
     public void robotInit() {
         //Set Loggin Levels
         Log.addClass(RobotMain.class, 3);
         Log.addClass(CameraSystem.class, 1);
         
-        
+        b = new Balance();
+        //v = new VeloTest();
         Log.defcon3(this, "Robot Init");
 
                 
@@ -36,11 +40,24 @@ public class RobotMain extends SimpleRobot {
     public void operatorControl() 
     {
         Log.defcon3(this, "Operator Mode Activated");
+        Log.dsLog(1, "balancing");
+        b.reset();
+        //v.reset();
+        while(!isDisabled())
+        {
+            //v.findVelocity();
+            b.balanceBall();
+            try
+            {
+                Thread.sleep(10);
+            }catch(Exception e){}
+        }
         
     }
     
     public void disabled() 
     {
         Log.defcon3(this, "Robot Disabled");
+        b.disable();
     }
 }
