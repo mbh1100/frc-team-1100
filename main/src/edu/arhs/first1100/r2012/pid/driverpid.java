@@ -6,6 +6,8 @@ package edu.arhs.first1100.r2012.pid;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 
+import edu.arhs.first1100.util.PID;
+
 class DriverSource implements PIDSource
 {
     public double pidGet()

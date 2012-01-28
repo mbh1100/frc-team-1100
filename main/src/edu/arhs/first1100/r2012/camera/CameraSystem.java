@@ -18,10 +18,13 @@ public class CameraSystem extends SystemBase
     
     //Thresholds and Constants
     private final int GREEN_THRESHOLD = 0;
+    private final int WHITE_CELL_THRESHOLD = 1;
     private final int PARTICLE_NUMBERS = 6; //number of particles to save in pRep
-    private final int BRIGHTNESS = 10;
+    private final int BRIGHTNESS = 50;
     private final int COMPRESSION = 0;
-    private final double IN_LINE_THRESHOLD = .10; //Threshold to see if two particles are in line
+    private final double IN_LINE_THRESHOLD = .20; //Threshold to see if two particles are in line
+    private final int SIZE_THRESHOLD = 100;
+    private final double WHITESPACE_THRESHOLD = .55;
     
     //RGB Threshold
     private int minRed = 0;
@@ -52,7 +55,7 @@ public class CameraSystem extends SystemBase
         ac.writeResolution(AxisCamera.ResolutionT.k320x240);
 
         //Defaults
-        setThreshold(GREEN_THRESHOLD);
+        setThreshold(WHITE_CELL_THRESHOLD);
     }
     
     public void start()
@@ -75,16 +78,69 @@ public class CameraSystem extends SystemBase
                 cImg = ac.getImage();
                 bImg = cImg.thresholdRGB(minRed, maxRed, minGreen, maxGreen, minBlue, maxBlue);
                 
-                pRep = bImg.getOrderedParticleAnalysisReports(PARTICLE_NUMBERS);
+                pRep = bImg.getOrderedParticleAnalysisReports();
                 
                 
-                /**
-                 * Prints out all info about all particles in pRep 
-                 */
-                for(int i = 0; pRep != null && i < pRep.length; i++)
+                //find number of particles in thresholds
+                int filter_number = 0;
+                for(int i = 0; i < pRep.length; i++)
                 {
-                    printParticleAnalysisReport(pRep[i]);
+                    if(isBigEnough(pRep[i]) && (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD)) filter_number++;
                 }
+                
+                //new array with particles in threshold
+                ParticleAnalysisReport[] filter;
+                if(filter_number != 0) filter = new ParticleAnalysisReport[filter_number];
+                else filter = null;
+                
+                int index = 0;
+                for(int i = 0; i < pRep.length; i++)
+                {
+                    if(isBigEnough(pRep[i]) && (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD))
+                    {
+                        filter[index] = pRep[i];
+                        index++;
+                    }
+                }
+                
+                
+                
+                //find two particles with similar x values
+                if(filter!= null&& filter.length>0)
+                {
+                    Log.defcon1(this,"Filter size: " + filter.length);
+                    for(int i = 0; i < filter.length; i++)
+                    {
+                        for(int j = i+1; j < filter.length; j++)
+                        {
+                            if(this.isParticlesInLineX(filter[i], filter[j]))
+                            {
+                                Log.defcon1(this, "In Line Particle 1");
+                                this.printParticleAnalysisReport(filter[i]);
+
+                                Log.defcon1(this, "In Line Particle 2");
+                                this.printParticleAnalysisReport(filter[j]);
+                            }
+                        }
+                    }
+                }
+                //else Log.defcon1(this, "No particles in Line");
+                
+                //test print filter particles
+                /*if(filter != null && filter.length >0)
+                {
+                    for(int i = 0; i < filter.length; i++)
+                    {
+                        Log.defcon1(this,"Particle: " + i);
+                        printParticleAnalysisReport(filter[i]);
+                    }
+                }
+                else
+                {
+                    //Log.defcon1(this,"No Particles in Threshold");
+                }
+                 * 
+                 */
                 
                 
                 cImg.free();
@@ -126,6 +182,9 @@ public class CameraSystem extends SystemBase
                 Log.defcon1(this, "Set Green Threshold");
                 setThresholdRGB(80, 130, 150, 255, 50, 130);
                 break;
+            case WHITE_CELL_THRESHOLD:
+                setThresholdRGB(210,255,210,255,210,255);
+                break;
         }
     }
     
@@ -133,16 +192,16 @@ public class CameraSystem extends SystemBase
      * @param p A ParticleAnalysisReport
      * @return Returns the direction of the particle in the x direction (positive is right, negative is left)
      */
-    public synchronized double getDirectionX(ParticleAnalysisReport p)
+    public double getDirectionX(ParticleAnalysisReport p)
     {
         return p.center_mass_x_normalized;
     }
     
     /**
      * @param p A ParticleAnalysisReport
-     * @return Returns the direction of the particle in the y direction (positive is up, negative is down)
+     * @return Returns the direction of the particle in the y direction (positive is down, negative is up)
      */
-    public synchronized double getDirectionY(ParticleAnalysisReport p)
+    public double getDirectionY(ParticleAnalysisReport p)
     {
         return p.center_mass_y_normalized;
     }
@@ -150,7 +209,7 @@ public class CameraSystem extends SystemBase
     /**
      * @return Returns the Largest Particle or null if there is none
      */
-    public synchronized ParticleAnalysisReport getLargestParticle()
+    public ParticleAnalysisReport getLargestParticle()
     {
         if (pRep != null && pRep.length != 0)
         {
@@ -163,16 +222,17 @@ public class CameraSystem extends SystemBase
     }
     
     /**
-     * @return Returns the Particle with the highest y-value or null if none, in pRep
+     * @return Returns the Particle with the lowest y-value or null if none, in pRep
+     * y value is greatest at the top and decreasing going down
      */
-    public synchronized ParticleAnalysisReport getHighestParticle()
+    public ParticleAnalysisReport getHighestParticle()
     {
         if (pRep != null && pRep.length != 0)
         {
             ParticleAnalysisReport highest = pRep[0];
             for(int i = 0; i < pRep.length; i++)
             {
-                if(pRep[i].center_mass_y_normalized > highest.center_mass_y_normalized)
+                if(pRep[i].center_mass_y_normalized < highest.center_mass_y_normalized)
                 {
                     highest = pRep[i];
                 }
@@ -187,15 +247,16 @@ public class CameraSystem extends SystemBase
     
     /**
      * @return Returns the Particle with the lowest y-value or null if none, in pRep
+     * y value is greatest at the top and decreasing going down
      */
-    public synchronized ParticleAnalysisReport getLowestParticle()
+    public ParticleAnalysisReport getLowestParticle()
     {
         if (pRep != null && pRep.length != 0)
         {
             ParticleAnalysisReport lowest = pRep[0];
             for(int i = 0; i < pRep.length; i++)
             {
-                if(pRep[i].center_mass_y_normalized < lowest.center_mass_y_normalized)
+                if(pRep[i].center_mass_y_normalized > lowest.center_mass_y_normalized)
                 {
                     lowest = pRep[i];
                 }
@@ -213,7 +274,7 @@ public class CameraSystem extends SystemBase
      * @param rep2 A ParticleAnalysisReport
      * @return Returns whether two particles have similar x-coordinates
      */
-    public synchronized boolean isParticlesInLineX(ParticleAnalysisReport rep1, ParticleAnalysisReport rep2)
+    public boolean isParticlesInLineX(ParticleAnalysisReport rep1, ParticleAnalysisReport rep2)
     {
         return (Math.abs(rep1.center_mass_x_normalized - rep2.center_mass_x_normalized) < IN_LINE_THRESHOLD);
     }
@@ -223,7 +284,7 @@ public class CameraSystem extends SystemBase
      * @param rep2 A ParticleAnalysisReport
      * @return Returns whether two particles have similar y-coordinates
      */
-    public synchronized boolean isParticlesInLineY(ParticleAnalysisReport rep1, ParticleAnalysisReport rep2)
+    public boolean isParticlesInLineY(ParticleAnalysisReport rep1, ParticleAnalysisReport rep2)
     {
         return (Math.abs(rep1.center_mass_y_normalized - rep2.center_mass_y_normalized) < IN_LINE_THRESHOLD);
     }
@@ -232,7 +293,7 @@ public class CameraSystem extends SystemBase
      * @param p a particleAnalysisReport
      * Prints information about a ParticleAnalysisReport
      */
-    private void printParticleAnalysisReport(ParticleAnalysisReport p)
+    public void printParticleAnalysisReport(ParticleAnalysisReport p)
     {                    
         Log.defcon1(this,"Area: "+ p.particleArea);
 
@@ -248,6 +309,12 @@ public class CameraSystem extends SystemBase
         Log.defcon1(this,"Center y-Coordinate: "+ p.center_mass_y);
         Log.defcon1(this,"Center x-normalized: "+ p.center_mass_x_normalized);
         Log.defcon1(this,"Center y-normalized: "+ p.center_mass_y_normalized);
+        
+        Log.defcon1(this,"Whitespace Method: " + getWhiteSpace(p));
+        Log.defcon1(this,"Center of Mass Difference: " + getCOMDistance(p)/getCornerDistance(p));
+        
+        Log.defcon1(this,"");
+        Log.defcon1(this,"");
     }
     
     /**
@@ -257,5 +324,44 @@ public class CameraSystem extends SystemBase
     public void setBrightness(int b)
     {
         ac.writeBrightness(b);
+    }
+    
+    
+    
+    public double getWhiteSpace(ParticleAnalysisReport p)
+    {
+        double area = p.particleArea*4.0/Math.PI;
+        double prop = area/(p.boundingRectHeight*p.boundingRectWidth);
+        return prop;
+    }
+    public double getXCOMDifference(ParticleAnalysisReport p)
+    {
+        double difofX = (p.center_mass_x-(p.boundingRectLeft+p.boundingRectWidth/2));
+        return difofX;
+    }
+    /**
+     * positive is down with 0 at top of picture
+     * @param p
+     * @return 
+     */
+    public double getYCOMDifference(ParticleAnalysisReport p)
+    {
+        double difofY = (p.center_mass_y-(p.boundingRectTop+p.boundingRectHeight/2));
+        return difofY;
+    }
+    public double getCOMDistance(ParticleAnalysisReport p)
+    {
+        double distance = Math.sqrt(getYCOMDifference(p)*getYCOMDifference(p) + getXCOMDifference(p)*getXCOMDifference(p));
+        return distance;
+    }
+    public double getCornerDistance(ParticleAnalysisReport p)
+    {
+        double distance = Math.sqrt(p.boundingRectHeight*p.boundingRectHeight+p.boundingRectWidth*p.boundingRectWidth);
+        return distance;
+    }
+    public boolean isBigEnough(ParticleAnalysisReport p)
+    {
+        boolean bigenough = p.particleArea >= SIZE_THRESHOLD;
+        return bigenough;
     }
 }

@@ -13,14 +13,15 @@ import edu.wpi.first.wpilibj.SimpleRobot;
 
 import edu.arhs.first1100.r2012.camera.CameraSystem;
 
-public class RobotMain extends SimpleRobot {  
+public class RobotMain extends SimpleRobot {
+    CameraSystem c;
      Balance b; 
      //VeloTest v;
     public void robotInit() {
         //Set Loggin Levels
         Log.addClass(RobotMain.class, 3);
         Log.addClass(CameraSystem.class, 1);
-        
+        c = new CameraSystem();
         b = new Balance();
         //v = new VeloTest();
         Log.defcon3(this, "Robot Init");
@@ -33,6 +34,7 @@ public class RobotMain extends SimpleRobot {
     
     public void autonomous() 
     {
+        c.start();
         Log.defcon3(this, "Autonomous Mode Activated");
         
     }
@@ -57,6 +59,7 @@ public class RobotMain extends SimpleRobot {
     
     public void disabled() 
     {
+        c.stop();
         Log.defcon3(this, "Robot Disabled");
         b.disable();
     }
