@@ -15,7 +15,8 @@ class GyroSource implements PIDSource
     
     public double pidGet()
     {
-        return source.getAngle();
+        double angle = source.getAngle();
+        return angle;
     }
    public GyroSource(Gyro g){
        source = g;              
@@ -40,9 +41,9 @@ class GyroOutput implements PIDOutput
  * @author Connor Moroney
  */
 public class GyroPid extends edu.wpi.first.wpilibj.PIDController{
-    static private final double P = 0.005;
-    static private final double I = 0.0001;
-    static private final double D = 0.0;
+    static private final double P = 0.003; //was 3.8
+    static private final double I = 0.00085;
+    static private final double D = 0.0001;
 
 public GyroPid(Gyro source, Jaguar output){
     super (P,I,D, new GyroSource(source), new GyroOutput(output));

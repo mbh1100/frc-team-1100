@@ -41,7 +41,7 @@ public class MinibotSystem extends SystemBase
     {
         if(instance == null) instance = new MinibotSystem();
         return instance;
-    }
+    } 
 
     public void tick()
     {
