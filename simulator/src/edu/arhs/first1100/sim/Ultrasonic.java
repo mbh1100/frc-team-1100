@@ -4,25 +4,23 @@
  */
 package edu.arhs.first1100.sim;
 
-import edu.arhs.first1100.sim.hardware.Input;
-import edu.arhs.first1100.sim.hardware.Output;
+import edu.arhs.first1100.sim.hardware.Channel;
 
 /**
  *
  * @author Joed
  */
 public class Ultrasonic {
-    Output ping;
-    Input echo;
-    
-    public Ultrasonic(int pingChannel, int echoChannel)
-    {
-        ping = Simulation.getOutput(pingChannel);
-        echo = Simulation.getInput(echoChannel);
+
+    Channel ping;
+    Channel echo;
+
+    public Ultrasonic(int pingChannel, int echoChannel) {
+        ping = Simulation.getChannel(pingChannel);
+        echo = Simulation.getChannel(echoChannel);
     }
-    
-    public double getRange()
-    {
+
+    public double getRange() {
         return echo.get();
     }
 }

@@ -11,19 +11,18 @@ import edu.arhs.first1100.sim.hardware.JoystickSim;
  * @author Joed
  */
 public class Joystick {
+
     JoystickSim sim;
-    
+
     public Joystick(int port) {
-            this.sim = Simulation.getJoystickSim(port);
+        this.sim = Simulation.getJoystickSim(port);
     }
-    
-    public double getX()
-    {
+
+    public double getX() {
         return sim.getXValue();
     }
 
-    public double getY()
-    {
+    public double getY() {
         return sim.getYValue();
     }
 }

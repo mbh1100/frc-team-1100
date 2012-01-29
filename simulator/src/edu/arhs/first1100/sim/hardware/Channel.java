@@ -8,7 +8,11 @@ package edu.arhs.first1100.sim.hardware;
  *
  * @author Joed
  */
-public interface Input {
+public interface Channel {
+
     public int getChannel();
+
     public double get();
+
+    public void set(double value);
 }

@@ -4,10 +4,9 @@
  */
 package edu.arhs.first1100.sim.hardware.component;
 
+import edu.arhs.first1100.sim.hardware.Channel;
 import edu.arhs.first1100.sim.hardware.Component;
 import edu.arhs.first1100.sim.hardware.Hardware;
-import edu.arhs.first1100.sim.hardware.Input;
-import edu.arhs.first1100.sim.hardware.Output;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -19,8 +18,8 @@ import javafx.scene.shape.*;
 public class RangeSensor extends Component {
 
     public RangeSensor(final int pingChannel, final int echoChannel) {
-        outputs = new Output[1];
-        outputs[0] = new Output() {
+        channels = new Channel[2];
+        channels[0] = new Channel() {
 
             @Override
             public int getChannel() {
@@ -28,11 +27,15 @@ public class RangeSensor extends Component {
             }
 
             @Override
+            public double get() {
+                return 0.0;
+            }
+
+            @Override
             public void set(double value) {
             }
         };
-        inputs = new Input[1];
-        inputs[0] = new Input() {
+        channels[1] = new Channel() {
 
             @Override
             public int getChannel() {
@@ -42,6 +45,10 @@ public class RangeSensor extends Component {
             @Override
             public double get() {
                 return getRange();
+            }
+
+            @Override
+            public void set(double value) {
             }
         };
     }

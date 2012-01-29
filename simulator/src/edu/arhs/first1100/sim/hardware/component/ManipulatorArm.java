@@ -4,11 +4,10 @@
  */
 package edu.arhs.first1100.sim.hardware.component;
 
-import edu.arhs.first1100.sim.hardware.Output;
+import edu.arhs.first1100.sim.hardware.Channel;
 import edu.arhs.first1100.sim.hardware.Component;
 import edu.arhs.first1100.sim.hardware.Hardware;
 import javafx.animation.Timeline;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
@@ -17,26 +16,37 @@ import javafx.scene.shape.*;
  * @author Joed
  */
 public class ManipulatorArm extends Component {
+
     static final double ARM_RESOLUTION = 0.01;
     Timeline armTimeline;
     private double armRotation = 0;
     private double armAngle = 0;
-    
-    public ManipulatorArm(final int channel)
-    {
-        outputs = new Output[1];
-        outputs[0] = new Output() {
-            public int getChannel() { return channel; }
-                public void set(double value) {
-                    rotate(value);
-                }
-            };
+
+    public ManipulatorArm(final int channel) {
+        channels = new Channel[1];
+        channels[0] = new Channel() {
+
+            @Override
+            public int getChannel() {
+                return channel;
+            }
+
+            @Override
+            public double get() {
+                return 0.0;
+            }
+
+            @Override
+            public void set(double value) {
+                rotate(value);
+            }
+        };
     }
-    
+
     public Shape setParent(Hardware parent) {
         super.setParent(parent);
         Shape parts;
-        
+
         Circle circ = new Circle(8.0);
         circ.setStrokeType(StrokeType.INSIDE);
         circ.setStroke(Color.web("white", 1.0f));
@@ -70,7 +80,7 @@ public class ManipulatorArm extends Component {
 
         return parts;
     }
-    
+
     public void rotate(double s) {
         /*
          * Not working - when bot is rotated, rotating arm moves body! double r

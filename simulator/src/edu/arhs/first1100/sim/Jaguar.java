@@ -4,20 +4,20 @@
  */
 package edu.arhs.first1100.sim;
 
-import edu.arhs.first1100.sim.hardware.Output;
+import edu.arhs.first1100.sim.hardware.Channel;
 
 /**
  *
  * @author Joed
  */
 public class Jaguar {
+
     protected double speed;
     protected int channel;
-    protected Output motor;
-    
-    public Jaguar(int channel)
-    {
-        motor = Simulation.getOutput(channel);
+    protected Channel motor;
+
+    public Jaguar(int channel) {
+        motor = Simulation.getChannel(channel);
     }
 
     public double get() {
@@ -25,7 +25,7 @@ public class Jaguar {
     }
 
     public void set(double speed) {
-        this.speed = Math.min(1.0, Math.abs(speed))*Math.signum(speed);
+        this.speed = Math.min(1.0, Math.abs(speed)) * Math.signum(speed);
         motor.set(speed);
     }
 }

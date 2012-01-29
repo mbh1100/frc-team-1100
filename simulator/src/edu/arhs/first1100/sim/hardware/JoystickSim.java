@@ -4,7 +4,6 @@
  */
 package edu.arhs.first1100.sim.hardware;
 
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -13,23 +12,22 @@ import javafx.scene.input.KeyEvent;
  * @author Joed
  */
 public class JoystickSim {
+
     private KeyCode keys[];
     private KeyCode lastYKey = null;
     private KeyCode lastXKey = null;
-
     private double x, y;
     private boolean buttons[];
     public static final int A = 0;
     public static final int B = 1;
     public static final int X = 2;
     public static final int Y = 3;
-
     private static KeyCode[] noKeys = {};
-    
+
     public JoystickSim() {
         this(noKeys);
     }
-    
+
     public JoystickSim(KeyCode[] keys) {
         this.keys = keys;
         buttons = new boolean[4];
@@ -60,7 +58,7 @@ public class JoystickSim {
         }
         return buttons[b];
     }
-    
+
     protected void setButton(int b) {
         buttons[b] = true;
     }

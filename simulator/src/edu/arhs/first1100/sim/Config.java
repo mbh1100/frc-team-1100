@@ -11,8 +11,8 @@ import javafx.util.Duration;
  * @author Joed
  */
 public final class Config {
+
     public static final Duration ANIMATION_TIME = Duration.millis(40);
-    
     public static final int WINDOW_BORDER = 3; // on desktop platform
     public static final int TITLE_BAR_HEIGHT = 19; // on desktop platform
     public static final int SCREEN_WIDTH = 960;

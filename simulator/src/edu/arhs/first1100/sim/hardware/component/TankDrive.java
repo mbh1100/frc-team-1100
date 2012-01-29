@@ -5,8 +5,8 @@
 package edu.arhs.first1100.sim.hardware.component;
 
 import edu.arhs.first1100.sim.Config;
+import edu.arhs.first1100.sim.hardware.Channel;
 import edu.arhs.first1100.sim.hardware.Component;
-import edu.arhs.first1100.sim.hardware.Output;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -29,30 +29,43 @@ public class TankDrive extends Component {
     private double speed = 0;
     private double rotation = 0;
     private double angle = 0;
-    
     static Point2D center = new Point2D(50, 40);
     static Point2D leftWheel = new Point2D(50, 0);
     static Point2D rightWheel = new Point2D(50, 80);
 
     public TankDrive(final int leftChannel, final int rightChannel) {
-        outputs = new Output[2];
-        outputs[0] = new Output() {
+        channels = new Channel[2];
+        channels[0] = new Channel() {
 
+            @Override
             public int getChannel() {
                 return leftChannel;
             }
 
+            @Override
+            public double get() {
+                return 0.0;
+            }
+
+            @Override
             public void set(double value) {
                 setLeft(value);
             }
         };
 
-        outputs[1] = new Output() {
+        channels[1] = new Channel() {
 
+            @Override
             public int getChannel() {
                 return rightChannel;
             }
 
+            @Override
+            public double get() {
+                return 0.0;
+            }
+
+            @Override
             public void set(double value) {
                 setRight(value);
             }
@@ -88,7 +101,7 @@ public class TankDrive extends Component {
             }
             rot = rot / (2.0 * Math.PI) * 360.0;
         }
-        
+
         /*
          * This projection method seems to just give the average of left and
          * right. I should prove that some day :-)
@@ -101,8 +114,8 @@ public class TankDrive extends Component {
          */
         double s = SPEED * (rightSpeed + leftSpeed) / 2;
 
-        if (Math.abs(speed - s) < SPEED_RESOLUTION &&
-            Math.abs(rotation - rot) < ROT_RESOLUTION) {
+        if (Math.abs(speed - s) < SPEED_RESOLUTION
+                && Math.abs(rotation - rot) < ROT_RESOLUTION) {
             return;
         }
 

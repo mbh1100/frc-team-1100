@@ -5,9 +5,8 @@
 package edu.arhs.first1100.sim.hardware.component;
 
 import edu.arhs.first1100.sim.Config;
-import edu.arhs.first1100.sim.hardware.Output;
+import edu.arhs.first1100.sim.hardware.Channel;
 import edu.arhs.first1100.sim.hardware.Component;
-import edu.arhs.first1100.sim.hardware.Hardware;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -18,32 +17,52 @@ import javafx.event.EventHandler;
  * @author Joed
  */
 public class CarDrive extends Component {
+
     static final double ROT_RESOLUTION = 0.01;
     static final double SPEED_RESOLUTION = 0.01;
     static final double SPEED = 3;
-
     Timeline driveTimeline;
     Timeline turnTimeline;
-
     private double speed = 0;
     private double rotation = 0;
-    
-    public CarDrive(final int driveChannel, final int turnChannel)
-    {
-        outputs = new Output[2];
-        outputs[0] = new Output() {
-            public int getChannel() { return driveChannel; }
-                public void set(double value) {
-                    drive(value);
-                }
-            };
-        
-        outputs[1] = new Output() {
-            public int getChannel() { return turnChannel; }
-                public void set(double value) {
-                    turn(value);
-                }
-            };
+
+    public CarDrive(final int driveChannel, final int turnChannel) {
+        channels = new Channel[2];
+        channels[0] = new Channel() {
+
+            @Override
+            public int getChannel() {
+                return driveChannel;
+            }
+
+            @Override
+            public double get() {
+                return 0.0;
+            }
+
+            @Override
+            public void set(double value) {
+                drive(value);
+            }
+        };
+
+        channels[1] = new Channel() {
+
+            @Override
+            public int getChannel() {
+                return turnChannel;
+            }
+
+            @Override
+            public double get() {
+                return 0.0;
+            }
+
+            @Override
+            public void set(double value) {
+                turn(value);
+            }
+        };
     }
 
     public void drive(double s) {
@@ -114,5 +133,4 @@ public class CarDrive extends Component {
                 }));
         turnTimeline.play();
     }
-    
 }

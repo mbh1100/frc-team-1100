@@ -11,20 +11,17 @@ import javafx.scene.shape.Shape;
  * @author Joed
  */
 public class Component {
-    
-    protected Output outputs[];
-    protected Input inputs[];
+
+    protected Channel channels[];
     protected Hardware parent;
-    
-    public Component()
-    {
+
+    public Component() {
     }
-    public Output[] getOutputs() {
-        return outputs;
+
+    public Channel[] getChannels() {
+        return channels;
     }
-    public Input[] getInputs() {
-        return inputs;
-    }
+
     public Shape setParent(Hardware parent) {
         this.parent = parent;
         return null;

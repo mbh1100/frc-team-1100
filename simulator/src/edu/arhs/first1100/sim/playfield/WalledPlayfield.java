@@ -4,8 +4,6 @@
  */
 package edu.arhs.first1100.sim.playfield;
 
-import edu.arhs.first1100.sim.Config;
-import javafx.geometry.BoundingBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +13,7 @@ import javafx.scene.shape.Rectangle;
  * @author Joed
  */
 public class WalledPlayfield extends Playfield {
+
     Line walls[];
     static final int WALL_THICKNESS = 3;
 
@@ -27,7 +26,4 @@ public class WalledPlayfield extends Playfield {
             addObstacle(wall);
         }
     }
-
-
-    
 }

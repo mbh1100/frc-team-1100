@@ -4,10 +4,9 @@
  */
 package edu.arhs.first1100.sim;
 
+import edu.arhs.first1100.sim.hardware.Channel;
 import edu.arhs.first1100.sim.hardware.Hardware;
-import edu.arhs.first1100.sim.hardware.Input;
 import edu.arhs.first1100.sim.hardware.JoystickSim;
-import edu.arhs.first1100.sim.hardware.Output;
 import edu.arhs.first1100.sim.playfield.Playfield;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -33,33 +32,26 @@ public abstract class Simulation extends Application {
     static Hardware hw;
     static Playfield playfield;
     static KeyCode[] fourKeys = {KeyCode.UP, null, null, KeyCode.DOWN,
-                                 KeyCode.LEFT, null, null, KeyCode.RIGHT,
-                                 KeyCode.SHIFT, KeyCode.CONTROL,
-                                 KeyCode.X, KeyCode.SPACE};
+        KeyCode.LEFT, null, null, KeyCode.RIGHT,
+        KeyCode.SHIFT, KeyCode.CONTROL,
+        KeyCode.X, KeyCode.SPACE};
     static KeyCode[] leftKeys = {KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F};
     static KeyCode[] rightKeys = {KeyCode.J, KeyCode.K, KeyCode.L, KeyCode.SEMICOLON};
     static JoystickSim[] joysticks = {new JoystickSim(fourKeys),
-                                      new JoystickSim(leftKeys),
-                                      new JoystickSim(rightKeys)};
+        new JoystickSim(leftKeys),
+        new JoystickSim(rightKeys)};
     static JoystickSim nullStick = new JoystickSim();
-    
-    static public Output getOutput(int channel)
-    {
-        return hw.getOutput(channel);
+
+    static public Channel getChannel(int channel) {
+        return hw.getChannel(channel);
     }
-    
-    static public Input getInput(int channel)
-    {
-        return hw.getInput(channel);
-    }
-    
-    static public JoystickSim getJoystickSim(int which)
-    {
-            if(which < 0 || which > 2) {
-                System.err.println("WARNING: Attempt to configure illegal joystick number " + which);
-                        return nullStick;
-                        
-            }
+
+    static public JoystickSim getJoystickSim(int which) {
+        if (which < 0 || which > 2) {
+            System.err.println("WARNING: Attempt to configure illegal joystick number " + which);
+            return nullStick;
+
+        }
         return joysticks[which];
     }
 
@@ -68,21 +60,21 @@ public abstract class Simulation extends Application {
     }
 
     public static void setHardware(Hardware hw, double initialX, double initialY,
-                                    double initialRotation) {
+            double initialRotation) {
         Simulation.hw = hw;
         hw.position(initialX, initialY, initialRotation);
-        if(Simulation.playfield != null) {
+        if (Simulation.playfield != null) {
             Simulation.hw.setPlayfield(Simulation.playfield);
         }
     }
 
     public static void setPlayfield(Playfield playfield) {
         Simulation.playfield = playfield;
-        if(Simulation.hw != null) {
+        if (Simulation.hw != null) {
             Simulation.hw.setPlayfield(playfield);
         }
     }
-    
+
     public static Point2D vector(Point2D to, Point2D from) {
         return new Point2D(to.getX() - from.getX(),
                 to.getY() - from.getY());
@@ -91,7 +83,7 @@ public abstract class Simulation extends Application {
     public static Point2D add(Point2D a, Point2D b) {
         return new Point2D(a.getX() + b.getX(), a.getY() + b.getY());
     }
-    
+
     public static double dot(Point2D v1, Point2D v2) {
         return v1.getX() * v2.getX() + v1.getY() * v2.getY();
     }
@@ -114,8 +106,7 @@ public abstract class Simulation extends Application {
     }
 
     // Transforms the points in path into Node n's parent coordinates (destructively)
-    public static void transformPath(Node n, Path path)
-    {
+    public static void transformPath(Node n, Path path) {
         for (PathElement e : path.getElements()) {
             if (e instanceof MoveTo) {
                 MoveTo m = (MoveTo) e;
@@ -163,7 +154,7 @@ public abstract class Simulation extends Application {
                 if ((ke.getCode() == KeyCode.POWER) || (ke.getCode() == KeyCode.ESCAPE)) {
                     controller.die();
                 }
-                for(JoystickSim j : joysticks) {
+                for (JoystickSim j : joysticks) {
                     j.handleKey(ke);
                 }
             }
@@ -171,7 +162,7 @@ public abstract class Simulation extends Application {
         background.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
             public void handle(KeyEvent ke) {
-                for(JoystickSim j : joysticks) {
+                for (JoystickSim j : joysticks) {
                     j.handleKeyUp(ke);
                 }
             }
@@ -190,10 +181,9 @@ public abstract class Simulation extends Application {
         controller.init();
         controller.start();
     }
-    
-    public void stop()
-    {
-        if(controller != null) {
+
+    public void stop() {
+        if (controller != null) {
             controller.die();
         }
     }

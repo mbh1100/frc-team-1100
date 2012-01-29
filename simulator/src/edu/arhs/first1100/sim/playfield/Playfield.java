@@ -6,24 +6,12 @@ package edu.arhs.first1100.sim.playfield;
 
 import edu.arhs.first1100.sim.Simulation;
 import java.util.LinkedList;
-import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.shape.Shape;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  *
