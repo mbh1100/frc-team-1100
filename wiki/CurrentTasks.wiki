@@ -30,8 +30,8 @@
 	
   == Shooting wheel encoder - Alex ==
     * Drive wheel encoders -
-    * speed of wheels
-    * Drive in autonomous for bridge balls
+      * speed of wheels
+      * Drive in autonomous for bridge balls
 
   == Potentiometer on shooter elevation - ??? ==
 
