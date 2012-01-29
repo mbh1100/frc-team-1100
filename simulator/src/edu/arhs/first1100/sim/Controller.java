@@ -11,11 +11,12 @@ import javafx.application.Platform;
  * @author Joed
  */
 public abstract class Controller extends Thread {
+
     boolean stopController;
+
     abstract public void init();
-    
-            public void run()
-    {
+
+    public void run() {
         stopController = false;
         while (!stopController) {
             tick();

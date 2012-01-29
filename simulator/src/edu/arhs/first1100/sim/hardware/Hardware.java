@@ -55,11 +55,14 @@ public class Hardware extends Group {
         Circle spot = new Circle(0, 0, 2);
         spot.setFill(Color.web("white", 1.0f));
         addShape(spot, 90, 40, 0);
-        
-        setTranslateX(100);
-        setTranslateY(50);
     }
 
+    public void position(double x, double y, double rotation) {                
+        setTranslateX(x);
+        setTranslateY(y);
+        setRotate(rotation);
+    }
+    
     public Playfield getPlayfield()
     {
         return playfield;

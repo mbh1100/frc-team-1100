@@ -4,11 +4,11 @@
  */
 package edu.arhs.first1100.sim;
 
-import edu.arhs.first1100.sim.hardware.JoystickSim;
-import edu.arhs.first1100.sim.playfield.Playfield;
-import edu.arhs.first1100.sim.hardware.Output;
-import edu.arhs.first1100.sim.hardware.Input;
 import edu.arhs.first1100.sim.hardware.Hardware;
+import edu.arhs.first1100.sim.hardware.Input;
+import edu.arhs.first1100.sim.hardware.JoystickSim;
+import edu.arhs.first1100.sim.hardware.Output;
+import edu.arhs.first1100.sim.playfield.Playfield;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -67,8 +67,10 @@ public abstract class Simulation extends Application {
         Simulation.controller = controller;
     }
 
-    public static void setHardware(Hardware hw) {
+    public static void setHardware(Hardware hw, double initialX, double initialY,
+                                    double initialRotation) {
         Simulation.hw = hw;
+        hw.position(initialX, initialY, initialRotation);
         if(Simulation.playfield != null) {
             Simulation.hw.setPlayfield(Simulation.playfield);
         }
@@ -176,7 +178,7 @@ public abstract class Simulation extends Application {
         });
 
         root.getChildren().add(background);
-        stage.setTitle("EduBot!");
+        stage.setTitle("ARHS Team1100 Robot Simulator");
         stage.setResizable(false);
         stage.setWidth(Config.SCREEN_WIDTH + 2 * Config.WINDOW_BORDER);
         stage.setHeight(Config.SCREEN_HEIGHT + 4 * Config.WINDOW_BORDER + Config.TITLE_BAR_HEIGHT);

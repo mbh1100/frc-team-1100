@@ -5,10 +5,8 @@
 package edu.arhs.first1100.sim.hardware.component;
 
 import edu.arhs.first1100.sim.Config;
-import edu.arhs.first1100.sim.Simulation;
-import edu.arhs.first1100.sim.hardware.Output;
 import edu.arhs.first1100.sim.hardware.Component;
-import edu.arhs.first1100.sim.hardware.Hardware;
+import edu.arhs.first1100.sim.hardware.Output;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -77,7 +75,6 @@ public class TankDrive extends Component {
         try {
             rDelta = 100 * leftSpeed / delta;
         } catch (Exception e) {
-            System.err.println("Math error");
             rDelta = Double.MAX_VALUE;
         }
 

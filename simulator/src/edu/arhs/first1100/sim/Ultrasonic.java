@@ -4,8 +4,8 @@
  */
 package edu.arhs.first1100.sim;
 
-import edu.arhs.first1100.sim.hardware.Output;
 import edu.arhs.first1100.sim.hardware.Input;
+import edu.arhs.first1100.sim.hardware.Output;
 
 /**
  *
