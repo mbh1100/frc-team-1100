@@ -35,17 +35,7 @@ public class TankDrive extends Component {
 
     public TankDrive(final int leftChannel, final int rightChannel) {
         channels = new Channel[2];
-        channels[0] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return leftChannel;
-            }
-
-            @Override
-            public double get() {
-                return 0.0;
-            }
+        channels[0] = new Channel(leftChannel) {
 
             @Override
             public void set(double value) {
@@ -53,17 +43,7 @@ public class TankDrive extends Component {
             }
         };
 
-        channels[1] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return rightChannel;
-            }
-
-            @Override
-            public double get() {
-                return 0.0;
-            }
+        channels[1] = new Channel(rightChannel) {
 
             @Override
             public void set(double value) {

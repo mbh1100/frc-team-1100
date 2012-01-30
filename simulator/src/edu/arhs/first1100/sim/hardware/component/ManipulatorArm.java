@@ -24,17 +24,7 @@ public class ManipulatorArm extends Component {
 
     public ManipulatorArm(final int channel) {
         channels = new Channel[1];
-        channels[0] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return channel;
-            }
-
-            @Override
-            public double get() {
-                return 0.0;
-            }
+        channels[0] = new Channel(channel) {
 
             @Override
             public void set(double value) {

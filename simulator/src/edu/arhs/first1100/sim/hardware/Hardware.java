@@ -101,7 +101,7 @@ public class Hardware extends Group {
             return channels[Math.max(0, Math.min(MAX_CHANNELS - 1, channel))];
         }
         System.err.println("WARNING: No device on output channel " + channel);
-        return new UnassignedChannel(channel);
+        return new Channel(channel);
     }
 
     public boolean collision() {

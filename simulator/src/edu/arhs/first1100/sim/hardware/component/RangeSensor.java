@@ -19,36 +19,17 @@ public class RangeSensor extends Component {
 
     public RangeSensor(final int pingChannel, final int echoChannel) {
         channels = new Channel[2];
-        channels[0] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return pingChannel;
-            }
-
-            @Override
-            public double get() {
-                return 0.0;
-            }
+        channels[0] = new Channel(pingChannel) {
 
             @Override
             public void set(double value) {
             }
         };
-        channels[1] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return echoChannel;
-            }
+        channels[1] = new Channel(echoChannel) {
 
             @Override
             public double get() {
                 return getRange();
-            }
-
-            @Override
-            public void set(double value) {
             }
         };
     }

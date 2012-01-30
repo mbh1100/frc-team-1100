@@ -28,17 +28,7 @@ public class CarDrive extends Component {
 
     public CarDrive(final int driveChannel, final int turnChannel) {
         channels = new Channel[2];
-        channels[0] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return driveChannel;
-            }
-
-            @Override
-            public double get() {
-                return 0.0;
-            }
+        channels[0] = new Channel(driveChannel) {
 
             @Override
             public void set(double value) {
@@ -46,17 +36,7 @@ public class CarDrive extends Component {
             }
         };
 
-        channels[1] = new Channel() {
-
-            @Override
-            public int getChannel() {
-                return turnChannel;
-            }
-
-            @Override
-            public double get() {
-                return 0.0;
-            }
+        channels[1] = new Channel(turnChannel) {
 
             @Override
             public void set(double value) {
