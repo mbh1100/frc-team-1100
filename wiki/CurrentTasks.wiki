@@ -33,7 +33,8 @@
       * speed of wheels
       * Drive in autonomous for bridge balls
 
-  == Potentiometer on shooter elevation - ??? ==
+  == Potentiometer on shooter elevation - Divy and Connor ==
+
 
   == Turret turning - ??? ==
     * Potentiometer if sensers not on turret
