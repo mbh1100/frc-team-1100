@@ -17,31 +17,41 @@ public class VeloTest
     Jaguar jaguar;
     Encoder encoder;
     RatePid ratePID;
-    
+    edu.wpi.first.wpilibj.Joystick stick;
     
     public VeloTest()
     {
-        s1 = 11;
-        c1 = 10;
+        s1 = 10;
+        c1 = 11;
         s2 = 1;
         c2 = 2;
+        
+        stick = new edu.wpi.first.wpilibj.Joystick(1);
         jaguar = new Jaguar(s2, c2);
-        encoder = new Encoder(s1, c1);
+        encoder = new Encoder(s1, c1, true);
         ratePID = new RatePid(encoder, jaguar);
+        ratePID.setSetpoint(3.0);
+    }
+    public void start()
+    {
+        encoder.start();
         ratePID.enable();
     }
     public void reset()
     {
         ratePID.disable();
         encoder.reset();
+        encoder.setDistancePerPulse(0.004);
+        encoder.start();
         ratePID.enable();
     }
     
     public void findVelocity()
-    {   
-        ratePID.setSetpoint(.3);
-        System.out.println("rate is: " + encoder.getRate() + "<~~~~~~~~~~~~~  FOR ALEX'S USE");        
-        System.out.println("rate is: " + encoder.getDistance() + "<~~  FOR ALEX'S USE");        
+    {
+        System.out.println(encoder.getRate() + "<~~~~~~~~~~~~~~~~~~~~~~~  Rate");
+        System.out.println("error------------------------> " + ratePID.getError());
+        System.out.println("input=" + stick.getZ());
+        ratePID.setSetpoint(stick.getZ() * 15);
     }
     
     public void disable()
