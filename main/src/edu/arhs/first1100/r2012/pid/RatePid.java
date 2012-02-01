@@ -17,7 +17,7 @@ class RateSource implements PIDSource
     Encoder source;
     
     public double pidGet()
-    {
+    {        
         double rate = source.getRate();
         return rate;
     }
@@ -31,10 +31,14 @@ class RateSource implements PIDSource
 class RateOutput implements PIDOutput
 {
     Jaguar output;
+    double adding;
     
     public void pidWrite(double o)
     {
-        output.pidWrite(-o);
+        adding = adding + o;
+        if(adding > 1) {adding = 1;}
+        if(adding < -1) {adding = -1;}
+        output.pidWrite(adding);
     }
     
     public RateOutput(Jaguar j){
@@ -43,15 +47,18 @@ class RateOutput implements PIDOutput
 }
 /**
  *
- * @author Alex D. Bitch
+ * @author
  */
 public class RatePid extends edu.wpi.first.wpilibj.PIDController{
-    static private final double P = 0.05;
-    static private final double I = 0.0008;
-    static private final double D = 0.0001;
+    static private final double P = 0.0500;
+    static private final double I = 0.0005;
+    static private final double D = 0.000000;
 
 public RatePid(Encoder source, Jaguar output){
     super (P,I,D, new RateSource(source), new RateOutput(output));
+    
+    this.setOutputRange(-0.1, 0.1);
+    this.setInputRange(-30.0, 30.0);
     //robot finish
 }
 }

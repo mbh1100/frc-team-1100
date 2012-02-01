@@ -40,7 +40,10 @@ class GyroOutput implements PIDOutput
  *
  * @author Connor Moroney
  */
-public class GyroPid extends edu.wpi.first.wpilibj.PIDController{
+public class GyroPid extends edu.wpi.first.wpilibj.//<editor-fold defaultstate="collapsed" desc="comment">
+        PIDController
+//</editor-fold>
+{
     static private final double P = 0.003; //was 3.8
     static private final double I = 0.00085;
     static private final double D = 0.0001;
