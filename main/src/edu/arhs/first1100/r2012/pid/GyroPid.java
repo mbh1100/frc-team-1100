@@ -11,15 +11,17 @@ import edu.wpi.first.wpilibj.PIDSource;
 
 class GyroSource implements PIDSource
 {
-    Gyro source;
+    Gyro gyro;
+    Gyro gyroTwo;
     
     public double pidGet()
     {
-        double angle = source.getAngle();
+        double angle = ((gyro.getAngle() + gyroTwo.getAngle()) / 2);
         return angle;
     }
-   public GyroSource(Gyro g){
-       source = g;              
+   public GyroSource(Gyro a, Gyro b){
+       gyro = a;
+       gyroTwo = b;
    }
 }
 
@@ -44,11 +46,11 @@ public class GyroPid extends edu.wpi.first.wpilibj.//<editor-fold defaultstate="
         PIDController
 //</editor-fold>
 {
-    static private final double P = 0.003; //was 3.8
+    static private final double P = 0.004; //was 0.003
     static private final double I = 0.00085;
     static private final double D = 0.0001;
 
-public GyroPid(Gyro source, Jaguar output){
-    super (P,I,D, new GyroSource(source), new GyroOutput(output));
-}
+    public GyroPid(Gyro source, Jaguar output, Gyro sourceTwo){
+        super (P,I,D, new GyroSource(source, sourceTwo), new GyroOutput(output));
+    }
 }

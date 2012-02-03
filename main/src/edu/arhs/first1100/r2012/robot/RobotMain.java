@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package edu.arhs.first1100.r2012.robot;
 
+import edu.arhs.first1100.r2011.camera.CameraSystem;
 import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.r2012.routines.Balance;
 import edu.arhs.first1100.r2012.routines.VeloTest;
@@ -21,23 +22,37 @@ import edu.wpi.first.wpilibj.Timer;
 public class RobotMain extends SimpleRobot {
     
     static final int JOYSTICK_LEFT = 1;
+    static final int JOYSTICK_RIGHT = 2;
     
     
-    //CameraSystem c;
+     CameraSystem c;
+     Joystick jstickTwo;
      Jaguar motor;
      Joystick jstick;
      Balance b; 
      JoyGyro j;
      double divy;
-     VeloTest v;
+     Jaguar j1;
+     Jaguar j2;
+     Jaguar j3;
+     Jaguar j4;
+     //VeloTest v;
+     
     public void robotInit() {
         //Set Loggin Levels
         Log.addClass(RobotMain.class, 3);
         Log.addClass(JoyGyro.class, 3);
-        //Log.addClass(CameraSystem.class, 1);
-        //c = new CameraSystem();
+        Log.addClass(CameraSystem.class, 1);
+        c = new CameraSystem();
        
-        v = new VeloTest();
+        jstickTwo = new Joystick(JOYSTICK_RIGHT);
+        jstick = new Joystick(JOYSTICK_LEFT);
+        j1 = new Jaguar(1,1);
+        j2 = new Jaguar(1,2);
+        j3 = new Jaguar(1,3);
+        j4 = new Jaguar(1,4);
+        
+        //v = new VeloTest();
         Log.defcon3(this, "Robot Init");
         motor = new Jaguar(2, 1);
         b = new Balance(motor);
@@ -45,7 +60,7 @@ public class RobotMain extends SimpleRobot {
                 
         Log.defcon3(this, "+-------------------------------------+");
         Log.defcon3(this, "| IT IS NOW SAFE TO UNPLUG YOUR ROBOT |");
-        Log.defcon3(this, "+-------------------------------------+");       
+        Log.defcon3(this, "+-------------------------------------+");
     }
     
     public void autonomous() 
@@ -59,61 +74,57 @@ public class RobotMain extends SimpleRobot {
     {
         Log.defcon3(this, "Operator Mode Activated");
         Log.dsLog(1, "balancing");
-       
-        v.start();
+
+        //v.start();
         
-        v.reset();
-        while(!isDisabled())
-        {
-            Timer.delay(0.5);
-            v.findVelocity();
-        }
-        
-                
-        
-                    
-        
-        
-        
-        
-        
-        /*
-        
-       
-        b.reset();
-        b.disable();
-        jstick = new Joystick(JOYSTICK_LEFT);
+        //v.reset();
+        //while(!isDisabled())
+        //{
+        //    Timer.delay(0.5);
+        //    v.findVelocity();
+        //}      
         
          
-         
+        //b.reset();
         
         while(!isDisabled())
         {
             b.enable();  
              
+            j1.set(jstickTwo.getAxis(Joystick.AxisType.kY));
+            j3.set(jstickTwo.getAxis(Joystick.AxisType.kY));
+            j2.set(-jstick.getAxis(Joystick.AxisType.kY));
+            j4.set(-jstick.getAxis(Joystick.AxisType.kY));
+            
+            
+            
+            /*
             while(!isDisabled() && jstick.getTrigger(GenericHID.Hand.kLeft )== false)
-            {
-               b.balanceBall();                      
+            {  
+                b.balanceBall();
             }
+            System.out.println("Resetting");
+            b.reset();
             
             b.disable();
             
             while(!isDisabled() && jstick.getTrigger(GenericHID.Hand.kLeft))
             {
                j.overRide();
-               b.balanceBall();
                j.jstickval();
             }
+            */
+             
          }
                         
         }
-    */
-    }
+    
 
     
    public void disabled()
    {
       Log.defcon3(this, "Robot Disabled");
-      v.disable();
+      b.disable();
+      //v.disable();
    }
 } 
