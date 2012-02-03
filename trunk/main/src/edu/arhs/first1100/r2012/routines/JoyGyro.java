@@ -21,7 +21,7 @@ public class JoyGyro
         int slot = 2;
         int channel = 1;
         
-        jstick = new Joystick(2);
+        jstick = new Joystick(1);
         System.out.println("Joystick enabled");
         this.motor = motor;
     }
@@ -30,14 +30,14 @@ public class JoyGyro
     public void overRide()
     {
         
-        motor.set(  .03   *   (jstick.getAxis(Joystick.AxisType.kY)));       
+        motor.set(jstick.getAxis(Joystick.AxisType.kY));       
               
     }
     public void jstickval()
     {
        System.out.println("                                            " + jstick.getAxis(Joystick.AxisType.kY));            
     }
-
-   
     
+   
+      
 }

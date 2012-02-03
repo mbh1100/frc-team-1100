@@ -18,7 +18,8 @@ public class Balance
     int c1;
     int s2;
     int c2;
-    Gyro gyro;
+    Gyro gyroOne;
+    Gyro gyroTwo;
     Jaguar jaguar;
     GyroPid gyropid;
     
@@ -26,13 +27,17 @@ public class Balance
     {
         s1 = 1;
         c1 = 1;
-        s2 = 2;
-        c2 = 1;
+        s2 = 1;
+        c2 = 2;
         
-        gyro = new Gyro(s1, c1);
+        gyroOne = new Gyro(s1, c1);
+        gyroTwo = new Gyro(s2, c2);
         //jaguar = new Jaguar(s2, c2);
-        gyro.reset();
-        gyropid = new GyroPid(gyro, jaguar);
+        
+        gyroOne.reset();
+        gyroTwo.reset();
+        
+        gyropid = new GyroPid(gyroOne, jaguar, gyroTwo);
         gyropid.setTolerance(0.83);
         gyropid.setOutputRange(-0.3, 0.3);
         //gyropid.enable();
@@ -49,19 +54,24 @@ public class Balance
       public void reset()
     {
         gyropid.disable();
-        gyro.reset();
-        gyropid.enable();
-            }
+        gyroOne.reset();
+        gyroTwo.reset();
+    }
       
     public void balanceBall()
     {   
         //gyropid.setSetpoint(0.0);
-        System.out.println(gyro.getAngle());  
+        System.out.println(gyroOne.getAngle());
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>" + gyroTwo.getAngle());
     }
     
     public double getAngle()
     {
-        return gyro.getAngle();
+        return gyroOne.getAngle();
+    }
+    public double getAngleTwo()
+    {
+        return gyroTwo.getAngle();
     }
     
     public void setSetpoint(double setPoint)
