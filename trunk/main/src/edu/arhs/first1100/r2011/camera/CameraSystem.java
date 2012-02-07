@@ -113,8 +113,8 @@ public class CameraSystem extends SystemBase
                 Log.defcon3(this, e.getMessage());
                 System.out.println("   FAIL   ");
             }
-                System.out.println("   Tick is running   ");
-            printPRep();
+            // System.out.println("   Tick is running   ");
+            // printPRep();
         }
     }
 
