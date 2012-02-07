@@ -27,12 +27,12 @@ public class CameraSystem extends SystemBase
     private final double WHITESPACE_THRESHOLD = .55;
     
     //RGB Threshold
-    private int minRed = 0;
-    private int maxRed = 0;
+    private int minRed = 100;
+    private int maxRed = 150;
     private int minGreen = 0;
-    private int maxGreen = 0;
+    private int maxGreen = 50;
     private int minBlue = 0;
-    private int maxBlue = 0;
+    private int maxBlue = 80;
     
     //Image Related Objects
     private AxisCamera ac = null;

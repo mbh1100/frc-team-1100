@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class SystemBase extends Thread
 {
     protected int sleepTime = 100;
-    
+    private static boolean stopAll = false;
     private boolean stopThread = true;
     private boolean threadStarted = false;
     
@@ -24,7 +24,7 @@ public class SystemBase extends Thread
      * Start the thread.
      */
     public void start()
-    {
+    {        
         stopThread = false;
 
         if(!threadStarted)
@@ -52,7 +52,7 @@ public class SystemBase extends Thread
     {
         while(true)
         {
-            while(!stopThread)
+            while(!shouldStop())
             {
                 /*
                 try
@@ -77,7 +77,7 @@ public class SystemBase extends Thread
                 Timer.delay(sleepTime / 1000.0);
             }
             
-            while(stopThread)
+            while(shouldStop())
             {
                 //Log.defcon1(this, "waiting for stopThread to equal false");
                 Timer.delay(0.1);
@@ -106,5 +106,17 @@ public class SystemBase extends Thread
     public synchronized void imDone()
     {
         notify();
+    }
+    public static void stopAll()
+    {
+        stopAll = true;
+    }     
+    protected boolean shouldStop()
+    {
+        return stopAll || stopThread;
+    }
+    public static void enableAll()
+    {
+        stopAll = false;
     }
 }
