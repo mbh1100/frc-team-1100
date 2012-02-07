@@ -20,15 +20,15 @@ public class CameraSystem extends SystemBase
     public final int BLUE_THRESHOLD =3;
     public final int GREEN_THRESHOLD = 4;
     private final int PARTICLE_SIZE = 3;
-    public Light light;
+    //public Light light;
 
     //RGB Threshold
-    private int minRed = 90;
-    private int maxRed = 145;
-    private int minGreen = 150;
+    private int minRed = 0;
+    private int maxRed = 30;
+    private int minGreen = 230;
     private int maxGreen = 256;
-    private int minBlue = 50;
-    private int maxBlue = 130;
+    private int minBlue = 240;
+    private int maxBlue = 256;
 
     //Image related
     AxisCamera ac;
@@ -37,20 +37,19 @@ public class CameraSystem extends SystemBase
     ParticleAnalysisReport[] pRep = null;
     private static CameraSystem instance = null;
 
-    public CameraSystem() 
+    public CameraSystem()
     {
         ac = AxisCamera.getInstance();
         cImg = null;
         bImg = null;
         sleepTime = 200;
-        light = new Light(3);
+        //light = new Light(2);
         //Camera Settings
         ac.writeCompression(0);
         ac.writeBrightness(50);
         ac.writeResolution(AxisCamera.ResolutionT.k320x240);
         ac.writeExposureControl(AxisCamera.ExposureT.hold);
         ac.writeRotation(AxisCamera.RotationT.k0);
-        ac.writeResolution(AxisCamera.ResolutionT.k160x120);
 
         //setThreshold(GREEN_THRESHOLD);
     }
@@ -65,7 +64,7 @@ public class CameraSystem extends SystemBase
         if(instance == null) instance = new CameraSystem();
         return instance;
     }
-    
+
     public void printInfoParticle(ParticleAnalysisReport particle){
         System.out.println("Area: "+ particle.particleArea);
 
@@ -95,6 +94,7 @@ public class CameraSystem extends SystemBase
         * Gets an image from the camera to find particles within the camera's
         * RGB threshold.
         */
+
         if (ac.freshImage())
         {
             try
@@ -102,16 +102,18 @@ public class CameraSystem extends SystemBase
                 cImg = ac.getImage();
                 bImg = cImg.thresholdRGB(minRed, maxRed,minGreen, maxGreen, minBlue, maxBlue);
                 pRep = bImg.getOrderedParticleAnalysisReports(PARTICLE_SIZE);
-                System.out.println("Image Dimensions: " + bImg.getWidth() + "x" + bImg.getHeight());
-                
-                
+                //System.out.println("Image Dimensions: " + bImg.getWidth() + "x" + bImg.getHeight());
+
+
                 bImg.free();
                 cImg.free();
             }
             catch(Exception e)
             {
                 Log.defcon3(this, e.getMessage());
+                System.out.println("   FAIL   ");
             }
+                System.out.println("   Tick is running   ");
             printPRep();
         }
     }
@@ -145,12 +147,12 @@ public class CameraSystem extends SystemBase
                 info += "Center: "
                         +pRep[i].center_mass_x_normalized
                         +", "
-                        +pRep[i].center_mass_y_normalized+"\n\n";                
+                        +pRep[i].center_mass_y_normalized+"\n\n";
             }
             Log.defcon2(this, info);
         }
     }
-    
+
     /**
     * Set the threshold of colors the camera should look for.
     * All parameters must be 0-255.
@@ -196,7 +198,7 @@ public class CameraSystem extends SystemBase
     */
     public double getCenterY()
     {
-        light.onForAWhile();
+        //light.onForAWhile();
         if( pRep != null && pRep.length > 0 && pRep[0] != null)
             return pRep[0].center_mass_y_normalized;
         else
@@ -209,7 +211,7 @@ public class CameraSystem extends SystemBase
     */
     public double getCenterX()
     {
-        light.onForAWhile();
+        //light.onForAWhile();
         if (false && pRep != null && pRep.length > 0 && pRep[0] != null)
         {
             Log.defcon3(this, "camera x:" + pRep[0].center_mass_x_normalized);
@@ -228,13 +230,14 @@ public class CameraSystem extends SystemBase
     */
     public synchronized ParticleAnalysisReport getBiggestParticle()
     {
-        light.onForAWhile();
+        //light.onForAWhile();
         if (pRep != null && pRep.length != 0)
         {
             return pRep[0];
         }
         else
         {
+            System.out.println("Biggest particle is returning null~~~~~~~~~~~-" );
             return null;
         }
     }

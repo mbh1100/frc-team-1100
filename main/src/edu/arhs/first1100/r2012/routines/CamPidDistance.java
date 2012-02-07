@@ -1,27 +1,35 @@
+package edu.arhs.first1100.r2012.routines;
 
+ 
 import edu.arhs.first1100.r2011.camera.CameraSystem;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 
 class CamSourceDistance implements PIDSource
 {
     CameraSystem cs;
     
-    public double pidGet()
+public double pidGet()
     {
-        if(cs.getBiggestParticle().imageHeight > 25) 
+        ParticleAnalysisReport biggest = cs.getBiggestParticle();
+        cs.tick();
+        System.out.println("Height = " + biggest.boundingRectHeight);
+        
+        if(cs.getBiggestParticle().imageHeight > 81)
         {
-            System.out.println("biggest particle is abouve center");
-            return 1;
-        }
-        if(cs.getBiggestParticle().imageHeight < 25)
-        {
-            System.out.println("biggest particle is below center");
+            System.out.println("biggest particle is above center");
             return -1;
         }
-        else return 0;
+        if(cs.getBiggestParticle().imageHeight < 75)
+        {
+            System.out.println("biggest particle is below center");
+            return 1;
+        }
+        System.out.println("Biggest particle is the right distance away");
+        return 0;
     }
     
    public CamSourceDistance(CameraSystem c){

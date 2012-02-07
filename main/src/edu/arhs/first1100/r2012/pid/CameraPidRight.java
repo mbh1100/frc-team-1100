@@ -21,7 +21,7 @@ class CamSourceRight implements PIDSource
     {
         if(cs.getBiggestParticle().center_mass_y_normalized>0) 
         {
-            System.out.println("biggest particle is abouve center");
+            System.out.println("biggest particle is above center");
         }
         if(cs.getBiggestParticle().center_mass_y_normalized<0)
         {
