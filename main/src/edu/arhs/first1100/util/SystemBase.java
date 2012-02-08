@@ -3,22 +3,23 @@ package edu.arhs.first1100.util;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
+ *
  * @author team1100
  */
 public class SystemBase extends Thread
 {
     protected int sleepTime = 100;
-    
+    private static boolean stopAll = false;
     private boolean stopThread = true;
     private boolean threadStarted = false;
-    
+
     /**
      * Construct the system base
      * @param robot
      * @param sleep
      */
     public SystemBase() { }
-    
+
     /**
      * Start the thread.
      */
@@ -33,7 +34,7 @@ public class SystemBase extends Thread
         }
         else Log.defcon2(this, "SystemBase thread already started");
     }
-    
+
     /**
      * Stop the thread.
      */
@@ -51,16 +52,16 @@ public class SystemBase extends Thread
     {
         while(true)
         {
-            while(!stopThread)
+            while(!shouldStop())
             {
                 /*
                 try
                 {*/
 
                 //Log.defcon1(this, "Looping while stopThread is false");
-                
+
                 tick(); // User code
-                
+
                 /*}
                 catch(Exception e)
                 {
@@ -72,18 +73,18 @@ public class SystemBase extends Thread
                     log("********************************");
                     robot.disabled();
                 }*/
-                
+
                 Timer.delay(sleepTime / 1000.0);
             }
-            
-            while(stopThread)
+
+            while(shouldStop())
             {
                 //Log.defcon1(this, "waiting for stopThread to equal false");
                 Timer.delay(0.1);
             }
         }
     }
-    
+
     /**
      * Put your own code here to run.
      *
@@ -101,9 +102,22 @@ public class SystemBase extends Thread
     {
         sleepTime = time;
     }
-    
+
     public synchronized void imDone()
     {
         notify();
+    }
+    public static void stopAll()
+    {
+        stopAll = true;
+    }
+    protected boolean shouldStop()
+    {
+        //hi
+        return stopAll || stopThread;
+    }
+    public static void enableAll()
+    {
+        stopAll = false;
     }
 }

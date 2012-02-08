@@ -15,17 +15,18 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 public class CameraSystem extends SystemBase
 {
-    
+
     //Thresholds and Constants
     private final int GREEN_THRESHOLD = 0;
-    private final int WHITE_CELL_THRESHOLD = 1;
+    private final int WHITE_THRESHOLD = 1;
+    private final int BLUE_THRESHOLD  = 2;
     private final int PARTICLE_NUMBERS = 6; //number of particles to save in pRep
     private final int BRIGHTNESS = 50;
     private final int COMPRESSION = 0;
     private final double IN_LINE_THRESHOLD = .20; //Threshold to see if two particles are in line
     private final int SIZE_THRESHOLD = 100;
     private final double WHITESPACE_THRESHOLD = .55;
-    
+
     //RGB Threshold
     private int minRed = 100;
     private int maxRed = 150;
@@ -33,15 +34,15 @@ public class CameraSystem extends SystemBase
     private int maxGreen = 50;
     private int minBlue = 0;
     private int maxBlue = 80;
-    
+
     //Image Related Objects
     private AxisCamera ac = null;
     private ColorImage cImg = null;
     private BinaryImage bImg = null;
     private ParticleAnalysisReport[] pRep = null; //ordered particleAnalysisReport
-    
+
     //SubHeirarchy Objects
-    
+
     public CameraSystem()
     {
         //Create Objects
@@ -55,20 +56,22 @@ public class CameraSystem extends SystemBase
         ac.writeResolution(AxisCamera.ResolutionT.k320x240);
 
         //Defaults
-        setThreshold(WHITE_CELL_THRESHOLD);
+        setThreshold(BLUE_THRESHOLD);
+
+        setSleep(50);
     }
-    
+
     public void start()
     {
         pRep = null;
         super.start();
     }
-    
+
     /**
      * Tick
      */
     public void tick(){
-        
+
         /**
         * Gets an image from the camera to find particles within the camera's
         * RGB threshold.
@@ -77,22 +80,22 @@ public class CameraSystem extends SystemBase
             try{
                 cImg = ac.getImage();
                 bImg = cImg.thresholdRGB(minRed, maxRed, minGreen, maxGreen, minBlue, maxBlue);
-                
+
                 pRep = bImg.getOrderedParticleAnalysisReports();
-                
-                
+
+
                 //find number of particles in thresholds
                 int filter_number = 0;
                 for(int i = 0; i < pRep.length; i++)
                 {
                     if(isBigEnough(pRep[i]) && (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD)) filter_number++;
                 }
-                
+
                 //new array with particles in threshold
                 ParticleAnalysisReport[] filter;
                 if(filter_number != 0) filter = new ParticleAnalysisReport[filter_number];
                 else filter = null;
-                
+
                 int index = 0;
                 for(int i = 0; i < pRep.length; i++)
                 {
@@ -102,11 +105,48 @@ public class CameraSystem extends SystemBase
                         index++;
                     }
                 }
-                
-                
-                
+
+                if(filter.length == 0)
+                {
+                    Log.defcon1(this, "No Particles");
+                }
+                else if(filter.length == 1)
+                {
+                    Log.defcon1(this, "1 Particles");
+                    if(filter[0].center_mass_x_normalized >0)
+                    {
+                        Log.defcon1(this, "Turn left");
+                    }
+                    else Log.defcon1(this, "Turn Right");
+                }
+                else if(filter.length == 2)
+                {
+                    ParticleAnalysisReport lowest = getLowestParticle(filter);
+                    if(lowest.center_mass_x_normalized >0)
+                    {
+                        Log.defcon1(this, "Turn left");
+                    }
+                    else Log.defcon1(this, "Turn Right");
+
+                }
+                else if(filter.length == 3)
+                {
+                    ParticleAnalysisReport lowest = getLowestParticle(filter);
+                    if(lowest.center_mass_x_normalized >0)
+                    {
+                        Log.defcon1(this, "Turn left");
+                    }
+                    else Log.defcon1(this, "Turn Right");
+
+                }
+                else
+                {
+                    Log.defcon1(this, "??");
+                }
+
+
                 //find two particles with similar x values
-                if(filter!= null&& filter.length>0)
+                /*if(filter!= null&& filter.length>0)
                 {
                     Log.defcon1(this,"Filter size: " + filter.length);
                     for(int i = 0; i < filter.length; i++)
@@ -124,25 +164,10 @@ public class CameraSystem extends SystemBase
                         }
                     }
                 }
-                //else Log.defcon1(this, "No particles in Line");
-                
-                //test print filter particles
-                /*if(filter != null && filter.length >0)
-                {
-                    for(int i = 0; i < filter.length; i++)
-                    {
-                        Log.defcon1(this,"Particle: " + i);
-                        printParticleAnalysisReport(filter[i]);
-                    }
-                }
-                else
-                {
-                    //Log.defcon1(this,"No Particles in Threshold");
-                }
-                 * 
-                 */
-                
-                
+                *
+                */
+
+
                 cImg.free();
                 bImg.free();
             }
@@ -151,7 +176,7 @@ public class CameraSystem extends SystemBase
             }
         }
     }
-    
+
     /**
     * Set the threshold of colors the camera should look for.
     * All parameters must be 0-255.
@@ -164,7 +189,7 @@ public class CameraSystem extends SystemBase
     */
     private synchronized void setThresholdRGB(int r, int R, int g, int G, int b, int B){
         minRed   = (r >= 0 && r <= 255 && r <= R)? r : 0;
-        maxRed   = (R >= 0 && R <= 255 && R >= r)? R : 255; 
+        maxRed   = (R >= 0 && R <= 255 && R >= r)? R : 255;
         minGreen = (g >= 0 && g <= 255 && g <= G)? g : 0;
         maxGreen = (G >= 0 && G <= 255 && G >= g)? G : 255;
         minBlue  = (b >= 0 && b <= 255 && b <= B)? b : 0;
@@ -182,12 +207,15 @@ public class CameraSystem extends SystemBase
                 Log.defcon1(this, "Set Green Threshold");
                 setThresholdRGB(80, 130, 150, 255, 50, 130);
                 break;
-            case WHITE_CELL_THRESHOLD:
+            case WHITE_THRESHOLD:
                 setThresholdRGB(210,255,210,255,210,255);
+                break;
+            case BLUE_THRESHOLD:
+                setThresholdRGB(0,170,0,255,180,255);
                 break;
         }
     }
-    
+
     /**
      * @param p A ParticleAnalysisReport
      * @return Returns the direction of the particle in the x direction (positive is right, negative is left)
@@ -196,7 +224,7 @@ public class CameraSystem extends SystemBase
     {
         return p.center_mass_x_normalized;
     }
-    
+
     /**
      * @param p A ParticleAnalysisReport
      * @return Returns the direction of the particle in the y direction (positive is down, negative is up)
@@ -205,7 +233,7 @@ public class CameraSystem extends SystemBase
     {
         return p.center_mass_y_normalized;
     }
-    
+
     /**
      * @return Returns the Largest Particle or null if there is none
      */
@@ -220,7 +248,7 @@ public class CameraSystem extends SystemBase
             return null;
         }
     }
-    
+
     /**
      * @return Returns the Particle with the lowest y-value or null if none, in pRep
      * y value is greatest at the top and decreasing going down
@@ -244,21 +272,21 @@ public class CameraSystem extends SystemBase
             return null;
         }
     }
-    
+
     /**
      * @return Returns the Particle with the lowest y-value or null if none, in pRep
      * y value is greatest at the top and decreasing going down
      */
-    public ParticleAnalysisReport getLowestParticle()
+    public ParticleAnalysisReport getLowestParticle(ParticleAnalysisReport[] p)
     {
-        if (pRep != null && pRep.length != 0)
+        if (p != null && p.length != 0)
         {
-            ParticleAnalysisReport lowest = pRep[0];
-            for(int i = 0; i < pRep.length; i++)
+            ParticleAnalysisReport lowest = p[0];
+            for(int i = 0; i < p.length; i++)
             {
-                if(pRep[i].center_mass_y_normalized > lowest.center_mass_y_normalized)
+                if(p[i].center_mass_y_normalized > lowest.center_mass_y_normalized)
                 {
-                    lowest = pRep[i];
+                    lowest = p[i];
                 }
             }
             return lowest;
@@ -268,7 +296,7 @@ public class CameraSystem extends SystemBase
             return null;
         }
     }
-    
+
     /**
      * @param rep1 A ParticleAnalysisReport
      * @param rep2 A ParticleAnalysisReport
@@ -278,7 +306,7 @@ public class CameraSystem extends SystemBase
     {
         return (Math.abs(rep1.center_mass_x_normalized - rep2.center_mass_x_normalized) < IN_LINE_THRESHOLD);
     }
-    
+
     /**
      * @param rep1 A ParticleAnalysisReport
      * @param rep2 A ParticleAnalysisReport
@@ -288,13 +316,13 @@ public class CameraSystem extends SystemBase
     {
         return (Math.abs(rep1.center_mass_y_normalized - rep2.center_mass_y_normalized) < IN_LINE_THRESHOLD);
     }
-    
+
     /**
      * @param p a particleAnalysisReport
      * Prints information about a ParticleAnalysisReport
      */
     public void printParticleAnalysisReport(ParticleAnalysisReport p)
-    {                    
+    {
         Log.defcon1(this,"Area: "+ p.particleArea);
 
         Log.defcon1(this,"Height: "+ p.boundingRectHeight);
@@ -309,14 +337,14 @@ public class CameraSystem extends SystemBase
         Log.defcon1(this,"Center y-Coordinate: "+ p.center_mass_y);
         Log.defcon1(this,"Center x-normalized: "+ p.center_mass_x_normalized);
         Log.defcon1(this,"Center y-normalized: "+ p.center_mass_y_normalized);
-        
+
         Log.defcon1(this,"Whitespace Method: " + getWhiteSpace(p));
         Log.defcon1(this,"Center of Mass Difference: " + getCOMDistance(p)/getCornerDistance(p));
-        
+
         Log.defcon1(this,"");
         Log.defcon1(this,"");
     }
-    
+
     /**
      * Sets Brightness of the Camera
      * @param b the Brightness
@@ -325,9 +353,9 @@ public class CameraSystem extends SystemBase
     {
         ac.writeBrightness(b);
     }
-    
-    
-    
+
+
+
     public double getWhiteSpace(ParticleAnalysisReport p)
     {
         double area = p.particleArea*4.0/Math.PI;
@@ -342,7 +370,7 @@ public class CameraSystem extends SystemBase
     /**
      * positive is down with 0 at top of picture
      * @param p
-     * @return 
+     * @return
      */
     public double getYCOMDifference(ParticleAnalysisReport p)
     {
