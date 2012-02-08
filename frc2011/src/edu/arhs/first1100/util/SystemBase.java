@@ -12,19 +12,19 @@ public class SystemBase extends Thread
     private static boolean stopAll = false;
     private boolean stopThread = true;
     private boolean threadStarted = false;
-    
+
     /**
      * Construct the system base
      * @param robot
      * @param sleep
      */
     public SystemBase() { }
-    
+
     /**
      * Start the thread.
      */
     public void start()
-    {        
+    {
         stopThread = false;
 
         if(!threadStarted)
@@ -34,7 +34,7 @@ public class SystemBase extends Thread
         }
         else Log.defcon2(this, "SystemBase thread already started");
     }
-    
+
     /**
      * Stop the thread.
      */
@@ -59,9 +59,9 @@ public class SystemBase extends Thread
                 {*/
 
                 //Log.defcon1(this, "Looping while stopThread is false");
-                
+
                 tick(); // User code
-                
+
                 /*}
                 catch(Exception e)
                 {
@@ -73,10 +73,10 @@ public class SystemBase extends Thread
                     log("********************************");
                     robot.disabled();
                 }*/
-                
+
                 Timer.delay(sleepTime / 1000.0);
             }
-            
+
             while(shouldStop())
             {
                 //Log.defcon1(this, "waiting for stopThread to equal false");
@@ -84,7 +84,7 @@ public class SystemBase extends Thread
             }
         }
     }
-    
+
     /**
      * Put your own code here to run.
      *
@@ -102,7 +102,7 @@ public class SystemBase extends Thread
     {
         sleepTime = time;
     }
-    
+
     public synchronized void imDone()
     {
         notify();
@@ -110,9 +110,10 @@ public class SystemBase extends Thread
     public static void stopAll()
     {
         stopAll = true;
-    }     
+    }
     protected boolean shouldStop()
     {
+        //hi
         return stopAll || stopThread;
     }
     public static void enableAll()
