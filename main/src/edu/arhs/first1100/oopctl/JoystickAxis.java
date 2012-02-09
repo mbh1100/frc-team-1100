@@ -1,12 +1,15 @@
 package edu.arhs.first1100.oopctl;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 public class JoystickAxis
 {
-   private JoystickAxisHandler jah;
-   private int axis;
-   private Joystick js;
-   boolean last_value;
-    
+
+    private JoystickAxisHandler jah;
+    private int axis;
+    private Joystick js;
+    double last_value;
+
     public JoystickAxis(Joystick js, int axisId)
     {
         this.axis = axisId;
@@ -15,19 +18,19 @@ public class JoystickAxis
 
     public void update()
     {
-        boolean value = js.getRawAxis(axis);
+        double value = js.getRawAxis(axis);
 
+        jah.heresYourValue(value);
         if (value != last_value)
         {
-            jah.heresYourValue(value);
+            jah.heresYourNewValue(value);
         }
 
         last_value = value;
     }
 
-    public void bind(ButtonHandler bh)
+    public void bind(JoystickAxisHandler h)
     {
-        this.bh = bh;
+        jah = h;
     }
-
 }
