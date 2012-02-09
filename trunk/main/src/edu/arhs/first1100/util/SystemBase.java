@@ -15,8 +15,14 @@ public class SystemBase extends Thread
 
     /**
      * Construct the system base
-     * @param robot
      * @param sleep
+     */
+    public SystemBase(int sleepTime)
+    {
+        this.sleepTime = sleepTime;
+    }
+    /**
+     * default constructor, ten ticks per second
      */
     public SystemBase() { }
 
