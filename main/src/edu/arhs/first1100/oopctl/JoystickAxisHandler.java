@@ -7,12 +7,7 @@ public class JoystickAxisHandler
         
     }
     
-    public void getX(double value)
-    {
-
-    }
-    
-    public void getY(double value)
+    public void heresYourValue(double value)
     {
 
     }
