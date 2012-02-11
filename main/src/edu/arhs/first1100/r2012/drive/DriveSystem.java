@@ -5,12 +5,14 @@
 package edu.arhs.first1100.r2012.drive;
 
 import edu.arhs.first1100.r2011.camera.CameraSystem;
+import edu.arhs.first1100.r2012.pid.DriveLeftPID;
+import edu.arhs.first1100.r2012.pid.DriveRightPID;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  *
- * @author team1100
+ * @author Ryan
  */
 public class DriveSystem
 {
@@ -20,6 +22,8 @@ public class DriveSystem
     Jaguar j2;
     Jaguar j3;
     Jaguar j4;
+    DriveLeftPID dl;
+    DriveRightPID dr;
 
     private DriveSystem()
     {
@@ -27,7 +31,9 @@ public class DriveSystem
         j2 = new Jaguar(1, 2);
         j3 = new Jaguar(1, 3);
         j4 = new Jaguar(1, 4);
-        rD = new RobotDrive(j1, j3, j2, j4);
+        //rD = new RobotDrive(j1, j3, j2, j4);
+        dl = new DriveLeftPID();
+        dr = new DriveRightPID();
     }
     static DriveSystem instance;
 
@@ -39,13 +45,20 @@ public class DriveSystem
         }
         return instance;
     }
-
-    public void drive(double outputMagnitude, double curve)
+    public void driveleft(double speed)
     {
-        rD.drive(outputMagnitude, curve);
+        j1.set(speed);
+        j3.set(speed);
     }
-        public void tankDrive(double leftValue, double rightValue)
-        {
-            rD.tankDrive(leftValue, rightValue);
-        }
+    public void driveright(double speed)
+    {
+        j2.set(speed);
+        j4.set(speed);
+    }
+    public void tank(double left, double right)
+    {
+        rD.tankDrive(right, left);
+    }
 }
+
+    //Added by Ryan
