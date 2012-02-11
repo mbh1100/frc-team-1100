@@ -141,32 +141,8 @@ public class CameraSystem extends SystemBase
                 }
                 else
                 {
-                    Log.defcon1(this, "??");
+                    Log.defcon1(this, "????????????????????????????????????????????????????????????");
                 }
-
-
-                //find two particles with similar x values
-                /*if(filter!= null&& filter.length>0)
-                {
-                    Log.defcon1(this,"Filter size: " + filter.length);
-                    for(int i = 0; i < filter.length; i++)
-                    {
-                        for(int j = i+1; j < filter.length; j++)
-                        {
-                            if(this.isParticlesInLineX(filter[i], filter[j]))
-                            {
-                                Log.defcon1(this, "In Line Particle 1");
-                                this.printParticleAnalysisReport(filter[i]);
-
-                                Log.defcon1(this, "In Line Particle 2");
-                                this.printParticleAnalysisReport(filter[j]);
-                            }
-                        }
-                    }
-                }
-                *
-                */
-
 
                 cImg.free();
                 bImg.free();

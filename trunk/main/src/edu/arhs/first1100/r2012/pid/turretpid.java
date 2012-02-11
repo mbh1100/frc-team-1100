@@ -28,10 +28,7 @@ class TurretOutput implements PIDOutput
 
     }
 }
-/**
- *Sets up the apature science turret.
- * @author Connor Moroney
- */
+
 public class turretpid extends edu.wpi.first.wpilibj.PIDController{
 static private final double P = 0.05;
 static private final double I = 0.01;

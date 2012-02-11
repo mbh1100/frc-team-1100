@@ -19,8 +19,8 @@ import edu.arhs.first1100.r2012.drive.DriveSystem;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.arhs.first1100.r2012.pid.;
 
-public class CameraTest {
-
+public class CameraTest 
+{
     Joystick jstick;
     CamPidDistance pd;
     CameraPidLeft cL;
@@ -30,7 +30,8 @@ public class CameraTest {
     DriveSystem ds;
     edu.wpi.first.wpilibj.Joystick stick;
 
-    public CameraTest(Joystick jstick) {
+    public CameraTest(Joystick jstick) 
+    {
         this.jstick = jstick;
         ds = DriveSystem.getInstance();
         //pd = new CamPidDistance(cs);
@@ -38,10 +39,11 @@ public class CameraTest {
         stick = new edu.wpi.first.wpilibj.Joystick(1);
     }
 
-    public void cameraMove() {
+    public void cameraMove() 
+    {
         double power = jstick.getAxis(Joystick.AxisType.kY);
         double curve = -pg.pidGet();
         if (power > 0) curve = -curve;
-        ds.drive(power, curve);
+        //ds.drive(power, curve);
     }
 }

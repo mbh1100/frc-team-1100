@@ -5,10 +5,10 @@
 package edu.arhs.first1100.r2012.pid;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
-
 import edu.arhs.first1100.util.PID;
 
-class DriverSource implements PIDSource
+
+class DrivelSource implements PIDSource
 {
     public double pidGet()
         {
@@ -16,10 +16,10 @@ class DriverSource implements PIDSource
         }
 }
 /**
- *Implements pid output for the right side motors of our dear robot.
+ *
  * @author Connor Moroney
  */
-class DriverOutput implements PIDOutput
+class DrivelOutput implements PIDOutput
         {
     public void pidWrite(double output)
     {
@@ -29,19 +29,19 @@ class DriverOutput implements PIDOutput
 }
 
 /**
- *Sets up the generic driving pid for the left side of the robot.
- * @author Connor Moroney
+ *This is a generic pid for the left drive motors.
+ * @author !Connor
  */
-public class driverpid extends edu.wpi.first.wpilibj.PIDController{
+public class DriveLeftPID extends edu.wpi.first.wpilibj.PIDController{
     static private final double P = 0.05;
     static private final double I = 0.01;
     static private final double D = 0.0;
 
     /**
-     *Just your generic constructor for our pid.
+     * Sets up the constructor for the left drive motors.
      */
-    public driverpid(){
-    super (P,I,D, new DriverSource(), new DriverOutput());
+    public DriveLeftPID(){
+    super (P,I,D, new DrivelSource(), new DrivelOutput());
 
     }
 }
