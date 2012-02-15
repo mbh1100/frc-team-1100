@@ -4,6 +4,8 @@
  */
 
 package edu.arhs.first1100.r2012.pid;
+
+
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -13,7 +15,7 @@ class GyroSource implements PIDSource
 {
     Gyro gyro;
     Gyro gyroTwo;
-    
+
     public double pidGet()
     {
         double angle = ((gyro.getAngle() + gyroTwo.getAngle()) / 2);
@@ -28,14 +30,14 @@ class GyroSource implements PIDSource
 class GyroOutput implements PIDOutput
 {
     Jaguar output;
-    
+
     public void pidWrite(double o)
     {
-        output.pidWrite(-o);
+        output.pidWrite(o);
     }
-    
+
     public GyroOutput(Jaguar j){
-        output = j;        
+        output = j;
     }
 }
 /**

@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj.PIDSource;
 class RateSource implements PIDSource
 {
     Encoder source;
-    
+
     public double pidGet()
-    {        
+    {
         double rate = source.getRate();
         return rate;
     }
-    
+
    public RateSource(Encoder e)
    {
        source = e;
@@ -32,17 +32,18 @@ class RateOutput implements PIDOutput
 {
     Jaguar output;
     double adding;
-    
+
     public void pidWrite(double o)
     {
         adding = adding + o;
         if(adding > 1) {adding = 1;}
         if(adding < -1) {adding = -1;}
-        output.pidWrite(adding);
+        System.out.println("adding is:" + adding);
+        output.pidWrite(0);
     }
-    
+
     public RateOutput(Jaguar j){
-        output = j;        
+        output = j;
     }
 }
 /**
@@ -56,7 +57,7 @@ public class RatePid extends edu.wpi.first.wpilibj.PIDController{
 
 public RatePid(Encoder source, Jaguar output){
     super (P,I,D, new RateSource(source), new RateOutput(output));
-    
+
     this.setOutputRange(-0.1, 0.1);
     this.setInputRange(-30.0, 30.0);
     //robot finish

@@ -25,14 +25,16 @@ import edu.arhs.first1100.r2012.routines.*;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
 
 
-public class RobotMain extends SimpleRobot {
+public class RobotMain extends SimpleRobot
+{
 
     CameraSystem c;
     OperatorSystem os;
     MotorEncoder me;
     Joystick jstick;
     Jaguar turretMotor;
-    public void robotInit() {
+    public void robotInit()
+    {
         //Set Loggin' Levels
         Log.addClass(RobotMain.class, 3);
         Log.addClass(JoyGyro.class, 3);
@@ -59,7 +61,7 @@ public class RobotMain extends SimpleRobot {
 
     public void operatorControl()
     {
-        Log.defcon3(this, "Operator Mode Activated");
+        Log.defcon3(this, "Operator Mode Activated\n\n\n\n\n\n\n\n\n");
         SystemBase.enableAll();
         turretpid tp = new turretpid(turretMotor);
         while(!isDisabled())

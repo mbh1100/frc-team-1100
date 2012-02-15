@@ -18,10 +18,10 @@ public class DriveSystem
 {
 
     RobotDrive rD;
-    Jaguar j1;
-    Jaguar j2;
-    Jaguar j3;
-    Jaguar j4;
+    public Jaguar j1;
+    public Jaguar j2;
+    public Jaguar j3;
+    public Jaguar j4;
    // DriveLeftPID dl;
     DriveRightPID dr;
 
