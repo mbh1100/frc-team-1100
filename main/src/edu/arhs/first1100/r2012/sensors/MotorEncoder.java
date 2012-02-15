@@ -13,6 +13,7 @@ public class MotorEncoder
 {
     Encoder enLeft;
     Encoder enRight;
+
     public MotorEncoder()
     {
         enLeft = new Encoder(11, 12);

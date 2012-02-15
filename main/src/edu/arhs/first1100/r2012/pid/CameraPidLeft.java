@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 class CamSourceleft implements PIDSource
 {
     CameraSystem cs;
-    
+
     public double pidGet()
     {
         if(cs.getBiggestParticle().center_mass_x_normalized>0)
@@ -31,23 +31,23 @@ class CamSourceleft implements PIDSource
         }
         else return 0;
     }
-    
-   public CamSourceleft(CameraSystem c){
+
+    public CamSourceleft(CameraSystem c){
        cs = c;
-   }
+    }
 }
 
 class CamOutputLeft implements PIDOutput
 {
     Jaguar output;
-    
+
     public void pidWrite(double o)
     {
         output.pidWrite(-o);
     }
-    
+
     public CamOutputLeft(Jaguar j){
-        output = j;        
+        output = j;
     }
 }
 

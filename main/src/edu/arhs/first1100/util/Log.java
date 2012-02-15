@@ -1,10 +1,9 @@
 package edu.arhs.first1100.util;
 
 import java.util.Vector;
-import edu.arhs.first1100.r2011.opctl.DriverStationDataFeeder;
 
 /**
- * @author team1100
+ * @author Alex Church @ Raymond Mead @ Team 1100
  */
 class AdvLogger
 {
@@ -27,37 +26,25 @@ class AdvLogger
 }
 
 /**
- * @author Raymond Mead
+ * @author Raymond Mead @ Alex Church @ Team 1100
  */
 public class Log
 {
-    DriverStationDataFeeder dsdf;
     private static Vector records = new Vector();
 
-    public static void dsLog(int line, String message)
-    {
-
-    }
-    
     public static void defcon3(Object obj, String message)
     {
-        if(checkClass(obj, 3))
-        {
-            log(obj, message, 3);
-        }
+        if(checkClass(obj, 3)) log(obj, message, 3);
     }
 
     public static void defcon2(Object obj, String message)
     {
         if(checkClass(obj, 2)) log(obj, message, 2);
     }
-    
+
     public static void defcon1(Object obj, String message)
     {
-        if(checkClass(obj, 1))
-        {
-            log(obj, message, 1);
-        }
+        if(checkClass(obj, 1)) log(obj, message, 1);
     }
 
     public static void addClass(Class aClass, int defcon)
@@ -78,7 +65,7 @@ public class Log
         }
         return record;
     }
-    
+
     private static void log(Object obj, String message, int defcon)
     {
         String name = obj.getClass().getName();
