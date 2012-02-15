@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.Joystick;
  * @author Connor Moroney
  */
 public class AttackThree extends SystemBase{
-private int channel;
+
+    private int channel;
     private Joystick js;
     private JoystickAxis x;
     private JoystickAxis y;
@@ -28,6 +29,7 @@ private int channel;
     private Button b9;
     private Button b10;
     private Button b11;
+
     public AttackThree (int ch){
         channel = ch;
         js = new Joystick(ch);
@@ -44,13 +46,13 @@ private int channel;
         b8 = new Button(js, 8);
         b9 = new Button(js, 9);
         b10 = new Button(js, 10);
-        b11= new Button(js, 11);
+        b11 = new Button(js, 11);
     }
     public void bindX(JoystickAxisHandler h)
     {
-    String name = "Attack 3 " +channel+ ", X Axis";
-    h.setName(name);
-    x.bind(h);
+        String name = "Attack 3 " +channel+ ", X Axis";
+        h.setName(name);
+        x.bind(h);
     }
     public void bindY(JoystickAxisHandler h)
     {
@@ -135,12 +137,12 @@ private int channel;
         h.setName(name);
         b10.bind(h);
     }
-public void bindB11 (ButtonHandler h)
-{
-    String name = "Attack 3 " + channel+ "' button 11";
-    h.setName(name);
-    b11.bind(h);
-}
+    public void bindB11 (ButtonHandler h)
+    {
+        String name = "Attack 3 " + channel+ "' button 11";
+        h.setName(name);
+        b11.bind(h);
+    }
     public void tick()
     {
         x.update();
@@ -156,6 +158,7 @@ public void bindB11 (ButtonHandler h)
         b8.update();
         b9.update();
         b10.update();
+        b11.update();
     }
 }
 

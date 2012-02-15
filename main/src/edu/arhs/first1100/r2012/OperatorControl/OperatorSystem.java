@@ -1,8 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.arhs.first1100.r2012.OperatorControl;
+
 import edu.arhs.first1100.r2012.drive.DriveSystem;
 import edu.arhs.first1100.r2012.pid.EncoderPIDLeft;
 import edu.arhs.first1100.r2012.pid.EncoderPIDRight;
@@ -12,60 +9,48 @@ import edu.wpi.first.wpilibj.Joystick;
 //import edu.arhs.first1100.r2012.routines.CameraTest;
 import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
-/**
- *
- * @author Ryan
- */
-public class OperatorSystem extends SystemBase{
+import edu.arhs.first1100.oopctl.AttackThree;
+import edu.arhs.first1100.oopctl.ButtonHandler;
+import edu.arhs.first1100.oopctl.JoystickAxisHandler;
 
+class LeftAxisY extends JoystickAxisHandler
+{
+    public void heresYourValue(double value)
+    {
+        DriveSystem.getInstance().driveleft(value);
+    }
+}
+class RightAxisY extends JoystickAxisHandler
+{
+    public void heresYourValue(double value)
+    {
+        DriveSystem.getInstance().driveright(value);
+    }
+}
+public class OperatorSystem
+{
+    private final int JOYSTICK_LEFT_CHANNEL = 1;
+    private final int JOYSTICK_RIGHT_CHANNEL = 2;
 
-    private final int JOYSTICK_LEFT = 1;
-    private final int JOYSTICK_RIGHT = 2;
-
-
-    Joystick jstick;
-    Joystick jsticktwo;
-    //AimTargetRoutine aim;
-    DriveSystem ds;
-    //CameraTest ct;
-    MotorEncoder me;
-
-    double[] dataleft;
-    double[] dataright;
-    int index =0;
-    EncoderPIDLeft driveleftcontrol;
-    EncoderPIDRight driverightcontrol;
+    private AttackThree left;
+    private AttackThree right;
 
     public OperatorSystem()
     {
-        jstick = new Joystick(JOYSTICK_LEFT);
-        jsticktwo = new Joystick(JOYSTICK_RIGHT);
-       // aim = new AimTargetRoutine(1);
-        ds = DriveSystem.getInstance();
-        me = new MotorEncoder();
+        left = new AttackThree(JOYSTICK_LEFT_CHANNEL);
+        right = new AttackThree(JOYSTICK_RIGHT_CHANNEL);
 
-        setSleep(10);
-
-        //temp
-        dataleft = new double[15];
-        dataright = new double[15];
-        index = 0;
-        for(int i =0; i < 15; i++)
-        {
-            dataleft[i] = dataright[i] = 0;
-        }
-
-        me.start();
-
-        driveleftcontrol = new EncoderPIDLeft(me, ds.j1, ds.j3);
-        driverightcontrol = new EncoderPIDRight(me, ds.j2, ds.j4);
-        driveleftcontrol.enable();
-        driverightcontrol.enable();
-        System.out.println("Enabled Both PIDS________________________");
+        left.bindY(new LeftAxisY());
+        right.bindY(new RightAxisY());
     }
-    public void tick()
+    public void start()
     {
+        left.start();
+        right.start();
+    }
+    public void stop()
+    {
+        left.stop();
+        right.stop();
     }
 }
-
-    //Added by Ryan

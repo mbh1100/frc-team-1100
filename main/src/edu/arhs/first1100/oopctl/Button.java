@@ -13,11 +13,12 @@ public class Button
     private int button_number;
     private Joystick js;
     boolean last_value;
-    
+
     public Button(Joystick js, int button_number)
     {
         this.button_number = button_number;
         this.js = js;
+        this.bh = new ButtonHandler();
     }
 
     public void update()
@@ -48,7 +49,8 @@ public class Button
 
     public void bind(ButtonHandler bh)
     {
-        this.bh = bh;
+        if(bh != null) this.bh = bh;
+        else this.bh = new ButtonHandler();
     }
 
 }
