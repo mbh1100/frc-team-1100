@@ -28,12 +28,12 @@ public class CameraSystem extends SystemBase
     private final double WHITESPACE_THRESHOLD = .55;
 
     //RGB Threshold
-    private int minRed = 100;
-    private int maxRed = 150;
-    private int minGreen = 0;
-    private int maxGreen = 50;
-    private int minBlue = 0;
-    private int maxBlue = 80;
+    private int minRed = 0;
+    private int maxRed = 15;
+    private int minGreen = 180;
+    private int maxGreen = 255;
+    private int minBlue = 245;
+    private int maxBlue = 255;
 
     //Image Related Objects
     private AxisCamera ac = null;
@@ -41,9 +41,10 @@ public class CameraSystem extends SystemBase
     private BinaryImage bImg = null;
     private ParticleAnalysisReport[] pRep = null; //ordered particleAnalysisReport
 
+    private static CameraSystem instance;
     //SubHeirarchy Objects
 
-    public CameraSystem()
+    private CameraSystem()
     {
         //Create Objects
         ac = AxisCamera.getInstance();
@@ -66,11 +67,22 @@ public class CameraSystem extends SystemBase
         pRep = null;
         super.start();
     }
+    public static CameraSystem getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new CameraSystem();
+            instance.start();
+        }
+
+        return instance;
+    }
 
     /**
      * Tick
      */
-    public void tick(){
+    public void tick()
+    {
 
         /**
         * Gets an image from the camera to find particles within the camera's
@@ -106,7 +118,8 @@ public class CameraSystem extends SystemBase
                     }
                 }
 
-                if(filter.length == 0)
+                if(filter == null);
+                else if(filter.length == 0)
                 {
                     Log.defcon1(this, "No Particles");
                 }
@@ -119,29 +132,15 @@ public class CameraSystem extends SystemBase
                     }
                     else Log.defcon1(this, "Turn Right");
                 }
-                else if(filter.length == 2)
-                {
-                    ParticleAnalysisReport lowest = getLowestParticle(filter);
-                    if(lowest.center_mass_x_normalized >0)
-                    {
-                        Log.defcon1(this, "Turn left");
-                    }
-                    else Log.defcon1(this, "Turn Right");
-
-                }
-                else if(filter.length == 3)
-                {
-                    ParticleAnalysisReport lowest = getLowestParticle(filter);
-                    if(lowest.center_mass_x_normalized >0)
-                    {
-                        Log.defcon1(this, "Turn left");
-                    }
-                    else Log.defcon1(this, "Turn Right");
-
-                }
                 else
                 {
-                    Log.defcon1(this, "????????????????????????????????????????????????????????????");
+                    ParticleAnalysisReport highest = this.getHighestParticle(filter);
+                    if(highest.center_mass_x_normalized >0)
+                    {
+                        Log.defcon1(this, "Turn left");
+                    }
+                    else Log.defcon1(this, "Turn Right");
+
                 }
 
                 cImg.free();
@@ -163,7 +162,8 @@ public class CameraSystem extends SystemBase
     * @param b Minimum Blue Value
     * @param B Maximum Blue Value
     */
-    private synchronized void setThresholdRGB(int r, int R, int g, int G, int b, int B){
+    private synchronized void setThresholdRGB(int r, int R, int g, int G, int b, int B)
+    {
         minRed   = (r >= 0 && r <= 255 && r <= R)? r : 0;
         maxRed   = (R >= 0 && R <= 255 && R >= r)? R : 255;
         minGreen = (g >= 0 && g <= 255 && g <= G)? g : 0;
@@ -229,16 +229,19 @@ public class CameraSystem extends SystemBase
      * @return Returns the Particle with the lowest y-value or null if none, in pRep
      * y value is greatest at the top and decreasing going down
      */
-    public ParticleAnalysisReport getHighestParticle()
+    public ParticleAnalysisReport getHighestParticle(){
+        return getHighestParticle(pRep);
+    }
+    public ParticleAnalysisReport getHighestParticle(ParticleAnalysisReport[] p)
     {
-        if (pRep != null && pRep.length != 0)
+        if (p != null && p.length != 0)
         {
-            ParticleAnalysisReport highest = pRep[0];
-            for(int i = 0; i < pRep.length; i++)
+            ParticleAnalysisReport highest = p[0];
+            for(int i = 0; i < p.length; i++)
             {
-                if(pRep[i].center_mass_y_normalized < highest.center_mass_y_normalized)
+                if(p[i].center_mass_y_normalized < highest.center_mass_y_normalized)
                 {
-                    highest = pRep[i];
+                    highest = p[i];
                 }
             }
             return highest;

@@ -4,9 +4,10 @@
  */
 package edu.arhs.first1100.r2012.OperatorControl;
 import edu.arhs.first1100.r2012.drive.DriveSystem;
+import edu.arhs.first1100.r2012.routines.AimTargetRoutine;
 import edu.arhs.first1100.util.Log;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.arhs.first1100.r2012.routines.CameraTest;
+//import edu.arhs.first1100.r2012.routines.CameraTest;
 import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
 /**
@@ -22,31 +23,22 @@ public class OperatorSystem extends SystemBase{
 
     Joystick jstick;
     Joystick jsticktwo;
-
+    //AimTargetRoutine aim;
     DriveSystem ds;
-    CameraTest ct;
+    //CameraTest ct;
     MotorEncoder me;
 
     public OperatorSystem()
     {
         jstick = new Joystick(JOYSTICK_LEFT);
         jsticktwo = new Joystick(JOYSTICK_RIGHT);
-
+       // aim = new AimTargetRoutine(1);
         ds = DriveSystem.getInstance();
         me = new MotorEncoder();
         me.start();
     }
     public void tick()
     {
-        ds.driveleft(jstick.getY());
-        ds.driveright(-jsticktwo.getY());
-        Log.defcon1(this, me.getLeft()+ " <Left--------Right> "+ me.getRight());
-
-        /*if(jstick.getTop())
-        {
-            ct.cameraMove();
-        }
-         */
     }
 }
 
