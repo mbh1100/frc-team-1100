@@ -4,7 +4,7 @@ import edu.arhs.first1100.util.Log;
 public class ButtonHandler
 {
     private String name;
-    
+
     public void notHeld()
     {
         Log.defcon3(this, name + " Button Not Held");//says that the button is not being held
@@ -25,11 +25,11 @@ public class ButtonHandler
         Log.defcon3(this, name + " Button Released"); //Says that the button has been releaced
     }
 
-    public void setName(String name)
+    void setName(String name)
     {
         this.name = name;
     }
-    
+
     public String getName()
     {
         return name;
