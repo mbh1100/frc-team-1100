@@ -15,18 +15,43 @@ import edu.arhs.first1100.oopctl.JoystickAxisHandler;
 
 class LeftAxisY extends JoystickAxisHandler
 {
+    EncoderPIDLeft l;
+
     public void heresYourValue(double value)
     {
-        DriveSystem.getInstance().driveleft(value);
+        double lRate = MotorEncoder.getInstance().getLeft();
+        double rRate = MotorEncoder.getInstance().getRight();
+        System.out.println("Left rate:" + lRate + "\tRight rate:" + rRate);
+        l.setSetpoint(value*100);
+    }
+
+    public LeftAxisY()
+    {
+        l = new EncoderPIDLeft();
+        l.setOutputRange(-0.5, 0.5);
+        l.enable();
+        super.setDeadBand(0.05);
     }
 }
+
 class RightAxisY extends JoystickAxisHandler
 {
+    EncoderPIDRight r;
+
     public void heresYourValue(double value)
     {
-        DriveSystem.getInstance().driveright(value);
+        r.setSetpoint(value*100);
+    }
+
+    public RightAxisY ()
+    {
+        r = new EncoderPIDRight();
+        r.setOutputRange(-0.5, 0.5);
+        r.enable();
+        super.setDeadBand(0.05);
     }
 }
+
 public class OperatorSystem
 {
     private final int JOYSTICK_LEFT_CHANNEL = 1;

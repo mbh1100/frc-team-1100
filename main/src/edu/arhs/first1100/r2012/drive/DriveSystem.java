@@ -27,7 +27,7 @@ public class DriveSystem
 
     private DriveSystem()
     {
-        j1 = new Jaguar(1, 9);
+        j1 = new Jaguar(1, 1);
         j2 = new Jaguar(1, 2);
         j3 = new Jaguar(1, 3);
         j4 = new Jaguar(1, 4);
@@ -41,20 +41,26 @@ public class DriveSystem
     {
         if (instance == null)
         {
-            instance = new DriveSystem();
+            synchronized(DriveSystem.class)
+            {
+                if (instance == null)
+                {
+                    instance = new DriveSystem();
+                }
+            }
         }
         return instance;
     }
 
     public void driveleft(double speed)
     {
-        j1.set(speed);
-        j3.set(speed);
+        j2.set(-speed);
+        j4.set(-speed);
     }
     public void driveright(double speed)
     {
-        j2.set(speed);
-        j4.set(speed);
+        j1.set(speed);
+        j3.set(speed);
     }
     public void tank(double left, double right)
     {

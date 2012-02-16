@@ -6,18 +6,34 @@ package edu.arhs.first1100.r2012.sensors;
 import edu.wpi.first.wpilibj.Encoder;
 
 /**
- *
- * @author Ryan
+ * @author Team1100
  */
 public class MotorEncoder
 {
     Encoder enLeft;
     Encoder enRight;
 
-    public MotorEncoder()
+    static MotorEncoder instance;
+
+    public static MotorEncoder getInstance()
     {
-        enLeft = new Encoder(11, 12);
-        enRight = new Encoder(13, 14, true); // 3rd parameter is reverse direction
+        if (instance == null)
+        {
+            synchronized(MotorEncoder.class)
+            {
+                if (instance == null)
+                {
+                    instance = new MotorEncoder();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private MotorEncoder()
+    {
+        enLeft = new Encoder(11, 12, true); // 3rd parameter is true to reverse direction
+        enRight = new Encoder(13, 14, false); // 3rd parameter is false to keep direction
         enRight.setDistancePerPulse(.1);
         enLeft.setDistancePerPulse(.1);
     }
@@ -30,11 +46,23 @@ public class MotorEncoder
 
     public double getRight()
     {
-        return enRight.getRate();
+        double x = enRight.getRate();
+        //used to check for NaN
+        if(x/x == 1)
+        {
+            return x;
+        }
+        else {return 0;}
     }
 
     public double getLeft()
     {
-        return enLeft.getRate();
+        double x = enLeft.getRate();
+        //used to check for NaN
+        if(x/x == 1)
+        {
+            return x;
+        }
+        else {return 0;}
     }
 }

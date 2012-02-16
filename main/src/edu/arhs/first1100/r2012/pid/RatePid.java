@@ -42,7 +42,8 @@ class RateOutput implements PIDOutput
         output.pidWrite(0);
     }
 
-    public RateOutput(Jaguar j){
+    public RateOutput(Jaguar j)
+    {
         output = j;
     }
 }
