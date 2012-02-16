@@ -24,11 +24,9 @@ import edu.arhs.first1100.r2012.robot.diagnostic.DiagnosticRobot;
 import edu.arhs.first1100.r2012.routines.*;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
 
-
 public class RobotMain extends SimpleRobot
 {
-
-    CameraSystem c;
+    //CameraSystem c;
     OperatorSystem os;
     MotorEncoder me;
     Joystick jstick;
@@ -41,10 +39,11 @@ public class RobotMain extends SimpleRobot
         Log.addClass(CameraSystem.class, 1);
         Log.addClass(OperatorSystem.class, 1);
 
-        turretMotor = new Jaguar(1, 1);
-        jstick = new Joystick(1);
-        c = new CameraSystem();
+        //turretMotor = new Jaguar(1, 1);
+        //jstick = new Joystick(1);
+        //c = new CameraSystem();
         os = new OperatorSystem();
+        MotorEncoder.getInstance().start();
 
         Log.defcon3(this, "Robot Init");
         Log.defcon3(this, "+-------------------------------------+");
@@ -56,19 +55,18 @@ public class RobotMain extends SimpleRobot
     {
         Log.defcon3(this, "Autonomous Mode Activated");
         SystemBase.enableAll();
-
     }
 
     public void operatorControl()
     {
         Log.defcon3(this, "Operator Mode Activated\n\n\n\n\n\n\n\n\n");
         SystemBase.enableAll();
-        turretpid tp = new turretpid(turretMotor);
+        //turretpid tp = new turretpid(turretMotor);
+
+        //used to test the camera tracking
+        /*
         while(!isDisabled())
         {
-
-
-
             if(jstick.getTrigger())
             {
                 tp.enable();
@@ -77,22 +75,14 @@ public class RobotMain extends SimpleRobot
             if(!jstick.getTrigger())
             {
                 tp.disable();
-                System.out.println(jstick.getX()*2);
-                turretMotor.set(jstick.getX()*2);  // needs to be Y
-
+                System.out.println(jstick.getX());
+                turretMotor.set(jstick.getX());
             }
+        }
+         */
 
-        }
-        //os.start();
-        //AimTargetRoutine aimer = new AimTargetRoutine(50, turretMotor);
-        //aimer.start();
-        //me.start();
-        /*while(true){
-            System.out.println(jstick.getAxis(Joystick.AxisType.kY));
-            turretMotor.set(jstick.getAxis(Joystick.AxisType.kY));
-        }
-        *
-        */
+        os.start();
+
     }
 
     public void disabled()
@@ -102,5 +92,4 @@ public class RobotMain extends SimpleRobot
         SystemBase.stopAll();
     }
 }
-
     //Added by Mike Morris
