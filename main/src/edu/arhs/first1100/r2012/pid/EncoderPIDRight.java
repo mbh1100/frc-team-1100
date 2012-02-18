@@ -42,7 +42,7 @@ class EncoderOutputRight implements PIDOutput
         if(adding > 1) {adding = 1;}
         if(adding < -1) {adding = -1;}
 
-        output.driveright(adding);
+        output.driveRight(adding);
     }
 
     public EncoderOutputRight()

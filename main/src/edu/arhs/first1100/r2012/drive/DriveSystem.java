@@ -16,14 +16,10 @@ import edu.wpi.first.wpilibj.RobotDrive;
  */
 public class DriveSystem
 {
-
-    RobotDrive rD;
     public Jaguar j1;
     public Jaguar j2;
     public Jaguar j3;
     public Jaguar j4;
-   // DriveLeftPID dl;
-    DriveRightPID dr;
 
     private DriveSystem()
     {
@@ -31,9 +27,6 @@ public class DriveSystem
         j2 = new Jaguar(1, 2);
         j3 = new Jaguar(1, 3);
         j4 = new Jaguar(1, 4);
-        //rD = new RobotDrive(j1, j3, j2, j4);
-       // dl = new DriveLeftPID();
-        dr = new DriveRightPID();
     }
     static DriveSystem instance;
 
@@ -52,20 +45,14 @@ public class DriveSystem
         return instance;
     }
 
-    public void driveleft(double speed)
+    public void driveLeft(double speed)
     {
         j2.set(-speed);
         j4.set(-speed);
     }
-    public void driveright(double speed)
+    public void driveRight(double speed)
     {
         j1.set(speed);
         j3.set(speed);
     }
-    public void tank(double left, double right)
-    {
-        rD.tankDrive(right, left);
-    }
 }
-
-    //Added by Ryan

@@ -41,9 +41,6 @@ public class RobotMain extends SimpleRobot
         Log.addClass(CameraSystem.class, 1);
         Log.addClass(OperatorSystem.class, 1);
 
-        //turretMotor = new Jaguar(1, 1);
-        //jstick = new Joystick(1);
-        //c = new CameraSystem();
         os = new OperatorSystem();
         MotorEncoder.getInstance().start();
 
@@ -61,7 +58,7 @@ public class RobotMain extends SimpleRobot
 
     public void operatorControl()
     {
-        Log.defcon3(this, "Operator Mode Activated\n\n\n\n\n\n\n\n\n");
+        Log.defcon3(this, "Operator Mode Activated\n\n\n");
         SystemBase.enableAll();
         //turretpid tp = new turretpid(turretMotor);
 

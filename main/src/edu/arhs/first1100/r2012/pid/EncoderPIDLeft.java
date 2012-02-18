@@ -21,7 +21,7 @@ class EncoderSourceLeft implements PIDSource
     public double pidGet()
     {
         double tmp = me.getLeft();
-        System.out.println( tmp + "<~~~~~~~~~~~~ Left rate");
+        //System.out.println( tmp + "<~~~~~~~~~~~~ Left rate");
         return tmp;
     }
    public EncoderSourceLeft()
@@ -37,13 +37,13 @@ class EncoderOutputLeft implements PIDOutput
 
     public void pidWrite(double o)
     {
-        System.out.println("left o is: " + o);
+        //System.out.println("left o is: " + o);
         adding = adding + o;
         if(adding > 1) {adding = 1;}
         if(adding < -1) {adding = -1;}
-        System.out.println("adding Left is:" + adding);
+        //System.out.println("adding Left is:" + adding);
 
-        output.driveleft(adding);
+        output.driveLeft(adding);
     }
 
     public EncoderOutputLeft()
@@ -55,7 +55,7 @@ class EncoderOutputLeft implements PIDOutput
 public class EncoderPIDLeft extends edu.wpi.first.wpilibj.PIDController
 {
     static private final double P = 0.004;
-    static private final double I = 0.0000;
+    static private final double I = 0.000;
     static private final double D = 0.0000;
 
     public EncoderPIDLeft()
