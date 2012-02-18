@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 /**
  *
  * @author Connor Moroney
- * @improved by Ryan
+ * @improved by Team1100
  */
 class TurretSource implements PIDSource
 {
@@ -43,7 +43,7 @@ class TurretOutput implements PIDOutput
 
 public class turretpid extends edu.wpi.first.wpilibj.PIDController{
 static private final double P = 1.0;
-static private final double I = 0.01;
+   static private final double I = 0.01;
 static private final double D = 0.0;
 
 /**

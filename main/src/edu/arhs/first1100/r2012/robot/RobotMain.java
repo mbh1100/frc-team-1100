@@ -23,6 +23,7 @@ import edu.arhs.first1100.r2012.pid.turretpid;
 import edu.arhs.first1100.r2012.robot.diagnostic.DiagnosticRobot;
 import edu.arhs.first1100.r2012.routines.*;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
+import edu.arhs.first1100.r2012.OperatorControl.PS3Controller;
 
 public class RobotMain extends SimpleRobot
 {
@@ -31,6 +32,7 @@ public class RobotMain extends SimpleRobot
     MotorEncoder me;
     Joystick jstick;
     Jaguar turretMotor;
+    PS3Controller ps;
     public void robotInit()
     {
         //Set Loggin' Levels
@@ -67,6 +69,7 @@ public class RobotMain extends SimpleRobot
         /*
         while(!isDisabled())
         {
+        /*
             if(jstick.getTrigger())
             {
                 tp.enable();
