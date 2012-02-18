@@ -13,52 +13,93 @@ import edu.arhs.first1100.oopctl.AttackThree;
 import edu.arhs.first1100.oopctl.ButtonHandler;
 import edu.arhs.first1100.oopctl.JoystickAxisHandler;
 
-class LeftAxisY extends JoystickAxisHandler
-{
-    EncoderPIDLeft l;
-
-    public void heresYourValue(double value)
-    {
-        double lRate = MotorEncoder.getInstance().getLeft();
-        double rRate = MotorEncoder.getInstance().getRight();
-        System.out.println("Left rate:" + lRate + "\tRight rate:" + rRate);
-        l.setSetpoint(value*100);
-    }
-
-    public LeftAxisY()
-    {
-        l = new EncoderPIDLeft();
-        l.setOutputRange(-0.5, 0.5);
-        l.enable();
-        super.setDeadBand(0.05);
-    }
-}
-
-class RightAxisY extends JoystickAxisHandler
-{
-    EncoderPIDRight r;
-
-    public void heresYourValue(double value)
-    {
-        r.setSetpoint(value*100);
-    }
-
-    public RightAxisY ()
-    {
-        r = new EncoderPIDRight();
-        r.setOutputRange(-0.5, 0.5);
-        r.enable();
-        super.setDeadBand(0.05);
-    }
-}
 
 public class OperatorSystem
 {
+    class LeftAxisY extends JoystickAxisHandler
+    {
+        EncoderPIDLeft l;
+
+        public void heresYourValue(double value)
+        {
+            if(raw_tank)
+            {
+                if(l.isEnable()) l.disable();
+                DriveSystem.getInstance().driveLeft(value);
+            }
+            else
+            {
+                if(!l.isEnable()) l.enable();
+                l.setSetpoint(value*100);
+            }
+        }
+
+        public LeftAxisY()
+        {
+            l = new EncoderPIDLeft();
+            l.setOutputRange(-0.5, 0.5);
+            l.enable();
+            super.setDeadBand(0.05);
+        }
+    }
+    class RightAxisY extends JoystickAxisHandler
+    {
+        EncoderPIDRight r;
+
+        public void heresYourValue(double value)
+        {
+            System.out.println("Raw Tank = " + raw_tank);
+            if(raw_tank)
+            {
+                if(r.isEnable()) r.disable();
+                DriveSystem.getInstance().driveRight(value);
+            }
+            else
+            {
+                if(!r.isEnable()) r.enable();
+                r.setSetpoint(value*100);
+            }
+        }
+
+        public RightAxisY ()
+        {
+            r = new EncoderPIDRight();
+            r.setOutputRange(-0.5, 0.5);
+            r.enable();
+            super.setDeadBand(0.05);
+        }
+    }
+    class DriveStraight extends JoystickAxisHandler
+    {
+        JoystickAxisHandler l;
+        JoystickAxisHandler r;
+
+        public void heresYourValue(double value)
+        {
+            l.heresYourValue(value);
+            r.heresYourValue(value);
+        }
+        DriveStraight()
+        {
+            l = new RightAxisY();
+            r = new LeftAxisY();
+        }
+    }
+    class RightB2 extends ButtonHandler
+    {
+        public void pressed()
+        {
+            raw_tank = !raw_tank;
+        }
+    }
+
     private final int JOYSTICK_LEFT_CHANNEL = 1;
     private final int JOYSTICK_RIGHT_CHANNEL = 2;
 
     private AttackThree left;
     private AttackThree right;
+
+    private boolean raw_tank = false;
 
     public OperatorSystem()
     {
@@ -67,6 +108,7 @@ public class OperatorSystem
 
         left.bindY(new LeftAxisY());
         right.bindY(new RightAxisY());
+        right.bindB2(new RightB2());
     }
     public void start()
     {
