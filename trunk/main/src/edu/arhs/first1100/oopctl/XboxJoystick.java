@@ -3,13 +3,13 @@
 Future controls:
 
             Xbox Controls:
-    
+
     Left Analog:    Arm
     Right Analog:   Lift
 
     Right Bumper:   Pull tube in
     Left Bumper:    Push tube out
-    
+
     A Button:       Rotate tube down
     B Button:       Rotate tube up
 
@@ -28,16 +28,16 @@ import edu.arhs.first1100.util.SystemBase;
 public class XboxJoystick extends SystemBase
 {
     private Button button_a;
-    
+
     private Joystick xboxJoystick;
-    
+
     public XboxJoystick(int channel)
     {
         super();
 
         xboxJoystick = new Joystick(channel);
         button_a = new Button(xboxJoystick, 1);
-        
+
         this.start();
     }
 
