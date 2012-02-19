@@ -1,7 +1,7 @@
 /**
  * AdvJaguar.java
  *
- * Extends the WPI jaguar class.
+ * Extends the WPI jaguar class. 
  */
 
 package edu.arhs.first1100.util;
