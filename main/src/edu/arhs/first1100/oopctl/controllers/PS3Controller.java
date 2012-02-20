@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.arhs.first1100.oopctl;
+package edu.arhs.first1100.oopctl.controllers;
+import edu.arhs.first1100.oopctl.handlers.Button;
+import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.util.SystemBase;
 import edu.wpi.first.wpilibj.Joystick;
 /**
@@ -108,7 +110,7 @@ public class PS3Controller extends SystemBase
         b9.bind(h);
     }
 
-    public void bindB10(ButtonHandler h)
+    public void bindB10(ButtonHandler h);;
     {
         String name = "PS 3 " + channel + ", button 10";
         h.setName(name);
