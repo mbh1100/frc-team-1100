@@ -1,13 +1,11 @@
 package edu.arhs.first1100.r2011.drive;
 
 import com.sun.squawk.util.MathUtils;
-import edu.arhs.first1100.r2011.camera.CameraSystem;
 import edu.arhs.first1100.util.Log;
-import edu.arhs.first1100.r2011.opctl.OperatorSystem;
 import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.util.AdvJaguar;
 import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.AnalogModule;
+import edu.wpi.first.wpilibj.Gyro;
 
 
 public class DriveSystem extends SystemBase
@@ -23,7 +21,7 @@ public class DriveSystem extends SystemBase
     private double curve = 0.0;
     private double power = 0.0;
 
-    private edu.wpi.first.wpilibj.Gyro gyro;
+    private Gyro gyro;
     private AnalogChannel range;
 
     public DriveSystem()
@@ -40,7 +38,10 @@ public class DriveSystem extends SystemBase
 
     public static DriveSystem getInstance()
     {
-        if(instance == null) instance = new DriveSystem();
+        if(instance == null)
+        {
+            instance = new DriveSystem();
+        }
         return instance;
     }
 
@@ -53,7 +54,7 @@ public class DriveSystem extends SystemBase
             powerPid.disable();
             steerPid.disable();
         }*/
-        
+
         //Log.defcon1(this, "Steer PID Output: " + steerPid.get());
         //Log.defcon1(this, "Power PID Output: " + powerPid.get());
         //Log.defcon1(this, "Gyro:" + gyro.getAngle());

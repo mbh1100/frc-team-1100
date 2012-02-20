@@ -21,10 +21,10 @@ public class JoystickAxis
     {
         double value = deadBand(js.getRawAxis(axis));
 
-        jah.heresYourValue(value);
+        jah.getHandleValue(value);
         if (value != last_value)
         {
-            jah.heresYourNewValue(value);
+            jah.getNewHandleValue(value);
         }
 
         last_value = value;

@@ -5,12 +5,12 @@ public class JoystickAxisHandler
     private String name;
     private double deadBandWidth;
 
-    public void heresYourValue(double value)
+    public void getHandleValue(double value)
     {
 
     }
 
-    public void heresYourNewValue(double value)
+    public void getNewHandleValue(double value)
     {
 
     }
