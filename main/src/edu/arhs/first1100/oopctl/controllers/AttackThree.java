@@ -5,9 +5,7 @@
 
 package edu.arhs.first1100.oopctl.controllers;
 
-import edu.arhs.first1100.oopctl.handlers.Button;
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
-import edu.arhs.first1100.oopctl.handlers.JoystickAxis;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.arhs.first1100.util.SystemBase;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,6 +15,8 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class AttackThree extends SystemBase{
 
+    private String prefix;
+    
     private int channel;
     private Joystick js;
     private JoystickAxis x;
@@ -35,29 +35,36 @@ public class AttackThree extends SystemBase{
     private Button b11;
 
     public AttackThree (int ch){
+        
         channel = ch;
-        js = new Joystick(ch);
-        x = new JoystickAxis(js, 1);
-        y = new JoystickAxis(js, 2);
-        z = new JoystickAxis(js, 3);
-        b1 = new Button(js, 1);
-        b2 = new Button(js, 2);
-        b3 = new Button(js, 3);
-        b4 = new Button(js, 4);
-        b5 = new Button(js, 5);
-        b6 = new Button(js, 6);
-        b7 = new Button(js, 7);
-        b8 = new Button(js, 8);
-        b9 = new Button(js, 9);
+        prefix = "Attack3["+channel+"], ";
+        
+        js  = new Joystick(ch);
+        
+        x  = new JoystickAxis(js, 1);
+        y  = new JoystickAxis(js, 2);
+        z  = new JoystickAxis(js, 3);
+        
+        b1  = new Button(js, 1);
+        b2  = new Button(js, 2);
+        b3  = new Button(js, 3);
+        b4  = new Button(js, 4);
+        b5  = new Button(js, 5);
+        b6  = new Button(js, 6);
+        b7  = new Button(js, 7);
+        b8  = new Button(js, 8);
+        b9  = new Button(js, 9);
         b10 = new Button(js, 10);
         b11 = new Button(js, 11);
     }
+    
     public void bindX(JoystickAxisHandler h)
     {
         String name = "Attack 3 " +channel+ ", X Axis";
-        h.setName(name);
+        h.setName(prefix+"X-axis");
         x.bind(h);
     }
+    
     public void bindY(JoystickAxisHandler h)
     {
         String name = "Attack 3 " + channel + ", Y Axis";
@@ -141,12 +148,14 @@ public class AttackThree extends SystemBase{
         h.setName(name);
         b10.bind(h);
     }
+    
     public void bindB11 (ButtonHandler h)
     {
         String name = "Attack 3 " + channel+ "' button 11";
         h.setName(name);
         b11.bind(h);
     }
+    
     public void tick()
     {
         x.update();
