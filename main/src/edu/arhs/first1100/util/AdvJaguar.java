@@ -1,7 +1,7 @@
 /**
  * AdvJaguar.java
  *
- * Extends the WPI jaguar class. 
+ * Extends the WPI jaguar class.
  */
 
 package edu.arhs.first1100.util;
@@ -13,7 +13,7 @@ public class AdvJaguar
     private boolean polarity;
     private Jaguar j1;
     private Jaguar j2;
-    
+
     /**
      * @param ch
      * @param inverted
@@ -25,12 +25,12 @@ public class AdvJaguar
 
         polarity = inverted;
     }
-    
+
     public AdvJaguar(int slot, int ch1, boolean inverted)
     {
         this(slot, ch1, 0, inverted);
     }
-    
+
     /**
      *
      * @param speed
