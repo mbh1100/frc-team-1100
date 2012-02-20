@@ -25,12 +25,12 @@ public class JoystickAxisHandler
         return name;
     }
 
-    protected void setDeadBand(double in)
+    public void setDeadBand(double in)
     {
         deadBandWidth = in;
     }
 
-    double getDeadBand()
+    public double getDeadBand()
     {
         return deadBandWidth;
     }

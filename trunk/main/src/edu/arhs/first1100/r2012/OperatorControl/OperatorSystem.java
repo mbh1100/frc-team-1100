@@ -60,7 +60,9 @@ public class OperatorSystem
             }
             else
             {
-                if(!r.isEnable()) r.enable();
+                if(!r.isEnable())
+                        r.enable();
+                
                 r.setSetpoint(value*100);
             }
         }
@@ -73,6 +75,7 @@ public class OperatorSystem
             super.setDeadBand(0.05);
         }
     }
+    
     class ToggleDrive extends ButtonHandler
     {
         public void pressed()
@@ -80,6 +83,7 @@ public class OperatorSystem
             raw_tank = !raw_tank;
         }
     }
+    
     class StandardDrive extends JoystickAxisHandler
     {
         JoystickAxisHandler l;
@@ -90,12 +94,14 @@ public class OperatorSystem
             l.getHandleValue(-value);
             r.getHandleValue(-value);
         }
+        
         StandardDrive()
         {
             l = new RightAxisY();
             r = new LeftAxisY();
         }
     }
+    
     class PS3B1 extends ButtonHandler
     {
         public void pressed()
@@ -103,6 +109,7 @@ public class OperatorSystem
             System.out.println("B1 Pressed");
         }
     }
+    
     class MainLiftBelt extends ButtonHandler
     {
         public void pressed()
@@ -113,12 +120,14 @@ public class OperatorSystem
             else
                 ManipulatorSystem.getInstance().setMainLiftBelt(.5);
         }
+        
         public void released()
         {
             System.out.println("B2 Released");
                 ManipulatorSystem.getInstance().setMainLiftBelt(0);
         }
     }
+    
     class IntakeRoller extends ButtonHandler
     {
         public void pressed()
@@ -129,12 +138,14 @@ public class OperatorSystem
             else
                 ManipulatorSystem.getInstance().setIntakeRoller(0.5);
         }
+        
         public void released()
         {
             System.out.println("B3 Released");
             ManipulatorSystem.getInstance().setIntakeRoller(0);
         }
     }
+    
     class ManuplitatorToggle extends ButtonHandler
     {
         public void pressed()
@@ -142,6 +153,7 @@ public class OperatorSystem
             invert = !invert;
         }
     }
+    
     class TopLiftBelt extends ButtonHandler
     {
         public void pressed()
@@ -194,12 +206,14 @@ public class OperatorSystem
         left.bindB5(new ManuplitatorToggle());
         ps3.bindB1(new PS3B1());
     }
+    
     public void start()
     {
         right.start();
         left.start();
         ps3.start();
     }
+    
     public void stop()
     {
         right.stop();

@@ -1,5 +1,6 @@
-package edu.arhs.first1100.oopctl.handlers;
+package edu.arhs.first1100.oopctl.controllers;
 
+import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class JoystickAxis

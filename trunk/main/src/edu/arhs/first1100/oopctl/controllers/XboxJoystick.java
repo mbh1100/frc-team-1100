@@ -22,7 +22,6 @@ Future controls:
 
 package edu.arhs.first1100.oopctl.controllers;
 
-import edu.arhs.first1100.oopctl.handlers.Button;
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.arhs.first1100.util.SystemBase;
