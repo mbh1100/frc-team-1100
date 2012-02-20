@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.arhs.first1100.r2012.robot;
+package edu.arhs.first1100.r2012.robot.diagnostic;
 
 import edu.arhs.first1100.r2011.drive.DriveSystem;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
@@ -17,15 +17,13 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class RobotTest
 {
-
-
     Jaguar turretRotation = new Jaguar(1,1);
     TurretPid tp = new TurretPid(turretRotation);
 
     Joystick jstick = new Joystick(1);
 
- public void OperatorControl()
- {
+    public void OperatorControl()
+    {
         Log.defcon3(this, "OpCtl");
         if(jstick.getRawButton(1))
         {

@@ -39,11 +39,14 @@ public class ManipulatorSystem
 
     public static ManipulatorSystem getInstance()
     {
-        synchronized(ManipulatorSystem.class)
+        if(instance == null)
         {
-            if (instance == null)
+            synchronized(ManipulatorSystem.class)
             {
-                instance = new ManipulatorSystem();
+                if (instance == null)
+                {
+                    instance = new ManipulatorSystem();
+                }
             }
         }
         return instance;

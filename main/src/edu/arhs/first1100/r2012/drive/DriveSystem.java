@@ -28,11 +28,14 @@ public class DriveSystem
 
     public static DriveSystem getInstance()
     {
-        synchronized(DriveSystem.class)
+        if(instance == null)
         {
-            if (instance == null)
+            synchronized(DriveSystem.class)
             {
-                instance = new DriveSystem();
+                if (instance == null)
+                {
+                    instance = new DriveSystem();
+                }
             }
         }
         return instance;

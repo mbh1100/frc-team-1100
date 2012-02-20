@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package edu.arhs.first1100.r2012.robot;
 
+import edu.arhs.first1100.r2012.robot.diagnostic.RobotTest;
 import edu.arhs.first1100.r2011.camera.CameraSystem;
 import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.r2012.routines.JoyGyro;
@@ -19,13 +20,14 @@ public class RobotMain extends SimpleRobot
 {
     OperatorSystem os;
     RobotTest rt;
+    
     public void robotInit()
     {
         //Set Loggin' Levels
         Log.addClass(RobotMain.class, 3);
         Log.addClass(JoyGyro.class, 4);
-        Log.addClass(CameraSystem.class, 4);
-        Log.addClass(OperatorSystem.class, 4);
+        Log.addClass(CameraSystem.class, 3);
+        Log.addClass(OperatorSystem.class, 1);
 
         Log.addClass(RobotTest.class, 3);
 
