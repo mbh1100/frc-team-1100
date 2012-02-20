@@ -25,6 +25,7 @@ public class Button
     {
         boolean value = js.getRawButton(button_number);
 
+
         if(value)
         {
             bh.held();
@@ -36,6 +37,7 @@ public class Button
 
         if(value && !last_value)
         {
+            //System.out.println(bh.getName()+ " " + value);
             bh.pressed();
         }
 
@@ -46,11 +48,9 @@ public class Button
 
         last_value = value;
     }
-
     public void bind(ButtonHandler bh)
     {
         if(bh != null) this.bh = bh;
         else this.bh = new ButtonHandler();
     }
-
 }

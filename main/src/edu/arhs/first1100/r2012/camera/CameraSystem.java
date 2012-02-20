@@ -29,11 +29,11 @@ public class CameraSystem extends SystemBase
 
     //RGB Threshold
     private int minRed = 0;
-    private int maxRed = 15;
-    private int minGreen = 180;
-    private int maxGreen = 255;
-    private int minBlue = 245;
-    private int maxBlue = 255;
+    private int maxRed = 20;
+    private int minGreen = 120;
+    private int maxGreen = 140;
+    private int minBlue = 10;
+    private int maxBlue = 30;
 
     //Image Related Objects
     private AxisCamera ac = null;

@@ -32,10 +32,11 @@ public class MotorEncoder
 
     private MotorEncoder()
     {
-        enLeft = new Encoder(11, 12, true); // 3rd parameter is true to reverse direction
-        enRight = new Encoder(13, 14, false); // 3rd parameter is false to keep direction
+        enLeft = new Encoder(13, 14, true); // 3rd parameter is true to reverse direction
+        enRight = new Encoder(11, 12, true); // 3rd parameter is false to keep direction
         enRight.setDistancePerPulse(.1);
         enLeft.setDistancePerPulse(.1);
+        start();
     }
 
     public void start()
@@ -48,6 +49,7 @@ public class MotorEncoder
     {
         double x = enRight.getRate();
         //used to check for NaN
+        //System.out.println("RATE:   " + x);
         if(x/x == 1)
         {
             return x;
@@ -59,6 +61,7 @@ public class MotorEncoder
     {
         double x = enLeft.getRate();
         //used to check for NaN
+        //System.out.println("RATE:   " + x);
         if(x/x == 1)
         {
             return x;
