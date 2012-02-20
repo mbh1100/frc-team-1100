@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package edu.arhs.first1100.oopctl.handlers;
+package edu.arhs.first1100.oopctl.controllers;
 
+import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Button
