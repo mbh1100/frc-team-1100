@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package edu.arhs.first1100.oopctl;
+package edu.arhs.first1100.oopctl.handlers;
 
 import edu.wpi.first.wpilibj.Joystick;
 

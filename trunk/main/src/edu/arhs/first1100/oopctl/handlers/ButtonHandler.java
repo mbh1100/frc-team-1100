@@ -1,4 +1,4 @@
-package edu.arhs.first1100.oopctl;
+package edu.arhs.first1100.oopctl.handlers;
 import edu.arhs.first1100.util.Log;
 
 public class ButtonHandler
@@ -25,7 +25,7 @@ public class ButtonHandler
         Log.defcon3(this, name + " Button Released"); //Says that the button has been releaced
     }
 
-    void setName(String name)
+    public void setName(String name)
     {
         this.name = name;
     }

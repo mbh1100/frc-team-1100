@@ -1,7 +1,7 @@
 package edu.arhs.first1100.r2012.OperatorControl;
 
 import edu.arhs.first1100.r2012.drive.DriveSystem;
-import edu.arhs.first1100.oopctl.PS3Controller;
+import edu.arhs.first1100.oopctl.controllers.PS3Controller;
 import edu.arhs.first1100.r2012.pid.EncoderPIDLeft;
 import edu.arhs.first1100.r2012.pid.EncoderPIDRight;
 import edu.arhs.first1100.r2012.routines.*;
@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.Joystick;
 //import edu.arhs.first1100.r2012.routines.CameraTest;
 import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
-import edu.arhs.first1100.oopctl.AttackThree;
-import edu.arhs.first1100.oopctl.ButtonHandler;
+import edu.arhs.first1100.oopctl.controllers.AttackThree;
+import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
-import edu.arhs.first1100.oopctl.JoystickAxisHandler;
+import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.wpi.first.wpilibj.Relay;
 
 
@@ -32,7 +32,7 @@ public class OperatorSystem
             }
             else
             {
-                System.out.println("ENCODER DRIVE_____________________________________________________");
+                Log.defcon2(OperatorSystem.class, "ENCODER DRIVE_____________________________________________________");
                 if(!l.isEnable()) l.enable();
                 l.setSetpoint(value*100);
             }
@@ -53,11 +53,9 @@ public class OperatorSystem
 
         public void getHandleValue(double value)
         {
-            //System.out.println("Raw Tank = " + raw_tank);
             if(raw_tank)
             {
                 if(r.isEnable()) r.disable();
-                //System.out.println("Right Value-------: " + value);
                 DriveSystem.getInstance().driveRight(value);
             }
             else
@@ -82,17 +80,17 @@ public class OperatorSystem
             raw_tank = !raw_tank;
         }
     }
-    class DriveStraight extends JoystickAxisHandler
+    class StandardDrive extends JoystickAxisHandler
     {
         JoystickAxisHandler l;
         JoystickAxisHandler r;
 
         public void getHandleValue(double value)
         {
-            l.getHandleValue(value);
-            r.getHandleValue(value);
+            l.getHandleValue(-value);
+            r.getHandleValue(-value);
         }
-        DriveStraight()
+        StandardDrive()
         {
             l = new RightAxisY();
             r = new LeftAxisY();
@@ -182,30 +180,30 @@ public class OperatorSystem
 
     public OperatorSystem()
     {
-        left = new AttackThree(JOYSTICK_LEFT_CHANNEL);
         right = new AttackThree(JOYSTICK_RIGHT_CHANNEL);
+        left = new AttackThree(JOYSTICK_LEFT_CHANNEL);
         ps3 = new PS3Controller(PLAYSTATION_CHANNEL);
 
-        left.bindY(new LeftAxisY());
         right.bindY(new RightAxisY());
         right.bindB2(new ToggleDrive());
-        ps3.bindB1(new PS3B1());
+        right.bindB3(new TopLiftBelt());
+        right.bindB10(new PrintRate());
+        left.bindY(new LeftAxisY());
         left.bindB2(new IntakeRoller());
         left.bindB3(new MainLiftBelt());
         left.bindB5(new ManuplitatorToggle());
-        right.bindB3(new TopLiftBelt());
-        right.bindB10(new PrintRate());
+        ps3.bindB1(new PS3B1());
     }
     public void start()
     {
-        left.start();
         right.start();
+        left.start();
         ps3.start();
     }
     public void stop()
     {
-        left.stop();
         right.stop();
+        left.stop();
         ps3.stop();
     }
 }

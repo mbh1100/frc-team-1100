@@ -110,7 +110,7 @@ public class PS3Controller extends SystemBase
         b9.bind(h);
     }
 
-    public void bindB10(ButtonHandler h);;
+    public void bindB10(ButtonHandler h)
     {
         String name = "PS 3 " + channel + ", button 10";
         h.setName(name);

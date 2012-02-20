@@ -32,7 +32,7 @@ class DrivelOutput implements PIDOutput
  *This is a generic pid for the left drive motors.
  * @author Connor Moroney
  */
-public class drivelpid extends edu.wpi.first.wpilibj.PIDController{
+public class DriveLeftPID extends edu.wpi.first.wpilibj.PIDController{
     static private final double P = 0.05;
     static private final double I = 0.01;
     static private final double D = 0.0;
@@ -40,7 +40,7 @@ public class drivelpid extends edu.wpi.first.wpilibj.PIDController{
     /**
      * Sets up the constructor for the left drive motors.
      */
-    public drivelpid(){
+    public DriveLeftPID(){
     super (P,I,D, new DrivelSource(), new DrivelOutput());
 
     }
