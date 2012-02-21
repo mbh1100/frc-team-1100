@@ -63,7 +63,7 @@ public class PS3Controller extends SystemBase
         h.setName(prefix+"X-axis");
         aT.bind(h);
     }
-    
+
     public void bindAX(JoystickAxisHandler h)
     {
         h.setName(prefix+"Y-axis");
@@ -149,17 +149,17 @@ public class PS3Controller extends SystemBase
     }
 
     //human-readable binding methods
-    
+
     public void bindA_R2(JoystickAxisHandler h)
     {
         bindAT(h);
     }
-    
+
     public void bindA_LeftX(JoystickAxisHandler h)
     {
         bindAX(h);
     }
-    
+
     public void bindA_LeftY(JoystickAxisHandler h)
     {
         bindAY(h);
