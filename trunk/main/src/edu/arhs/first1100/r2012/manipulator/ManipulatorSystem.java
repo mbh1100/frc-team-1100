@@ -4,18 +4,22 @@ package edu.arhs.first1100.r2012.manipulator;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.AnalogChannel;
 
 public class ManipulatorSystem
 {
     private static ManipulatorSystem instance = null;
     private BallCounter ballCounter;
-
+    
+    private AnalogChannel turretRotation;
+    private double turretMaxRotation;
+    
     private Jaguar topShooterWheel;
     private Jaguar bottomShooterWheel;
     private Victor leftShooterBelt;
     private Victor rightShooterBelt;
     private Relay leadScrewTilt;
-    private Victor turretRotation;
+    private Victor turret;
     private Victor intakeRoller;
     private Victor mainLiftBelt;
     private Relay topLiftBelt;
@@ -27,6 +31,11 @@ public class ManipulatorSystem
     private ManipulatorSystem()
     {
         ballCounter = new BallCounter();
+        ballCounter.start();
+        
+        turretRotation = new AnalogChannel(1);
+        turretMaxRotation = 5.0;
+        
         
         topShooterWheel = new Jaguar(1,3);  //ok
         bottomShooterWheel = new Jaguar(2,3);  //ok
@@ -57,11 +66,6 @@ public class ManipulatorSystem
         return instance;
     }
 
-    public Victor getTurretRotation()
-    {
-        return turretRotation;
-    }
-
     public void setTopShooterWheel(double speed)
     {
         if(speed * 1.2 >= 1)
@@ -75,21 +79,44 @@ public class ManipulatorSystem
     {
         bottomShooterWheel.set(0.5*speed);
     }
+    
+    /**
+     * Top left shooter belt, cannot drive backwards
+     * @param speed 
+     */
     public void setLeftShooterBelt(double speed)
     {
-        leftShooterBelt.set(speed);
+        leftShooterBelt.set((speed > 0.0)?speed:0);
     }
+    
+    /**
+     * Top left shooter belt, cannot drive backwards
+     * @param speed 
+     */
     public void setRightShooterBelt(double speed)
     {
-        rightShooterBelt.set(speed);
+        rightShooterBelt.set((speed > 0.0)?speed:0);
     }
+    
     public void setLeadScrewTilt(Relay.Value in)
     {
         leadScrewTilt.set(in);
     }
+    
+    /**
+     * sets the turret rotation and limits turret to range
+     * @param speed 
+     */
     public void setTurretRotation(double speed)
     {
-        turretRotation.set(speed);
+        if(Math.abs(turretRotation.getValue()) >= turretMaxRotation)
+        {
+            turret.set(0.0);
+        }
+        else
+        {
+        turret.set(speed);
+        }
     }
     
     /**
@@ -109,10 +136,16 @@ public class ManipulatorSystem
             intakeRoller.set(speed);
         }
     }
+    
     public void setMainLiftBelt(double speed)
     {
         mainLiftBelt.set(speed);
     }
+    
+    public double getMainLiftBelt(){
+        return mainLiftBelt.get();        
+    }
+    
     public void setTopLiftBelt(Relay.Value value)
     {
         topLiftBelt.set(value);
