@@ -1,18 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package edu.arhs.first1100.oopctl.controllers;
 
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.arhs.first1100.util.SystemBase;
 import edu.wpi.first.wpilibj.Joystick;
-/**
- *
- * @author Connor Moroney
- */
+
 public class AttackThree extends SystemBase{
 
     private String prefix;
