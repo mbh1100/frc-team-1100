@@ -150,6 +150,37 @@ public class OperatorSystem
             ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
         }
     }
+    
+    /**
+     * Control LeadScrew for up/down turret aiming
+     * Bound to PS3 Left Analog Y
+     */
+    class AnalogLeadScrew extends JoystickAxisHandler
+    {
+        
+        public void setHandleValue(double value)
+        {
+            if(value > 0)
+                ManipulatorSystem.getInstance().setLeadScrewTilt((invert)?Relay.Value.kReverse:Relay.Value.kForward);
+            else if (value < 0)
+                ManipulatorSystem.getInstance().setLeadScrewTilt((invert)?Relay.Value.kForward:Relay.Value.kReverse);
+            else
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff); 
+        
+        }               
+    }
+    
+    /**
+     * Control turret rotation
+     * Bound to PS3 Left Analog X
+     */
+    class AnalogTurretRotation extends JoystickAxisHandler
+    {
+        public void setHandleValue(double value)
+        {  
+            ManipulatorSystem.getInstance().setTurretRotation(value);
+        }        
+    }      
 
     /**
      * Used for main lift belt system.
@@ -313,6 +344,10 @@ public class OperatorSystem
         //ps3.bindB_DUp(new LeadScrewUp());
         //ps3.bindB_DDown(new LeadScrewDown());
         ps3.bindA_R2(new AnalogShooterSpeed());
+        
+        //Aiming
+        ps3.bindA_LeftX(new AnalogTurretRotation());
+        ps3.bindA_LeftY(new AnalogLeadScrew());
     }
 
     public void start()
