@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Victor;
 public class ManipulatorSystem
 {
     private static ManipulatorSystem instance = null;
+    private BallCounter ballCounter;
 
     private Jaguar topShooterWheel;
     private Jaguar bottomShooterWheel;
@@ -25,6 +26,8 @@ public class ManipulatorSystem
 
     private ManipulatorSystem()
     {
+        ballCounter = new BallCounter();
+        
         topShooterWheel = new Jaguar(1,3);  //ok
         bottomShooterWheel = new Jaguar(2,3);  //ok
         leftShooterBelt = new Victor(2,4);   //ok
@@ -88,9 +91,23 @@ public class ManipulatorSystem
     {
         turretRotation.set(speed);
     }
+    
+    /**
+     * Sets the intake roller
+     * Intake roller will not intake if BallCounter is counting an illegal number
+     * of balls.
+     * @param speed 
+     */
     public void setIntakeRoller(double speed)
     {
-        intakeRoller.set(speed);
+        if(!ballCounter.canIntake())
+        {
+            intakeRoller.set((speed > 0)?-speed:speed);
+        } 
+        else 
+        {
+            intakeRoller.set(speed);
+        }
     }
     public void setMainLiftBelt(double speed)
     {
@@ -116,8 +133,9 @@ public class ManipulatorSystem
     {
         rampArm.set(speed);
     }
+        
     public void stop()
-    {
+    {        
         this.topShooterWheel.set(0);
         this.bottomShooterWheel.set(0);
         this.intakeRoller.set(0);

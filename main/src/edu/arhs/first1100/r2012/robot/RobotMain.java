@@ -13,8 +13,7 @@ import edu.arhs.first1100.r2012.routines.JoyGyro;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.r2012.OperatorControl.OperatorSystem;
-import edu.arhs.first1100.r2012.robot.diagnostic.DiagnosticRobot;
-import edu.arhs.first1100.r2012.sensors.MotorEncoder;
+import edu.arhs.first1100.r2012.manipulator.BallCounter;
 
 public class RobotMain extends SimpleRobot
 {
@@ -29,6 +28,7 @@ public class RobotMain extends SimpleRobot
         Log.addClass(OperatorSystem.class, 1);
 
         Log.addClass(RobotTest.class, 3);
+        Log.addClass(BallCounter.class, 2);
 
         os = new OperatorSystem();
 
