@@ -165,15 +165,20 @@ public class OperatorSystem
     {
 
         public void setHandleValue(double value)
-        {
+        {            
             if(value > 0)
-                ManipulatorSystem.getInstance().setLeadScrewTilt((invert)?Relay.Value.kReverse:Relay.Value.kForward);
+            {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
+            } 
             else if (value < 0)
-                ManipulatorSystem.getInstance().setLeadScrewTilt((invert)?Relay.Value.kForward:Relay.Value.kReverse);
-            else
+            {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
+            } 
+            else 
+            {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
-
-        }
+            }
+        }               
     }
 
     /**

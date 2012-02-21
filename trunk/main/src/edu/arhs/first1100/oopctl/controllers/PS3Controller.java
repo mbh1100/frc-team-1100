@@ -149,6 +149,7 @@ public class PS3Controller extends SystemBase
     }
 
     //human-readable binding methods
+    
     public void bindA_R2(JoystickAxisHandler h)
     {
         bindAT(h);
