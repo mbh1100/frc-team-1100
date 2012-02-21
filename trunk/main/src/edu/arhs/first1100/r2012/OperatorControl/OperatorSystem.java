@@ -134,26 +134,42 @@ public class OperatorSystem
 
     class LeadScrewUp extends ButtonHandler
     {
+        private boolean toggle = true;
         public void held()
         {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
+            if(toggle)
+            {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
+                toggle = !toggle;
+            }
+            else
+            {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+                toggle = !toggle;
+            }
         }
 
         public void released()
         {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
         }
     }
 
     class LeadScrewDown extends ButtonHandler
     {
+        private boolean toggle = true;
+
         public void held()
         {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
-        }
-
-        public void released(){
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+            if(toggle)
+            {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
+                toggle = !toggle;
+            }
+            else
+            {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+                toggle = !toggle;
+            }
         }
     }
 
@@ -165,20 +181,21 @@ public class OperatorSystem
     {
 
         public void setHandleValue(double value)
-        {            
+        {
+            System.out.println("AnalogScrew "+getName());
             if(value > 0)
             {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
-            } 
+            }
             else if (value < 0)
             {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
-            } 
-            else 
+            }
+            else
             {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
             }
-        }               
+        }
     }
 
     /**
@@ -189,6 +206,7 @@ public class OperatorSystem
     {
         public void setHandleValue(double value)
         {
+            System.out.println("AnalogTurretRot "+getName());
             ManipulatorSystem.getInstance().setTurretRotation(value);
         }
     }
@@ -198,31 +216,36 @@ public class OperatorSystem
      */
     class LiftBelt extends ButtonHandler
     {
+        private boolean toggle = true;
         public void pressed()
         {
-
-            // Sets value when pressed and released.
-            // Makes main lift negative values when inverted and normal when normal.
-
-            if(invert)
+            if(toggle)
             {
-                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                //Intake roller - remove
-                ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
+                // Sets value when pressed and released.
+                // Makes main lift negative values when inverted and normal when normal.
+
+                if(invert)
+                {
+                    ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+                    //Intake roller - remove
+                    ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
+                    toggle = !toggle;
+                }
+                else
+                {
+                    ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
+                    //Intake roller - remove
+                    ManipulatorSystem.getInstance().setIntakeRoller(0.5);
+                    toggle = !toggle;
+                }
             }
             else
             {
-                ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
-                //Intake roller - remove
-                ManipulatorSystem.getInstance().setIntakeRoller(0.5);
-            }
-        }
-
-        public void released()
-        {
                 ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
                 //Intake roller - remove
                 ManipulatorSystem.getInstance().setIntakeRoller(0.0);
+                toggle = !toggle;
+            }
         }
     }
 
@@ -232,24 +255,29 @@ public class OperatorSystem
      */
     class IntakeRoller extends ButtonHandler
     {
+        private boolean toggle = true;
         public void pressed()
         {
-            if(invert)
+            if(toggle)
             {
-                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                ManipulatorSystem.getInstance().setIntakeRoller(-0.7);
+                if(invert)
+                {
+                    ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+                    ManipulatorSystem.getInstance().setIntakeRoller(-0.7);
+                    toggle = !toggle;
+                }
+                else
+                {
+                    ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+                    ManipulatorSystem.getInstance().setIntakeRoller(0.7);
+                    toggle = !toggle;
+                }
             }
             else
             {
-                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                ManipulatorSystem.getInstance().setIntakeRoller(0.7);
+                ManipulatorSystem.getInstance().setIntakeRoller(0);
+                toggle = !toggle;
             }
-        }
-
-        public void released()
-        {
-            //System.out.println("B2 Released");
-            ManipulatorSystem.getInstance().setIntakeRoller(0);
         }
     }
 
@@ -273,6 +301,10 @@ public class OperatorSystem
                 ManipulatorSystem.getInstance().setTopLiftBelt(Relay.Value.kReverse);
             else
                 ManipulatorSystem.getInstance().setTopLiftBelt(Relay.Value.kForward);
+        }
+        public void released()
+        {
+            ManipulatorSystem.getInstance().setTopLiftBelt(Relay.Value.kOff);
         }
     }
     class PrintRate extends ButtonHandler
@@ -321,6 +353,41 @@ public class OperatorSystem
             ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
         }
     }
+    class OuterBallRoller extends ButtonHandler
+    {
+        private boolean toggle = true;
+        public void pressed()
+        {
+            if(toggle)
+            {
+                ManipulatorSystem.getInstance().setOuterBallRoller(-.7);
+                toggle = !toggle;
+            }
+            else
+            {
+                ManipulatorSystem.getInstance().setOuterBallRoller(0);
+                toggle = !toggle;
+            }
+        }
+    }
+    class OuterBallArmDown extends ButtonHandler
+    {
+        private boolean toggle = true;
+        public void pressed()
+        {
+            if(toggle)
+            {
+                ManipulatorSystem.getInstance().setOuterBallArm(-.7);
+                toggle = !toggle;
+            }
+            else
+            {
+                ManipulatorSystem.getInstance().setOuterBallArm(0);
+                toggle = !toggle;
+            }
+        }
+
+    }
 
     //channels
     private final int JOYSTICK_LEFT_CHANNEL = 1;
@@ -356,9 +423,11 @@ public class OperatorSystem
         ps3.bindB_X(new LiftBelt());
         ps3.bindB_L1(new ShooterSpeedUp());
         ps3.bindB_R1(new ShooterSpeedDown());
-        //ps3.bindB_DUp(new LeadScrewUp());
-        //ps3.bindB_DDown(new LeadScrewDown());
+        ps3.bindB_DUp(new LeadScrewUp());
+        ps3.bindB_DDown(new LeadScrewDown());
         ps3.bindA_R2(new AnalogShooterSpeed());
+        ps3.bindB_Circle(new OuterBallRoller());
+        ps3.bindB_Square(new OuterBallArmDown());
 
         //Aiming
         ps3.bindA_LeftX(new AnalogTurretRotation());

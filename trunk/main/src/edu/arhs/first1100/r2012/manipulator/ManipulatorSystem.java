@@ -61,11 +61,16 @@ public class ManipulatorSystem
 
     public void setTopShooterWheel(double speed)
     {
-        topShooterWheel.set(-speed);
+        if(speed * 1.2 >= 1)
+            topShooterWheel.set(-speed);
+        else
+        {
+            topShooterWheel.set(-speed*1.2);
+        }
     }
     public void setBottomShooterWheel(double speed)
     {
-        bottomShooterWheel.set(0.9*speed);
+        bottomShooterWheel.set(0.5*speed);
     }
     public void setLeftShooterBelt(double speed)
     {
@@ -113,18 +118,17 @@ public class ManipulatorSystem
     }
     public void stop()
     {
+        this.topShooterWheel.set(0);
         this.bottomShooterWheel.set(0);
         this.intakeRoller.set(0);
-        this.leadScrewTilt.set(Relay.Value.kOff);
         this.leftShooterBelt.set(0);
+        this.rightShooterBelt.set(0);
+        this.leadScrewTilt.set(Relay.Value.kOff);
         this.mainLiftBelt.set(0);
         this.neckBelt.set(Relay.Value.kOff);
-        this.outerBallArm.set(0);
-        this.outerBallRoller.set(0);
-        this.rampArm.set(0);
-        this.rightShooterBelt.set(0);
-        this.topLiftBelt.set(Relay.Value.kOff);
-        this.topShooterWheel.set(0);
-        this.turretRotation.set(0);
+        //this.outerBallArm.set(0);       NULL
+        //this.outerBallRoller.set(0);    NULL
+        //this.rampArm.set(0);            NULL
+        //this.turretRotation.set(0);     NULL
     }
 }
