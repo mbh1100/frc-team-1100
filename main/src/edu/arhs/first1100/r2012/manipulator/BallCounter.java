@@ -23,7 +23,7 @@ public class BallCounter extends SystemBase
     private int heldBalls;
     
     public BallCounter(){
-        topBallSwitch = new DigitalInput(0);
+        topBallSwitch = new DigitalInput(1, 10);
         bottomBallSwitch = new DigitalInput(0);
     }
     
@@ -47,9 +47,16 @@ public class BallCounter extends SystemBase
     public void tick()
     {
         
-        if(bottomBallSwitch.get() && !bottomLastState)
-            heldBalls++;
-        
+        if(!bottomBallSwitch.get() && bottomLastState){
+            if(ManipulatorSystem.getInstance().getMainLiftBelt() >= 0)
+                heldBalls++;
+            else 
+                heldBalls--;            
+        }
+            
+        /**
+         * Top feeder belt can not go backwards, so we don't need to check
+         */
         if(topBallSwitch.get() && !topLastState)
             heldBalls--;
         
