@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ManipulatorSystem
 {
@@ -13,6 +14,8 @@ public class ManipulatorSystem
     
     private AnalogChannel turretRotation;
     private double turretMaxRotation;
+    
+    private DigitalInput outerBallArmTopSwitch;
     
     private Jaguar topShooterWheel;
     private Jaguar bottomShooterWheel;
@@ -24,8 +27,10 @@ public class ManipulatorSystem
     private Victor mainLiftBelt;
     private Relay topLiftBelt;
     private Relay neckBelt;
+    
     private Victor outerBallRoller;
     private Victor outerBallArm;
+    
     private Victor rampArm;
 
     private ManipulatorSystem()
@@ -35,6 +40,8 @@ public class ManipulatorSystem
         
         turretRotation = new AnalogChannel(1);
         turretMaxRotation = 5.0;
+        
+        outerBallArmTopSwitch = new DigitalInput(1, 1);
         
         
         topShooterWheel = new Jaguar(1,3);  //ok
@@ -150,22 +157,36 @@ public class ManipulatorSystem
     {
         topLiftBelt.set(value);
     }
+    
     public void setNeckBelt(Relay.Value in)
     {
         neckBelt.set(in);
     }
+    
     public void setOuterBallRoller(double speed)
     {
         outerBallRoller.set(speed);
     }
+    
     public void setOuterBallArm(double speed)
     {
-        outerBallArm.set(speed);
+        if(outerBallArmTopSwitch.get() && speed < 0.0)
+        {
+            outerBallArm.set(0.0);            
+        }
+        else
+        {
+            outerBallArm.set(speed);
+        }
     }
+    
     public void setRampArm(double speed)
     {
         rampArm.set(speed);
     }
+    
+    
+    
         
     public void stop()
     {        
