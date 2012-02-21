@@ -111,13 +111,20 @@ public class ManipulatorSystem
     {
         rampArm.set(speed);
     }
-    /*public void setCowUp()
+    public void stop()
     {
-        outerBallArm.set(.7);
+        this.bottomShooterWheel.set(0);
+        this.intakeRoller.set(0);
+        this.leadScrewTilt.set(Relay.Value.kOff);
+        this.leftShooterBelt.set(0);
+        this.mainLiftBelt.set(0);
+        this.neckBelt.set(Relay.Value.kOff);
+        this.outerBallArm.set(0);
+        this.outerBallRoller.set(0);
+        this.rampArm.set(0);
+        this.rightShooterBelt.set(0);
+        this.topLiftBelt.set(Relay.Value.kOff);
+        this.topShooterWheel.set(0);
+        this.turretRotation.set(0);
     }
-    public void setCowDown()
-    {
-
-    }
-    */
 }

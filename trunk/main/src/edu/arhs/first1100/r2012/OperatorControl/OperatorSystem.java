@@ -372,5 +372,6 @@ public class OperatorSystem
         right.stop();
         left.stop();
         ps3.stop();
+        ManipulatorSystem.getInstance().stop();
     }
 }
