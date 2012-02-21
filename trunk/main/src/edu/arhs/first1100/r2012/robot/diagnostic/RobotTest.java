@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class RobotTest
 {
     Jaguar turretRotation = new Jaguar(1,1);
-    TurretPid tp = new TurretPid(turretRotation);
+    //TurretPid tp = new TurretPid(turretRotation);
 
     Joystick jstick = new Joystick(1);
 
@@ -27,12 +27,12 @@ public class RobotTest
         Log.defcon3(this, "OpCtl");
         if(jstick.getRawButton(1))
         {
-            tp.enable();
+            //tp.enable();
             Log.defcon3(this, "turret pid control");
         }
         else
         {
-            tp.disable();
+            //tp.disable();
             Log.defcon3(this, "Joystick control");
             turretRotation.set(jstick.getX());
         }

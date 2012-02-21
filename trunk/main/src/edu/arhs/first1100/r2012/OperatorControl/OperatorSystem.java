@@ -1,20 +1,20 @@
 package edu.arhs.first1100.r2012.OperatorControl;
 
 import edu.arhs.first1100.r2012.drive.DriveSystem;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.arhs.first1100.oopctl.controllers.PS3Controller;
 import edu.arhs.first1100.r2012.pid.EncoderPIDLeft;
 import edu.arhs.first1100.r2012.pid.EncoderPIDRight;
-import edu.arhs.first1100.r2012.routines.*;
-import edu.arhs.first1100.util.Log;
-import edu.wpi.first.wpilibj.Joystick;
-//import edu.arhs.first1100.r2012.routines.CameraTest;
-import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
 import edu.arhs.first1100.oopctl.controllers.AttackThree;
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
+import edu.arhs.first1100.r2012.camera.CameraSystem;
+import edu.arhs.first1100.r2012.manipulator.BallCounter;
+import edu.arhs.first1100.r2012.pid.TurretPid;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 
 public class OperatorSystem
@@ -35,7 +35,6 @@ public class OperatorSystem
             }
             else
             {
-                Log.defcon2(OperatorSystem.class, "ENCODER DRIVE_____________________________________________________");
                 if(!l.isEnable()) l.enable();
                 l.setSetpoint(value*100);
             }
@@ -134,42 +133,26 @@ public class OperatorSystem
 
     class LeadScrewUp extends ButtonHandler
     {
-        private boolean toggle = true;
         public void held()
         {
-            if(toggle)
-            {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
-                toggle = !toggle;
-            }
-            else
-            {
-                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
-                toggle = !toggle;
-            }
         }
-
         public void released()
         {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
         }
     }
 
     class LeadScrewDown extends ButtonHandler
     {
-        private boolean toggle = true;
 
         public void held()
         {
-            if(toggle)
-            {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
-                toggle = !toggle;
-            }
-            else
-            {
+        }
+        public void released()
+        {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
-                toggle = !toggle;
-            }
         }
     }
 
@@ -182,8 +165,6 @@ public class OperatorSystem
 
         public void setHandleValue(double value)
         {
-            super.setHandleValue(value);
-            System.out.println("AnalogScrew "+getName());
             if(value > 0)
             {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
@@ -198,6 +179,28 @@ public class OperatorSystem
             }
         }
     }
+    class TurretRotationLeft extends ButtonHandler
+    {
+        public void held()
+        {
+            ManipulatorSystem.getInstance().setTurretRotationSpeed(-.35);
+        }
+        public void released()
+        {
+            ManipulatorSystem.getInstance().setTurretRotationSpeed(0);
+        }
+    }
+    class TurretRotationRight extends ButtonHandler
+    {
+        public void held()
+        {
+            ManipulatorSystem.getInstance().setTurretRotationSpeed(.35);
+        }
+        public void released()
+        {
+            ManipulatorSystem.getInstance().setTurretRotationSpeed(0);
+        }
+    }
 
     /**
      * Control turret rotation
@@ -207,8 +210,6 @@ public class OperatorSystem
     {
         public void setHandleValue(double value)
         {
-            super.setHandleValue(value);
-            System.out.println("AnalogTurretRot "+getName());
             //ManipulatorSystem.getInstance().setTurretRotation(value);
         }
     }
@@ -266,12 +267,14 @@ public class OperatorSystem
                 {
                     ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                     ManipulatorSystem.getInstance().setIntakeRoller(-0.7);
+                    ManipulatorSystem.getInstance().setOuterBallRoller(-.7);
                     toggle = !toggle;
                 }
                 else
                 {
                     ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                     ManipulatorSystem.getInstance().setIntakeRoller(0.7);
+                    ManipulatorSystem.getInstance().setOuterBallRoller(0);
                     toggle = !toggle;
                 }
             }
@@ -317,6 +320,8 @@ public class OperatorSystem
             System.out.println("Get left: " + val);
             val = MotorEncoder.getInstance().getRight();
             System.out.println("Get right: " + val);
+            System.out.println("Limit Switch on top of the ball counter" + BallCounter.getInstance().getTopSwitch());
+            System.out.println("Limit Switch on bottom of the ball counter" + BallCounter.getInstance().getBottomSwitch());
         }
     }
     class ShooterSpeedUp extends ButtonHandler
@@ -355,23 +360,6 @@ public class OperatorSystem
             ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
         }
     }
-    class OuterBallRoller extends ButtonHandler
-    {
-        private boolean toggle = true;
-        public void pressed()
-        {
-            if(toggle)
-            {
-                ManipulatorSystem.getInstance().setOuterBallRoller(-.7);
-                toggle = !toggle;
-            }
-            else
-            {
-                ManipulatorSystem.getInstance().setOuterBallRoller(0);
-                toggle = !toggle;
-            }
-        }
-    }
     class OuterBallArmDown extends ButtonHandler
     {
         private boolean toggle = true;
@@ -388,7 +376,36 @@ public class OperatorSystem
                 toggle = !toggle;
             }
         }
+    }
+    class CameraPositioning extends ButtonHandler
+    {
+        TurretPid pos;
+        public void held()
+        {
+            if(!pos.isEnable()) pos.enable();
+            System.out.println("PID ENABLED");
 
+            pos.setSetpoint(0);
+        }
+        public void notHeld()
+        {
+            if(pos.isEnable()) pos.disable();
+            System.out.println("PID DISABLED");
+        }
+        public CameraPositioning()
+        {
+            pos = new TurretPid();
+            pos.enable();
+            System.out.println("PID Created");
+            System.out.println("BOUND");
+        }
+    }
+    class TurretRotation extends JoystickAxisHandler
+    {
+        public void setHandleValue(double value)
+        {
+            ManipulatorSystem.getInstance().setTurretRotationSpeed(value);
+        }
     }
 
     //channels
@@ -418,6 +435,7 @@ public class OperatorSystem
         right.bindB10(new PrintRate());
 
         left.bindY(new LeftAxisY());
+        //left.bindY(new TurretRotation()); //Used to test the PS3 controller with the turret motor.
 
         ps3.bindB_L2(new ManipulatorToggle());
         ps3.bindB_Triangle(new ShooterBelts());
@@ -425,14 +443,16 @@ public class OperatorSystem
         ps3.bindB_X(new LiftBelt());
         ps3.bindB_L1(new ShooterSpeedUp());
         ps3.bindB_R1(new ShooterSpeedDown());
-        //ps3.bindB_DUp(new LeadScrewUp());
-        //ps3.bindB_DDown(new LeadScrewDown());
-        ps3.bindA_R2(new AnalogShooterSpeed());
-        ps3.bindB_Circle(new OuterBallRoller());
+        ps3.bindB_DUp(new LeadScrewUp());
+        ps3.bindB_DDown(new LeadScrewDown());
+        ps3.bindB_DLeft(new TurretRotationLeft());
+        ps3.bindB_DRight(new TurretRotationRight());
+        //ps3.bindA_R2(new AnalogShooterSpeed());
+        ps3.bindB_Square(new CameraPositioning());
 
         //Aiming
         ps3.bindA_LeftX(new AnalogTurretRotation());
-        ps3.bindA_LeftY(new AnalogLeadScrew());
+        //ps3.bindA_LeftY(new AnalogLeadScrew());
     }
 
     public void start()

@@ -11,7 +11,7 @@ import edu.arhs.first1100.util.Log;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDOutput;
-import edu.arhs.first1100.r2011.opctl.DriverStationDataFeeder;
+import edu.arhs.first1100.util.DriverStationDataFeeder;
 import edu.arhs.first1100.r2011.robot.RobotMain;
 import edu.wpi.first.wpilibj.DigitalInput;
 

@@ -7,7 +7,7 @@ public class JoystickAxisHandler
 
     public void setHandleValue(double value)
     {
-         System.out.println(getName()+" "+value);
+        
     }
 
     //change to set is need be

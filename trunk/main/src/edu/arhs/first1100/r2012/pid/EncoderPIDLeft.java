@@ -21,13 +21,12 @@ class EncoderSourceLeft implements PIDSource
     public double pidGet()
     {
         double tmp = me.getLeft();
-        //System.out.println( tmp + "<~~~~~~~~~~~~ Left rate");
         return tmp;
     }
-   public EncoderSourceLeft()
-   {
-       me = MotorEncoder.getInstance();
-   }
+    public EncoderSourceLeft()
+    {
+        me = MotorEncoder.getInstance();
+    }
 }
 
 class EncoderOutputLeft implements PIDOutput
@@ -37,15 +36,12 @@ class EncoderOutputLeft implements PIDOutput
 
     public void pidWrite(double o)
     {
-        //System.out.println("left o is: " + o);
         adding = adding + o;
         if(adding > 1) {adding = 1;}
         if(adding < -1) {adding = -1;}
-        //System.out.println("adding Left is:" + adding);
-
+        
         output.driveLeft(adding);
     }
-
     public EncoderOutputLeft()
     {
         output = DriveSystem.getInstance();

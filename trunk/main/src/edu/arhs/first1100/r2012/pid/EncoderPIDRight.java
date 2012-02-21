@@ -10,7 +10,6 @@ package edu.arhs.first1100.r2012.pid;
  */
 import edu.arhs.first1100.r2012.drive.DriveSystem;
 import edu.arhs.first1100.r2012.sensors.MotorEncoder;
-import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 

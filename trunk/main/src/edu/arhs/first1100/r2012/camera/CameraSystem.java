@@ -24,7 +24,7 @@ public class CameraSystem extends SystemBase
     private final int BRIGHTNESS = 50;
     private final int COMPRESSION = 0;
     private final double IN_LINE_THRESHOLD = .20; //Threshold to see if two particles are in line
-    private final int SIZE_THRESHOLD = 100;
+    private final int SIZE_THRESHOLD = 35;
     private final double WHITESPACE_THRESHOLD = .55;
 
     //RGB Threshold
@@ -40,6 +40,7 @@ public class CameraSystem extends SystemBase
     private ColorImage cImg = null;
     private BinaryImage bImg = null;
     private ParticleAnalysisReport[] pRep = null; //ordered particleAnalysisReport
+    private ParticleAnalysisReport particle = null;
 
     private static CameraSystem instance;
     //SubHeirarchy Objects
@@ -61,12 +62,6 @@ public class CameraSystem extends SystemBase
 
         setSleep(50);
     }
-
-    public void start()
-    {
-        pRep = null;
-        super.start();
-    }
     public static CameraSystem getInstance()
     {
         if(instance == null)
@@ -76,6 +71,12 @@ public class CameraSystem extends SystemBase
         }
 
         return instance;
+    }
+    public void start()
+    {
+        super.start();
+        System.out.println("Started");
+        pRep = null;
     }
 
     /**
@@ -118,29 +119,14 @@ public class CameraSystem extends SystemBase
                     }
                 }
 
-                if(filter == null);
-                else if(filter.length == 0)
+                if(filter == null || filter.length == 0)
                 {
                     Log.defcon1(this, "No Particles");
-                }
-                else if(filter.length == 1)
-                {
-                    Log.defcon1(this, "1 Particles");
-                    if(filter[0].center_mass_x_normalized >0)
-                    {
-                        Log.defcon1(this, "Turn left");
-                    }
-                    else Log.defcon1(this, "Turn Right");
+                    particle = null;
                 }
                 else
                 {
-                    ParticleAnalysisReport highest = this.getHighestParticle(filter);
-                    if(highest.center_mass_x_normalized >0)
-                    {
-                        Log.defcon1(this, "Turn left");
-                    }
-                    else Log.defcon1(this, "Turn Right");
-
+                    particle = this.getLowestParticle(filter);
                 }
 
                 cImg.free();
@@ -150,6 +136,11 @@ public class CameraSystem extends SystemBase
                 Log.defcon3(this, e.getMessage());
             }
         }
+    }
+
+    public ParticleAnalysisReport getParticle()
+    {
+        return particle;
     }
 
     /**
@@ -180,14 +171,13 @@ public class CameraSystem extends SystemBase
     {
         switch (t){
             case GREEN_THRESHOLD:
-                Log.defcon1(this, "Set Green Threshold");
                 setThresholdRGB(80, 130, 150, 255, 50, 130);
                 break;
             case WHITE_THRESHOLD:
                 setThresholdRGB(210,255,210,255,210,255);
                 break;
             case BLUE_THRESHOLD:
-                setThresholdRGB(0,170,0,255,180,255);
+                setThresholdRGB(0,25,230,255,230,255);
                 break;
         }
     }
@@ -302,6 +292,8 @@ public class CameraSystem extends SystemBase
      */
     public void printParticleAnalysisReport(ParticleAnalysisReport p)
     {
+        if(p == null) return;
+
         Log.defcon1(this,"Area: "+ p.particleArea);
 
         Log.defcon1(this,"Height: "+ p.boundingRectHeight);
