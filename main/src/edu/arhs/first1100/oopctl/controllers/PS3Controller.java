@@ -15,8 +15,10 @@ public class PS3Controller extends SystemBase
     private int channel;
     private Joystick js;
 
-    private JoystickAxis ay;  //L2
-    private JoystickAxis ax;  //R2
+    private JoystickAxis ay; //L2
+    private JoystickAxis aT; //R2
+    private JoystickAxis aX;  // Left analog X
+    private JoystickAxis aY;  //Left analog Y
 
     private Button b1;  //triangle
     private Button b2;  //square
@@ -37,8 +39,10 @@ public class PS3Controller extends SystemBase
         prefix = "PS3["+channel+"], ";
         js = new Joystick(channel);
 
-        ax = new JoystickAxis(js, Joystick.AxisType.kThrottle); //PS3 R2
+        aT = new JoystickAxis(js, Joystick.AxisType.kThrottle); //PS3 R2
         //ay = new JoystickAxis(js, Joystick.AxisType.kY);
+        aX = new JoystickAxis(js, Joystick.AxisType.kX);
+        aY = new JoystickAxis(js, Joystick.AxisType.kY);
 
         b1  = new Button(js, 1);
         b2  = new Button(js, 2);
@@ -54,15 +58,22 @@ public class PS3Controller extends SystemBase
         b12 = new Button(js, 12);
     }
 
-    public void bindAX(JoystickAxisHandler h)
+    public void bindAT(JoystickAxisHandler h)
     {
         h.setName(prefix+"X-axis");
-        ax.bind(h);
+        aT.bind(h);
+    }
+    
+    public void bindAX(JoystickAxisHandler h)
+    {
+        h.setName(prefix+"Y-axis");
+        aX.bind(h);
     }
 
     public void bindAY(JoystickAxisHandler h)
     {
         h.setName(prefix+"Y-axis");
+        aY.bind(h);
     }
 
     public void bindB1(ButtonHandler h)
@@ -140,7 +151,17 @@ public class PS3Controller extends SystemBase
     //human-readable binding methods
     public void bindA_R2(JoystickAxisHandler h)
     {
+        bindAT(h);
+    }
+    
+    public void bindA_LeftX(JoystickAxisHandler h)
+    {
         bindAX(h);
+    }
+    
+    public void bindA_LeftY(JoystickAxisHandler h)
+    {
+        bindAY(h);
     }
 
     public void bindA_L2(JoystickAxisHandler h){
@@ -201,7 +222,7 @@ public class PS3Controller extends SystemBase
 
     public void tick()
     {
-        ax.update();
+        aT.update();
 
         b1.update();
         b2.update();
