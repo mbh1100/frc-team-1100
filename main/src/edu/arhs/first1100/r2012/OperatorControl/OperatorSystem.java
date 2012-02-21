@@ -23,7 +23,7 @@ public class OperatorSystem
     {
         EncoderPIDLeft l;
 
-        public void getHandleValue(double value)
+        public void setHandleValue(double value)
         {
             if(raw_tank)
             {
@@ -46,12 +46,11 @@ public class OperatorSystem
             super.setDeadBand(0.05);
         }
     }
-
     class RightAxisY extends JoystickAxisHandler
     {
         EncoderPIDRight r;
 
-        public void getHandleValue(double value)
+        public void setHandleValue(double value)
         {
             if(raw_tank)
             {
@@ -62,7 +61,7 @@ public class OperatorSystem
             {
                 if(!r.isEnable())
                         r.enable();
-                
+
                 r.setSetpoint(value*100);
             }
         }
@@ -75,7 +74,11 @@ public class OperatorSystem
             super.setDeadBand(0.05);
         }
     }
-    
+
+    /**
+     * Toggles between Encoder PID tank drive and direct tank drive
+     * Bound to Right Joystick, Button 2
+     */
     class ToggleDrive extends ButtonHandler
     {
         public void pressed()
@@ -83,88 +86,149 @@ public class OperatorSystem
             raw_tank = !raw_tank;
         }
     }
-    
+
     class StandardDrive extends JoystickAxisHandler
     {
         JoystickAxisHandler l;
         JoystickAxisHandler r;
 
-        public void getHandleValue(double value)
+        public void setHandleValue(double value)
         {
-            l.getHandleValue(-value);
-            r.getHandleValue(-value);
+            l.setHandleValue(-value);
+            r.setHandleValue(-value);
         }
-        
+
         StandardDrive()
         {
             l = new RightAxisY();
             r = new LeftAxisY();
         }
     }
-    
-    class PS3B1 extends ButtonHandler
+
+    /**
+     * Sets speed of top feeder belts and neck belt
+     * Bound to PS3 Triangle
+     */
+    class ShooterBelts extends ButtonHandler
     {
         public void pressed()
         {
-            System.out.println("B1 Pressed");
+            ManipulatorSystem.getInstance().setLeftShooterBelt(1.0);
+            ManipulatorSystem.getInstance().setRightShooterBelt(1.0);
+            ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
         }
-    }
-    
-    class MainLiftBelt extends ButtonHandler
-    {
-        public void pressed()
-        {
-            System.out.println("B2 Pressed");
-            if(invert)
-                ManipulatorSystem.getInstance().setMainLiftBelt(-.5);
-            else
-                ManipulatorSystem.getInstance().setMainLiftBelt(.5);
-        }
-        
+
         public void released()
         {
-            System.out.println("B2 Released");
-                ManipulatorSystem.getInstance().setMainLiftBelt(0);
+            ManipulatorSystem.getInstance().setLeftShooterBelt(0.0);
+            ManipulatorSystem.getInstance().setRightShooterBelt(0.0);
+            ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
         }
     }
-    
+
+    class LeadScrewUp extends ButtonHandler
+    {
+        public void held()
+        {
+            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
+        }
+
+        public void released()
+        {
+            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+        }
+    }
+
+    class LeadScrewDown extends ButtonHandler
+    {
+        public void held()
+        {
+            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
+        }
+
+        public void released(){
+            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+        }
+    }
+
+    /**
+     * Used for main lift belt system.
+     */
+    class LiftBelt extends ButtonHandler
+    {
+        public void pressed()
+        {
+
+            // Sets value when pressed and released.
+            // Makes main lift negative values when inverted and normal when normal.
+
+            if(invert)
+            {
+                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+                //Intake roller - remove
+                ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
+            }
+            else
+            {
+                ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
+                //Intake roller - remove
+                ManipulatorSystem.getInstance().setIntakeRoller(0.5);
+            }
+        }
+
+        public void released()
+        {
+                ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
+                //Intake roller - remove
+                ManipulatorSystem.getInstance().setIntakeRoller(0.0);
+        }
+    }
+
+    /**
+     * Sets intake roller and main belt to pull in balls
+     * Bound to PS3 Circle
+     */
     class IntakeRoller extends ButtonHandler
     {
         public void pressed()
         {
-            System.out.println("B3 Pressed");
             if(invert)
+            {
+                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
+            }
             else
+            {
+                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(0.5);
+            }
         }
-        
+
         public void released()
         {
-            System.out.println("B3 Released");
+            //System.out.println("B2 Released");
             ManipulatorSystem.getInstance().setIntakeRoller(0);
         }
     }
-    
-    class ManuplitatorToggle extends ButtonHandler
+
+    class ManipulatorToggle extends ButtonHandler
     {
         public void pressed()
         {
             invert = !invert;
         }
     }
-    
+
     class TopLiftBelt extends ButtonHandler
     {
         public void pressed()
         {
             if(invert)
-                ManipulatorSystem.getInstance().setTopLiftBelt(-0.5);
+                ManipulatorSystem.getInstance().setTopLiftBelt(Relay.Value.kReverse);
             else
-                ManipulatorSystem.getInstance().setTopLiftBelt(0.5);
+                ManipulatorSystem.getInstance().setTopLiftBelt(Relay.Value.kForward);
         }
     }
-
     class PrintRate extends ButtonHandler
     {
         public void held()
@@ -173,6 +237,42 @@ public class OperatorSystem
             System.out.println("Get left: " + val);
             val = MotorEncoder.getInstance().getRight();
             System.out.println("Get right: " + val);
+        }
+    }
+    class ShooterSpeedUp extends ButtonHandler
+    {
+        public void pressed()
+        {
+            shootspeed += .2;
+            if(shootspeed>=1) shootspeed = 1;
+            if(shootspeed<=0) shootspeed = 0;
+            System.out.println("shootspeed = "+shootspeed);
+            ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
+            ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
+        }
+    }
+    class ShooterSpeedDown extends ButtonHandler
+    {
+        public void pressed()
+        {
+            shootspeed -= .2;
+            if(shootspeed>=1) shootspeed = 1;
+            if(shootspeed<=0) shootspeed = 0;
+            System.out.println("shootspeed = "+shootspeed);
+            ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
+            ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
+        }
+    }
+    class AnalogShooterSpeed extends JoystickAxisHandler
+    {
+        public void setNewHandleValue(double value)
+        {
+            shootspeed = value;
+            if(shootspeed>=1.0) shootspeed = 1.0;
+            if(shootspeed<=0.0) shootspeed = 0.0;
+            System.out.println("shootspeed = "+shootspeed);
+            ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
+            ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
         }
     }
 
@@ -189,6 +289,7 @@ public class OperatorSystem
     //stuff
     private boolean raw_tank = true;
     private boolean invert = true;
+    private double shootspeed = 0;
 
     public OperatorSystem()
     {
@@ -200,20 +301,27 @@ public class OperatorSystem
         right.bindB2(new ToggleDrive());
         right.bindB3(new TopLiftBelt());
         right.bindB10(new PrintRate());
+
         left.bindY(new LeftAxisY());
-        left.bindB2(new IntakeRoller());
-        left.bindB3(new MainLiftBelt());
-        left.bindB5(new ManuplitatorToggle());
-        ps3.bindB1(new PS3B1());
+
+        ps3.bindB_L2(new ManipulatorToggle());
+        ps3.bindB_Triangle(new ShooterBelts());
+        ps3.bindB_Circle(new IntakeRoller());
+        ps3.bindB_X(new LiftBelt());
+        ps3.bindB_L1(new ShooterSpeedUp());
+        ps3.bindB_R1(new ShooterSpeedDown());
+        //ps3.bindB_DUp(new LeadScrewUp());
+        //ps3.bindB_DDown(new LeadScrewDown());
+        ps3.bindA_R2(new AnalogShooterSpeed());
     }
-    
+
     public void start()
     {
         right.start();
         left.start();
         ps3.start();
     }
-    
+
     public void stop()
     {
         right.stop();

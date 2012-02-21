@@ -1,6 +1,7 @@
 
 package edu.arhs.first1100.r2012.manipulator;
 
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Victor;
 
@@ -8,30 +9,31 @@ public class ManipulatorSystem
 {
     private static ManipulatorSystem instance = null;
 
-    private Victor topShooterWheel;
-    private Victor bottomShooterWheel;
+    private Jaguar topShooterWheel;
+    private Jaguar bottomShooterWheel;
     private Victor leftShooterBelt;
     private Victor rightShooterBelt;
-    private Victor leadScrewTilt;
+    private Relay leadScrewTilt;
     private Victor turretRotation;
     private Victor intakeRoller;
     private Victor mainLiftBelt;
-    private Victor topLiftBelt;
+    private Relay topLiftBelt;
+    private Relay neckBelt;
     private Victor outerBallRoller;
     private Victor outerBallArm;
     private Victor rampArm;
 
     private ManipulatorSystem()
     {
-        //topShooterWheel = new Victor(1,5);
-        //bottomShooterWheel = new Victor(1,6);
-        //leftShooterBelt = new Victor(2,1);
-        //rightShooterBelt = new Victor(2,3);
-        //leadScrewTilt = new Victor(1,1);
+        topShooterWheel = new Jaguar(1,3);  //ok
+        bottomShooterWheel = new Jaguar(2,3);  //ok
+        leftShooterBelt = new Victor(2,4);   //ok
+        rightShooterBelt = new Victor(1,4);  //ok
+        leadScrewTilt = new Relay(1,1);  // ok
         //turretRotation = new Victor(2,3);
-        intakeRoller = new Victor(2,2);  //ok location
-        mainLiftBelt = new Victor(1,2);  //ok location
-        //topLiftBelt = new Victor(1,4);
+        intakeRoller = new Victor(2,2);  //ok
+        mainLiftBelt = new Victor(1,2);//1, 2  //ok
+        neckBelt = new Relay(2,1);   //ok
         //outerBallRoller = new Victor(2,5);
         //outerBallArm = new Victor(2,6);
         //rampArm = new Victor(2,7);
@@ -59,7 +61,7 @@ public class ManipulatorSystem
 
     public void setTopShooterWheel(double speed)
     {
-        topShooterWheel.set(speed);
+        topShooterWheel.set(-speed);
     }
     public void setBottomShooterWheel(double speed)
     {
@@ -73,9 +75,9 @@ public class ManipulatorSystem
     {
         rightShooterBelt.set(speed);
     }
-    public void setLeadScrewTilt(double speed)
+    public void setLeadScrewTilt(Relay.Value in)
     {
-        leadScrewTilt.set(speed);
+        leadScrewTilt.set(in);
     }
     public void setTurretRotation(double speed)
     {
@@ -89,9 +91,13 @@ public class ManipulatorSystem
     {
         mainLiftBelt.set(speed);
     }
-    public void setTopLiftBelt(double speed)
+    public void setTopLiftBelt(Relay.Value value)
     {
-        topLiftBelt.set(speed);
+        topLiftBelt.set(value);
+    }
+    public void setNeckBelt(Relay.Value in)
+    {
+        neckBelt.set(in);
     }
     public void setOuterBallRoller(double speed)
     {
@@ -105,4 +111,5 @@ public class ManipulatorSystem
     {
         rampArm.set(speed);
     }
+    //public void setCowUp()
 }

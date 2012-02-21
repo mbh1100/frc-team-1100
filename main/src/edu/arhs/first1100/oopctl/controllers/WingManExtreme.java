@@ -26,8 +26,8 @@ public class WingManExtreme extends SystemBase {
     {
         channel = ch;
         js = new Joystick(ch);
-        xaxis = new JoystickAxis(js, 1);
-        yaxis = new JoystickAxis(js, 2);
+        xaxis = new JoystickAxis(js, Joystick.AxisType.kX);
+        yaxis = new JoystickAxis(js, Joystick.AxisType.kY);
         a = new Button(js, 1);
         b = new Button(js, 2);
         c = new Button(js, 3);

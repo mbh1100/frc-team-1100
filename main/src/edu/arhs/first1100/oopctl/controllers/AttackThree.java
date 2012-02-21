@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class AttackThree extends SystemBase{
 
     private String prefix;
-    
+
     private int channel;
     private Joystick js;
     private JoystickAxis x;
@@ -35,16 +35,16 @@ public class AttackThree extends SystemBase{
     private Button b11;
 
     public AttackThree (int ch){
-        
+
         channel = ch;
         prefix = "Attack3["+channel+"], ";
-        
+
         js  = new Joystick(ch);
-        
-        x  = new JoystickAxis(js, 1);
-        y  = new JoystickAxis(js, 2);
-        z  = new JoystickAxis(js, 3);
-        
+
+        x  = new JoystickAxis(js, Joystick.AxisType.kX);
+        y  = new JoystickAxis(js, Joystick.AxisType.kY);
+        z  = new JoystickAxis(js, Joystick.AxisType.kZ);
+
         b1  = new Button(js, 1);
         b2  = new Button(js, 2);
         b3  = new Button(js, 3);
@@ -57,14 +57,14 @@ public class AttackThree extends SystemBase{
         b10 = new Button(js, 10);
         b11 = new Button(js, 11);
     }
-    
+
     public void bindX(JoystickAxisHandler h)
     {
         String name = "Attack 3 " +channel+ ", X Axis";
         h.setName(prefix+"X-axis");
         x.bind(h);
     }
-    
+
     public void bindY(JoystickAxisHandler h)
     {
         String name = "Attack 3 " + channel + ", Y Axis";
@@ -148,14 +148,14 @@ public class AttackThree extends SystemBase{
         h.setName(name);
         b10.bind(h);
     }
-    
+
     public void bindB11 (ButtonHandler h)
     {
         String name = "Attack 3 " + channel+ "' button 11";
         h.setName(name);
         b11.bind(h);
     }
-    
+
     public void tick()
     {
         x.update();
