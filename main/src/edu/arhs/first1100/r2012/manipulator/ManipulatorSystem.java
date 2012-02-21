@@ -65,7 +65,7 @@ public class ManipulatorSystem
     }
     public void setBottomShooterWheel(double speed)
     {
-        bottomShooterWheel.set(speed);
+        bottomShooterWheel.set(0.9*speed);
     }
     public void setLeftShooterBelt(double speed)
     {
@@ -111,5 +111,13 @@ public class ManipulatorSystem
     {
         rampArm.set(speed);
     }
-    //public void setCowUp()
+    /*public void setCowUp()
+    {
+        outerBallArm.set(.7);
+    }
+    public void setCowDown()
+    {
+
+    }
+    */
 }

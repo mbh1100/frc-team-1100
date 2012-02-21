@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj.Relay;
 
 public class OperatorSystem
 {
+    /**
+     * Drives Left Side of the Robot
+     */
     class LeftAxisY extends JoystickAxisHandler
     {
         EncoderPIDLeft l;
@@ -37,7 +40,6 @@ public class OperatorSystem
                 l.setSetpoint(value*100);
             }
         }
-
         public LeftAxisY()
         {
             l = new EncoderPIDLeft();
@@ -46,6 +48,10 @@ public class OperatorSystem
             super.setDeadBand(0.05);
         }
     }
+
+    /**
+     * Drives Right Side of the Robot
+     */
     class RightAxisY extends JoystickAxisHandler
     {
         EncoderPIDRight r;
@@ -150,14 +156,14 @@ public class OperatorSystem
             ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
         }
     }
-    
+
     /**
      * Control LeadScrew for up/down turret aiming
      * Bound to PS3 Left Analog Y
      */
     class AnalogLeadScrew extends JoystickAxisHandler
     {
-        
+
         public void setHandleValue(double value)
         {
             if(value > 0)
@@ -165,11 +171,11 @@ public class OperatorSystem
             else if (value < 0)
                 ManipulatorSystem.getInstance().setLeadScrewTilt((invert)?Relay.Value.kForward:Relay.Value.kReverse);
             else
-                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff); 
-        
-        }               
+                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+
+        }
     }
-    
+
     /**
      * Control turret rotation
      * Bound to PS3 Left Analog X
@@ -177,10 +183,10 @@ public class OperatorSystem
     class AnalogTurretRotation extends JoystickAxisHandler
     {
         public void setHandleValue(double value)
-        {  
+        {
             ManipulatorSystem.getInstance().setTurretRotation(value);
-        }        
-    }      
+        }
+    }
 
     /**
      * Used for main lift belt system.
@@ -226,12 +232,12 @@ public class OperatorSystem
             if(invert)
             {
                 ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
+                ManipulatorSystem.getInstance().setIntakeRoller(-0.7);
             }
             else
             {
                 ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                ManipulatorSystem.getInstance().setIntakeRoller(0.5);
+                ManipulatorSystem.getInstance().setIntakeRoller(0.7);
             }
         }
 
@@ -244,9 +250,13 @@ public class OperatorSystem
 
     class ManipulatorToggle extends ButtonHandler
     {
-        public void pressed()
+        public void held()
         {
-            invert = !invert;
+            invert = true;
+        }
+        public void released()
+        {
+            invert = false;
         }
     }
 
@@ -274,7 +284,7 @@ public class OperatorSystem
     {
         public void pressed()
         {
-            shootspeed += .2;
+            shootspeed += .1;
             if(shootspeed>=1) shootspeed = 1;
             if(shootspeed<=0) shootspeed = 0;
             System.out.println("shootspeed = "+shootspeed);
@@ -286,7 +296,7 @@ public class OperatorSystem
     {
         public void pressed()
         {
-            shootspeed -= .2;
+            shootspeed -= .1;
             if(shootspeed>=1) shootspeed = 1;
             if(shootspeed<=0) shootspeed = 0;
             System.out.println("shootspeed = "+shootspeed);
@@ -344,7 +354,7 @@ public class OperatorSystem
         //ps3.bindB_DUp(new LeadScrewUp());
         //ps3.bindB_DDown(new LeadScrewDown());
         ps3.bindA_R2(new AnalogShooterSpeed());
-        
+
         //Aiming
         ps3.bindA_LeftX(new AnalogTurretRotation());
         ps3.bindA_LeftY(new AnalogLeadScrew());
