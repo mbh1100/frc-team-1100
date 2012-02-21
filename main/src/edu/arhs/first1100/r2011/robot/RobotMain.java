@@ -22,7 +22,7 @@ import edu.arhs.first1100.r2011.minibot.MinibotSystem;
 import edu.arhs.first1100.r2011.opctl.OperatorSystem;
 import edu.arhs.first1100.r2011.diag.DiagnosticRobot;
 import edu.arhs.first1100.util.Log;
-import edu.arhs.first1100.r2011.opctl.DriverStationDataFeeder;
+import edu.arhs.first1100.util.DriverStationDataFeeder;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -34,14 +34,14 @@ public class RobotMain extends SimpleRobot
     private DiagnosticRobot diagRobot;
     public Compressor compressor;
     //added by Akshay
-    
+
     public void robotInit()
-    {        
+    {
         //added by Akshay
         Log.addClass(RobotMain.class, 3);
         Log.addClass(OperatorSystem.class, 4);
         Log.defcon3(this, "Robot Init");
-        
+
         autonomousModeSwitch = new DigitalInput(13);
         autonomousWithCamera = autonomousModeSwitch.get();
 
@@ -60,7 +60,7 @@ public class RobotMain extends SimpleRobot
             Log.addClass(NoCamNoRangeAutonomous.class, 1);
             Log.addClass(LiftRoutine.class, 4);
 
-            
+
             OperatorSystem.getInstance().setSleep(25);
             AutonomousSystem.getInstance().setSleep(1000);
 
@@ -83,12 +83,12 @@ public class RobotMain extends SimpleRobot
         }
         catch(Exception e)
         {
-            
+
         }
-        
+
         compressor = new Compressor(6, 1);
         //compressor.start();
-        
+
         Log.defcon3(this, "+------------------------+");
         Log.defcon3(this, "| USING " + ((autonomousWithCamera) ? "CAMERA     " : "NO CAMERA  ") + "      |");
         Log.defcon3(this, "+------------------------+");
@@ -100,7 +100,7 @@ public class RobotMain extends SimpleRobot
         OperatorSystem.getInstance().dsPrint(6, "Autonomous : "+((autonomousWithCamera) ? "" : "NO ") + "CAMERA");
         CameraSystem.getInstance().start();
     }
-    
+
     public void autonomous()
     {
         DriveSystem.getInstance().setTankSpeed(0.0, 0.0);
@@ -108,7 +108,7 @@ public class RobotMain extends SimpleRobot
         ManipulatorSystem.getInstance().setLiftSpeed(0.0);
         DriveSystem.getInstance().resetGyro();
 
-        
+
         Log.defcon3(this, "Autonomous Mode Activated");
         if(true)
         {
@@ -139,7 +139,7 @@ public class RobotMain extends SimpleRobot
 
             CameraSystem.getInstance().start();
             //LineSystem.getInstance().start();
-            
+
             MinibotSystem.getInstance().start();
         }
         else
@@ -150,12 +150,12 @@ public class RobotMain extends SimpleRobot
             }
         }
     }
-    
+
     public void disabled()
     {
         Log.defcon3(this, "Robot Disabled");
         if(true)
-        {        
+        {
             OperatorSystem.getInstance().stop();
             AutonomousSystem.getInstance().stop();
             AutonomousSystem.getInstance().resetWin();
@@ -168,7 +168,7 @@ public class RobotMain extends SimpleRobot
             LineSystem.getInstance().stop();
 
             MinibotSystem.getInstance().stop();
-        
+
         }
     }
     public static boolean getSwitch()

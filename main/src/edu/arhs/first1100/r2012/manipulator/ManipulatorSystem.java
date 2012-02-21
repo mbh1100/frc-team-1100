@@ -9,14 +9,17 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ManipulatorSystem
 {
+
+    private final int TURRET_MAX = 487;
+    private final int TURRET_MIN = 187;
+
     private static ManipulatorSystem instance = null;
-    private BallCounter ballCounter;
-    
+
     private AnalogChannel turretRotation;
-    private double turretMaxRotation;
-    
+
     private DigitalInput outerBallArmTopSwitch;
-    
+    private DigitalInput outerBallArmBottomSwitch;
+
     private Jaguar topShooterWheel;
     private Jaguar bottomShooterWheel;
     private Victor leftShooterBelt;
@@ -27,34 +30,33 @@ public class ManipulatorSystem
     private Victor mainLiftBelt;
     private Relay topLiftBelt;
     private Relay neckBelt;
-    
+
     private Victor outerBallRoller;
     private Victor outerBallArm;
-    
+
     private Victor rampArm;
 
     private ManipulatorSystem()
     {
-        ballCounter = new BallCounter();
-        ballCounter.start();
-        
+        BallCounter.getInstance().start();
+
         turretRotation = new AnalogChannel(1);
-        turretMaxRotation = 5.0;
-        
-        outerBallArmTopSwitch = new DigitalInput(1, 1);
-        
-        
+
+        //outerBallArmTopSwitch = new DigitalInput(1, 1);
+        //outerBallArmBottomSwitch = new DigitalInput(1, 1);
+
+
         topShooterWheel = new Jaguar(1,3);  //ok
         bottomShooterWheel = new Jaguar(2,3);  //ok
         leftShooterBelt = new Victor(2,4);   //ok
         rightShooterBelt = new Victor(1,4);  //ok
         leadScrewTilt = new Relay(1,1);  // ok
-        //turretRotation = new Victor(2,3);
+        turret = new Victor(1,5);  //ok
         intakeRoller = new Victor(2,2);  //ok
         mainLiftBelt = new Victor(1,2);//1, 2  //ok
         neckBelt = new Relay(2,1);   //ok
-        //outerBallRoller = new Victor(2,5);
-        //outerBallArm = new Victor(2,6);
+        outerBallRoller = new Victor(2,5);
+        outerBallArm = new Victor(2,6);
         //rampArm = new Victor(2,7);
     }
 
@@ -75,121 +77,138 @@ public class ManipulatorSystem
 
     public void setTopShooterWheel(double speed)
     {
-        if(speed * 1.2 >= 1)
-            topShooterWheel.set(-speed);
-        else
-        {
-            topShooterWheel.set(-speed*1.2);
-        }
+            topShooterWheel.set(-speed*.9);
     }
     public void setBottomShooterWheel(double speed)
     {
-        bottomShooterWheel.set(0.5*speed);
+        bottomShooterWheel.set(speed);
     }
-    
+
     /**
      * Top left shooter belt, cannot drive backwards
-     * @param speed 
+     * @param speed
      */
     public void setLeftShooterBelt(double speed)
     {
         leftShooterBelt.set((speed > 0.0)?speed:0);
     }
-    
+
     /**
      * Top left shooter belt, cannot drive backwards
-     * @param speed 
+     * @param speed
      */
     public void setRightShooterBelt(double speed)
     {
         rightShooterBelt.set((speed > 0.0)?speed:0);
     }
-    
+
     public void setLeadScrewTilt(Relay.Value in)
     {
         leadScrewTilt.set(in);
     }
-    
+
     /**
-     * sets the turret rotation and limits turret to range
-     * @param speed 
+     * sets the turret rotation as long as it is within the current turret range limit.
+     * @param speed (speed of the turret)
      */
-    public void setTurretRotation(double speed)
+    public void setTurretRotationSpeed(double speed)
     {
-        if(Math.abs(turretRotation.getValue()) >= turretMaxRotation)
+        if(Math.abs(turretRotation.getValue()) >= TURRET_MAX)
         {
-            turret.set(0.0);
+            turret.set((speed < 0)?0:speed);
+        }
+        else if(Math.abs(turretRotation.getValue()) <= TURRET_MIN)
+        {
+            turret.set((speed > 0)?0:speed);
         }
         else
         {
-        turret.set(speed);
+            turret.set(speed);
         }
+        System.out.println("Value of turret rotation = " + turretRotation.getValue());
     }
-    
+
     /**
      * Sets the intake roller
      * Intake roller will not intake if BallCounter is counting an illegal number
      * of balls.
-     * @param speed 
+     * Counting balls was removed.
+     * @param speed (Speed the roller)
      */
     public void setIntakeRoller(double speed)
     {
-        if(!ballCounter.canIntake())
+        if(!BallCounter.getInstance().canIntake())
         {
-            intakeRoller.set((speed > 0)?-speed:speed);
-        } 
-        else 
+            intakeRoller.set(-Math.abs(speed));
+        }
+        else
         {
             intakeRoller.set(speed);
         }
     }
-    
+
+     /**
+     *  Sets the speed of the main lift belt.
+     */
     public void setMainLiftBelt(double speed)
     {
         mainLiftBelt.set(speed);
     }
-    
+    /**
+     * @returns speed of the main lift belt.
+     */
     public double getMainLiftBelt(){
-        return mainLiftBelt.get();        
+        return mainLiftBelt.get();
     }
-    
+    /**
+     * Does not exist.
+     * @param speed to set the non-existent belt.
+     */
     public void setTopLiftBelt(Relay.Value value)
     {
         topLiftBelt.set(value);
     }
-    
+    /**
+     * Sets the speed of the final belt into the shooter.
+     * Note: This belt is always on.
+     * @param Speed to set the belt.
+     */
     public void setNeckBelt(Relay.Value in)
     {
         neckBelt.set(in);
     }
-    
+    /**
+     * Sets the speed of the outer roller.
+     * @param speed to set the roller.
+     */
     public void setOuterBallRoller(double speed)
     {
         outerBallRoller.set(speed);
     }
-    
+
     public void setOuterBallArm(double speed)
     {
-        if(outerBallArmTopSwitch.get() && speed < 0.0)
+        if((outerBallArmTopSwitch.get() && speed < 0.0) ||
+                (outerBallArmBottomSwitch.get() && speed > 0.0))
         {
-            outerBallArm.set(0.0);            
+            outerBallArm.set(0.0);
         }
         else
         {
             outerBallArm.set(speed);
         }
     }
-    
+
     public void setRampArm(double speed)
     {
         rampArm.set(speed);
     }
-    
-    
-    
-        
+
+
+
+
     public void stop()
-    {        
+    {
         this.topShooterWheel.set(0);
         this.bottomShooterWheel.set(0);
         this.intakeRoller.set(0);
@@ -201,6 +220,6 @@ public class ManipulatorSystem
         //this.outerBallArm.set(0);       NULL
         //this.outerBallRoller.set(0);    NULL
         //this.rampArm.set(0);            NULL
-        //this.turretRotation.set(0);     NULL
+        this.turret.set(0);
     }
 }

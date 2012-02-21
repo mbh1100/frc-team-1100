@@ -1,4 +1,4 @@
-package edu.arhs.first1100.r2011.opctl;
+package edu.arhs.first1100.util;
 
 /**
  * @author   William Dell
@@ -48,7 +48,7 @@ public class DriverStationDataFeeder extends SystemBase
             lcdHistory[i] = "";
         }
     }
-    
+
     /**
      * When run, the class starts a continuous loop to update the dashboard
      * constantly.  This is probably a bad way to do it.
@@ -57,7 +57,7 @@ public class DriverStationDataFeeder extends SystemBase
     {
         updateDashboard();
     } // end method run()
-    
+
     /**
      * Messages to the LCD must be 21 characters long or you get artifacts
      * from previous lines.  This should pad the desired message out to
@@ -76,7 +76,7 @@ public class DriverStationDataFeeder extends SystemBase
                 line += " ";
             }
         }
-        
+
         line = line.substring(0, 21); // make sure we are only 21 long
         return line; // and return the new, padded out line
 
@@ -120,7 +120,7 @@ public class DriverStationDataFeeder extends SystemBase
             DriverStationLCD.getInstance().println(lcdLines[i], 1, lcdHistory[i]);
             //System.out.println(i);
         }
-        
+
         DriverStationLCD.getInstance().updateLCD(); // display the screen
 
     } // end method sendToLCD()

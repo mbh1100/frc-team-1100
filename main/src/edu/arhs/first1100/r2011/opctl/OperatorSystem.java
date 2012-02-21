@@ -1,6 +1,7 @@
  package edu.arhs.first1100.r2011.opctl;
 
 
+import edu.arhs.first1100.util.DriverStationDataFeeder;
 import edu.arhs.first1100.r2011.autoctl.NoCamNoRangeEncodersRoutine;
 import edu.arhs.first1100.r2011.autoctl.ScoreRoutine;
 import edu.arhs.first1100.r2011.camera.CameraSystem;
@@ -15,31 +16,31 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class OperatorSystem extends SystemBase
 {
     private static OperatorSystem instance = null;
-    
+
     public AdvJoystick leftJoystick;  //controls the left side of the robot
     public AdvJoystick rightJoystick; //controls the right side of the robot.
     public XboxJoystick xboxJoystick; //controls the arm and other stuff. Hi.
-    
+
     private boolean xboxLeftBumperLastState = false;
     private boolean xboxRightBumperLastState = false;
-    
+
     private boolean stopLift = false;
     private boolean stopArm = false;
-    
+
     private ButtonBox buttonBox;
-    
+
     private ScoreRoutine scoreRoutine;
     private NoCamNoRangeEncodersRoutine autonomousRoutine;
-    
+
     private boolean sensitiveDrive;
-    
+
     public OperatorSystem()
     {
         leftJoystick = new AdvJoystick(1);
         rightJoystick = new AdvJoystick(2);
 
         xboxJoystick = new XboxJoystick(3);
-        
+
         buttonBox = new ButtonBox();
     }
 
@@ -69,9 +70,9 @@ public class OperatorSystem extends SystemBase
          * DON'T INVERT THE JOYSTICK
          *
          */
-        
+
         processDriveControls();
-        
+
         if(xboxJoystick.getStartButton())
         {
             processMinibotControls();
@@ -79,7 +80,7 @@ public class OperatorSystem extends SystemBase
         else
         {
             MinibotSystem.getInstance().stopJaguars();
-            
+
             if(scoreRoutine == null)
             {
                 processLiftControls();
@@ -87,7 +88,7 @@ public class OperatorSystem extends SystemBase
                 processGripperControls();
             }
         }
-        
+
         if(scoreRoutine != null)
         {
             if(scoreRoutine.isDone())
@@ -95,7 +96,7 @@ public class OperatorSystem extends SystemBase
                 scoreRoutine = null;
             }
         }
-        
+
         if(autonomousRoutine != null)
         {
             if(autonomousRoutine.isDone())
@@ -111,7 +112,7 @@ public class OperatorSystem extends SystemBase
             sensitiveDrive = true;
         else if(leftJoystick.getRawButton(7))
             sensitiveDrive = false;
-        
+
         /*
          * Reset joysticks
          */
@@ -125,7 +126,7 @@ public class OperatorSystem extends SystemBase
          * Minibot controls
          */
         MinibotSystem minis = MinibotSystem.getInstance();
-        
+
         if(Math.abs(xboxJoystick.getLeftStickY()) > 0.20)
         {
             minis.setArmSpeed(xboxJoystick.getLeftStickY());
@@ -143,7 +144,7 @@ public class OperatorSystem extends SystemBase
         {
             minis.setBeltSpeed(0.0);
         }
-        
+
     }
 
     public void processLiftControls()
@@ -156,7 +157,7 @@ public class OperatorSystem extends SystemBase
         {
             Log.defcon1(this, "Setting lift speed " + xboxJoystick.getLeftStickY());
             ms.setLiftSpeed(xboxJoystick.getLeftStickY());
-            
+
             // Will make sure lift won't drift when joystick re-enters
             // deadband
             stopLift = true;
@@ -175,7 +176,7 @@ public class OperatorSystem extends SystemBase
          * Arm control
          */
         ManipulatorSystem ms = ManipulatorSystem.getInstance();
-        
+
         if(Math.abs(xboxJoystick.getRightStickY()) > 0.20)
         {
             if(xboxJoystick.getRightStickY() > 0.0)
@@ -188,7 +189,7 @@ public class OperatorSystem extends SystemBase
                 Log.defcon1(this, "Setting arm speed" + xboxJoystick.getRightStickY()/1.3);
                 ms.setArmSpeed(xboxJoystick.getRightStickY()/1.3);
             }
-            
+
             stopArm = true;
         }
         else if(stopArm)
@@ -202,16 +203,16 @@ public class OperatorSystem extends SystemBase
     public void processGripperControls()
     {
         ManipulatorSystem ms = ManipulatorSystem.getInstance();
-        
+
         if(xboxJoystick.getLeftBumper())
             ms.rollerWristUp();
-        
+
         else if(xboxJoystick.getRightBumper())
             ms.rollerWristDown();
-        
+
         else if(xboxJoystick.getTriggers() > 0.6)
             ms.rollersOut();
-        
+
         else if(xboxJoystick.getTriggers() < -0.6)
             ms.rollersIn();
 
@@ -233,7 +234,7 @@ public class OperatorSystem extends SystemBase
                 autonomousRoutine.cancel();
         }
     }
-    
+
     public void processDriveControls()
     {
         /*
@@ -244,12 +245,12 @@ public class OperatorSystem extends SystemBase
          *   The drive output is multiplied by this value when setTankSpeed is called.
          *   To avoid accidental moving, the trim will only work if the axis is over 75 percent.
          */
-        
+
         // TANK DRIVE WITH TRIM
         if(sensitiveDrive)
         {
             Log.defcon1(this, "sensitive drive");
-            
+
             double leftValue = limit(-leftJoystick.getStickY());
             double rightValue = limit(-rightJoystick.getStickY());
 
@@ -272,7 +273,7 @@ public class OperatorSystem extends SystemBase
             }
 
             //setLeftRightMotorOutputs(leftValue, rightValue);
-            
+
             DriveSystem.getInstance().setTankSpeed(
                     leftValue *getLeftTrim(),
                     rightValue*getRightTrim()
@@ -284,7 +285,7 @@ public class OperatorSystem extends SystemBase
             //Old Drive
             double leftSpeed = -leftJoystick.getStickY() ;
             double rightSpeed = -rightJoystick.getStickY();
-            
+
             DriveSystem.getInstance().setTankSpeed(leftSpeed * getLeftTrim(),
                                                    rightSpeed* getRightTrim());
         }
@@ -299,7 +300,7 @@ public class OperatorSystem extends SystemBase
         }
         return num;
     }
-    
+
     public ButtonBox getButtonBox()
     {
         return buttonBox;
@@ -313,13 +314,13 @@ public class OperatorSystem extends SystemBase
         rightJoystick.reset();
         leftJoystick.reset();
     }
-    
+
     DriverStationDataFeeder dsFeeder;
 
    /**
     * Sends a message to the Driver Station
     */
-    
+
     public void dsPrint(int ln, String msg)
     {
         try

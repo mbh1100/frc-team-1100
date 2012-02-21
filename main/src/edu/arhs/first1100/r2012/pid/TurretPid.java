@@ -5,6 +5,7 @@
 
 package edu.arhs.first1100.r2012.pid;
 import edu.arhs.first1100.r2012.camera.CameraSystem;
+import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDController;
@@ -20,15 +21,10 @@ class TurretSource implements PIDSource
 {
     public double pidGet()
     {
-        ParticleAnalysisReport p = CameraSystem.getInstance().getHighestParticle();
-        if (p == null)
-        {
-            System.out.println("null particle!");
-            return 0;
-        }
-
-        System.out.println("Setting motors to: " + -p.center_mass_x_normalized);
-        return (-p.center_mass_x_normalized);
+        ParticleAnalysisReport p = CameraSystem.getInstance().getParticle();
+        CameraSystem.getInstance().printParticleAnalysisReport(p);
+        if (p == null) return 0;
+        return -p.center_mass_x_normalized;
     }
 }
 
@@ -36,20 +32,18 @@ class TurretOutput implements PIDOutput
 {
     public void pidWrite(double output)
     {
-        // assuming a DriveSystem interface that incorporates the behavior of the ArcadeDriveMux
-
+        ManipulatorSystem.getInstance().setTurretRotationSpeed(output);
     }
 }
 
-public class TurretPid extends edu.wpi.first.wpilibj.PIDController{
-
-    static private final double P = 1.0;
+public class TurretPid extends edu.wpi.first.wpilibj.PIDController
+{
+    static private final double P = 0.5;
     static private final double I = 0.01;
     static private final double D = 0.0;
 
-/**
- *turret pid constructor
- */
-public TurretPid(Jaguar turretMotor){
-    super (P,I,D, new TurretSource(), turretMotor);
-}}
+    public TurretPid()
+    {
+        super (P,I,D, new TurretSource(), new TurretOutput());
+    }
+}

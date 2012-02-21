@@ -18,19 +18,21 @@ import edu.arhs.first1100.r2012.manipulator.BallCounter;
 public class RobotMain extends SimpleRobot
 {
     OperatorSystem os;
+    CameraSystem cs;
 
     public void robotInit()
     {
         //Set Loggin' Levels
         Log.addClass(RobotMain.class, 3);
         Log.addClass(JoyGyro.class, 4);
-        Log.addClass(CameraSystem.class, 3);
+        Log.addClass(CameraSystem.class, 1);
         Log.addClass(OperatorSystem.class, 1);
 
         Log.addClass(RobotTest.class, 3);
         Log.addClass(BallCounter.class, 2);
 
         os = new OperatorSystem();
+        cs = CameraSystem.getInstance();
 
         Log.defcon3(this, "Robot Init");
         Log.defcon3(this, "+-------------------------------------+");
@@ -40,24 +42,22 @@ public class RobotMain extends SimpleRobot
 
     public void autonomous()
     {
-
-        SystemBase.enableAll();
         Log.defcon3(this, "Autonomous Mode Activated");
+        SystemBase.enableAll();
     }
 
 
     public void operatorControl()
     {
+        Log.defcon3(this, "Operator Mode Activated\n\n\n");
         SystemBase.enableAll();
         os.start();
-        Log.defcon3(this, "Operator Mode Activated\n\n\n");
     }
 
     public void disabled()
     {
-        os.stop();
         Log.defcon3(this, "Robot Disabled");
-        //DiagnosticRobot.disable();
         SystemBase.stopAll();
+        os.stop();
     }
 }

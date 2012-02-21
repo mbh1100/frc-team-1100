@@ -47,7 +47,7 @@ public class MotorEncoder
 
     public double getRight()
     {
-        double x = enRight.getRate();
+        double x = -enRight.getRate();
         //used to check for NaN
         //System.out.println("RATE:   " + x);
         if(!Double.isNaN(x))
@@ -62,7 +62,7 @@ public class MotorEncoder
 
     public double getLeft()
     {
-        double x = enLeft.getRate();
+        double x = -enLeft.getRate();
         //used to check for NaN
         //System.out.println("RATE:   " + x);
         if(!Double.isNaN(x))
@@ -72,6 +72,7 @@ public class MotorEncoder
         else
         {
             return 0;
+            
         }
     }
 }
