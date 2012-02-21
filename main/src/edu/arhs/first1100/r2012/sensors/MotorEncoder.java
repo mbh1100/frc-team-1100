@@ -50,11 +50,14 @@ public class MotorEncoder
         double x = enRight.getRate();
         //used to check for NaN
         //System.out.println("RATE:   " + x);
-        if(x/x == 1)
+        if(!Double.isNaN(x))
         {
             return x;
         }
-        else {return 0;}
+        else
+        {
+            return 0;
+        }
     }
 
     public double getLeft()
@@ -62,10 +65,13 @@ public class MotorEncoder
         double x = enLeft.getRate();
         //used to check for NaN
         //System.out.println("RATE:   " + x);
-        if(x/x == 1)
+        if(!Double.isNaN(x))
         {
             return x;
         }
-        else {return 0;}
+        else
+        {
+            return 0;
+        }
     }
 }
