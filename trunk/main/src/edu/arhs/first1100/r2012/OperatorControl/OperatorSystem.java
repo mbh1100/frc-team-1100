@@ -77,7 +77,7 @@ public class OperatorSystem
             r = new EncoderPIDRight();
             r.setOutputRange(-0.5, 0.5);
             r.enable();
-            super.setDeadBand(0.05);
+            setDeadBand(0.05);
         }
     }
 
@@ -182,6 +182,7 @@ public class OperatorSystem
 
         public void setHandleValue(double value)
         {
+            super.setHandleValue(value);
             System.out.println("AnalogScrew "+getName());
             if(value > 0)
             {
@@ -206,8 +207,9 @@ public class OperatorSystem
     {
         public void setHandleValue(double value)
         {
+            super.setHandleValue(value);
             System.out.println("AnalogTurretRot "+getName());
-            ManipulatorSystem.getInstance().setTurretRotation(value);
+            //ManipulatorSystem.getInstance().setTurretRotation(value);
         }
     }
 
@@ -423,11 +425,10 @@ public class OperatorSystem
         ps3.bindB_X(new LiftBelt());
         ps3.bindB_L1(new ShooterSpeedUp());
         ps3.bindB_R1(new ShooterSpeedDown());
-        ps3.bindB_DUp(new LeadScrewUp());
-        ps3.bindB_DDown(new LeadScrewDown());
+        //ps3.bindB_DUp(new LeadScrewUp());
+        //ps3.bindB_DDown(new LeadScrewDown());
         ps3.bindA_R2(new AnalogShooterSpeed());
         ps3.bindB_Circle(new OuterBallRoller());
-        ps3.bindB_Square(new OuterBallArmDown());
 
         //Aiming
         ps3.bindA_LeftX(new AnalogTurretRotation());

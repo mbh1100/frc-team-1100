@@ -21,7 +21,6 @@ class EncoderSourceRight implements PIDSource
     public double pidGet()
     {
         double tmp = me.getRight();
-        //System.out.println( tmp + "<~~~~~~~~~~~~ Right rate");
         return tmp;
     }
 

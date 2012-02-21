@@ -3,11 +3,11 @@ package edu.arhs.first1100.oopctl.handlers;
 public class JoystickAxisHandler
 {
     private String name;
-    private double deadBandWidth;
+    private double deadBandWidth = 0.0;
 
     public void setHandleValue(double value)
     {
-
+         System.out.println(getName()+" "+value);
     }
 
     //change to set is need be

@@ -43,7 +43,6 @@ public class PS3Controller extends SystemBase
         //ay = new JoystickAxis(js, Joystick.AxisType.kY);
         aX = new JoystickAxis(js, Joystick.AxisType.kX);
         aY = new JoystickAxis(js, Joystick.AxisType.kY);
-
         b1  = new Button(js, 1);
         b2  = new Button(js, 2);
         b3  = new Button(js, 3);
@@ -60,13 +59,13 @@ public class PS3Controller extends SystemBase
 
     public void bindAT(JoystickAxisHandler h)
     {
-        h.setName(prefix+"X-axis");
+        h.setName(prefix+"T-axis");
         aT.bind(h);
     }
 
     public void bindAX(JoystickAxisHandler h)
     {
-        h.setName(prefix+"Y-axis");
+        h.setName(prefix+"X-axis");
         aX.bind(h);
     }
 
