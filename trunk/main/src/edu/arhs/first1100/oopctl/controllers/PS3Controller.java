@@ -1,6 +1,7 @@
 package edu.arhs.first1100.oopctl.controllers;
 
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
+import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.arhs.first1100.util.SystemBase;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -13,6 +14,10 @@ public class PS3Controller extends SystemBase
     private String prefix;
     private int channel;
     private Joystick js;
+
+    private JoystickAxis ay;  //L2
+    private JoystickAxis ax;  //R2
+
     private Button b1;  //triangle
     private Button b2;  //square
     private Button b3;  //circle
@@ -31,7 +36,10 @@ public class PS3Controller extends SystemBase
         channel = ch;
         prefix = "PS3["+channel+"], ";
         js = new Joystick(channel);
-        
+
+        ax = new JoystickAxis(js, Joystick.AxisType.kThrottle); //PS3 R2
+        //ay = new JoystickAxis(js, Joystick.AxisType.kY);
+
         b1  = new Button(js, 1);
         b2  = new Button(js, 2);
         b3  = new Button(js, 3);
@@ -39,11 +47,22 @@ public class PS3Controller extends SystemBase
         b5  = new Button(js, 5);
         b6  = new Button(js, 6);
         b7  = new Button(js, 7);
-        b8  = new Button(js, 8);
+        //b8  = new Button(js, 8);
         b9  = new Button(js, 9);
         b10 = new Button(js, 10);
         b11 = new Button(js, 11);
         b12 = new Button(js, 12);
+    }
+
+    public void bindAX(JoystickAxisHandler h)
+    {
+        h.setName(prefix+"X-axis");
+        ax.bind(h);
+    }
+
+    public void bindAY(JoystickAxisHandler h)
+    {
+        h.setName(prefix+"Y-axis");
     }
 
     public void bindB1(ButtonHandler h)
@@ -105,29 +124,93 @@ public class PS3Controller extends SystemBase
         h.setName(prefix+"button 10");
         b10.bind(h);
     }
-    
+
     public void bindB11 (ButtonHandler h)
     {
         h.setName(prefix+"button 11");
         b11.bind(h);
     }
-    
+
     public void bindB12 (ButtonHandler h)
     {
         h.setName(prefix+"button 12");
         b12.bind(h);
     }
-    
+
+    //human-readable binding methods
+    public void bindA_R2(JoystickAxisHandler h)
+    {
+        bindAX(h);
+    }
+
+    public void bindA_L2(JoystickAxisHandler h){
+        //impement later
+    }
+
+    public void bindB_Triangle(ButtonHandler h)
+    {
+        bindB1(h);
+    }
+
+    public void bindB_Circle(ButtonHandler h)
+    {
+        bindB2(h);
+    }
+
+    public void bindB_X(ButtonHandler h)
+    {
+        bindB3(h);
+    }
+
+    public void bindB_Square(ButtonHandler h)
+    {
+        bindB4(h);
+    }
+
+    public void bindB_L1(ButtonHandler h)
+    {
+        bindB5(h);
+    }
+
+    public void bindB_R1(ButtonHandler h)
+    {
+        bindB6(h);
+    }
+
+    public void bindB_L2(ButtonHandler h)
+    {
+        bindB7(h);
+    }
+
+    public void bindB_DUp(ButtonHandler h)
+    {
+        bindB9(h);
+    }
+    public void bindB_DRight(ButtonHandler h)
+    {
+        bindB10(h);
+    }
+    public void bindB_DDown(ButtonHandler h)
+    {
+        bindB11(h);
+    }
+    public void bindB_DLeft(ButtonHandler h)
+    {
+        bindB12(h);
+    }
+
     public void tick()
     {
+        ax.update();
+
         b1.update();
         b2.update();
         b3.update();
         b4.update();
         b5.update();
         b6.update();
-        b7.update();
-        b8.update();
+        //b7.update();
+        //b8.update();
         b9.update();
         b10.update();
         b11.update();

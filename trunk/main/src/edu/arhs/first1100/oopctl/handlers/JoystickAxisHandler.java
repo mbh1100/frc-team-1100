@@ -5,12 +5,13 @@ public class JoystickAxisHandler
     private String name;
     private double deadBandWidth;
 
-    public void getHandleValue(double value)
+    public void setHandleValue(double value)
     {
 
     }
 
-    public void getNewHandleValue(double value)
+    //change to set is need be
+    public void setNewHandleValue(double value)
     {
 
     }

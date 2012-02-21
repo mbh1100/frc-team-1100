@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.Joystick;
 public class JoystickAxis
 {
     private JoystickAxisHandler jah;
-    private int axis;
+    private Joystick.AxisType axis;
     private Joystick js;
     double last_value;
     double deadBandWidth;
 
-    public JoystickAxis(Joystick js, int axisId)
+    public JoystickAxis(Joystick js, Joystick.AxisType axisId)
     {
         this.axis = axisId;
         this.js = js;
@@ -20,12 +20,12 @@ public class JoystickAxis
 
     public void update()
     {
-        double value = deadBand(js.getRawAxis(axis));
+        double value = deadBand(js.getAxis(axis));
 
-        jah.getHandleValue(value);
+        jah.setHandleValue(value);
         if (value != last_value)
         {
-            jah.getNewHandleValue(value);
+            jah.setNewHandleValue(value);
         }
 
         last_value = value;

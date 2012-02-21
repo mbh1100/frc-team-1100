@@ -19,8 +19,7 @@ import edu.arhs.first1100.r2012.sensors.MotorEncoder;
 public class RobotMain extends SimpleRobot
 {
     OperatorSystem os;
-    RobotTest rt;
-    
+
     public void robotInit()
     {
         //Set Loggin' Levels
@@ -32,7 +31,6 @@ public class RobotMain extends SimpleRobot
         Log.addClass(RobotTest.class, 3);
 
         os = new OperatorSystem();
-        //rt = new RobotTest();
 
         Log.defcon3(this, "Robot Init");
         Log.defcon3(this, "+-------------------------------------+");
@@ -53,8 +51,6 @@ public class RobotMain extends SimpleRobot
         SystemBase.enableAll();
         os.start();
         Log.defcon3(this, "Operator Mode Activated\n\n\n");
-        //while(!isDisabled())
-        //rt.OperatorControl();
     }
 
     public void disabled()
