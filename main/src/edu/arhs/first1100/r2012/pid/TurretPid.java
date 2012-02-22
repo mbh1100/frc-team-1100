@@ -6,6 +6,7 @@
 package edu.arhs.first1100.r2012.pid;
 import edu.arhs.first1100.r2012.camera.CameraSystem;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
+import edu.arhs.first1100.util.DSLog;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDController;
@@ -23,6 +24,7 @@ class TurretSource implements PIDSource
     {
         ParticleAnalysisReport p = CameraSystem.getInstance().getParticle();
         CameraSystem.getInstance().printParticleAnalysisReport(p);
+
         if (p == null) return 0;
         return -p.center_mass_x_normalized;
     }
