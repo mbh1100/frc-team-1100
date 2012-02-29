@@ -1,7 +1,6 @@
 package edu.arhs.first1100.r2012.OperatorControl;
 
 import edu.arhs.first1100.r2012.drive.DriveSystem;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.arhs.first1100.oopctl.controllers.PS3Controller;
 import edu.arhs.first1100.r2012.pid.EncoderPIDLeft;
 import edu.arhs.first1100.r2012.pid.EncoderPIDRight;
@@ -10,11 +9,10 @@ import edu.arhs.first1100.oopctl.controllers.AttackThree;
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
-import edu.arhs.first1100.r2012.camera.CameraSystem;
 import edu.arhs.first1100.r2012.manipulator.BallCounter;
 import edu.arhs.first1100.r2012.pid.TurretPid;
 import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
+import edu.arhs.first1100.util.DSLog;
 
 
 public class OperatorSystem
@@ -265,7 +263,7 @@ public class OperatorSystem
             {
                 if(invert)
                 {
-                    ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+                    ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
                     ManipulatorSystem.getInstance().setIntakeRoller(-0.7);
                     ManipulatorSystem.getInstance().setOuterBallRoller(-.7);
                     toggle = !toggle;
@@ -274,7 +272,7 @@ public class OperatorSystem
                 {
                     ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                     ManipulatorSystem.getInstance().setIntakeRoller(0.7);
-                    ManipulatorSystem.getInstance().setOuterBallRoller(0);
+                    ManipulatorSystem.getInstance().setOuterBallRoller(0.7);
                     toggle = !toggle;
                 }
             }
@@ -330,10 +328,11 @@ public class OperatorSystem
         {
             shootspeed += .1;
             if(shootspeed>=1) shootspeed = 1;
-            if(shootspeed<=0) shootspeed = 0;
+            if(shootspeed<=0.4) shootspeed = 0.4;
             System.out.println("shootspeed = "+shootspeed);
             ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
             ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
+            DSLog.log(1, "Shooter Speed: "+ String.valueOf(shootspeed));
         }
     }
     class ShooterSpeedDown extends ButtonHandler
@@ -342,10 +341,11 @@ public class OperatorSystem
         {
             shootspeed -= .1;
             if(shootspeed>=1) shootspeed = 1;
-            if(shootspeed<=0) shootspeed = 0;
+            if(shootspeed<=0.0) shootspeed = 0.0;
             System.out.println("shootspeed = "+shootspeed);
             ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
             ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
+            DSLog.log(1, "Shooter Speed: "+ String.valueOf(shootspeed));
         }
     }
     class AnalogShooterSpeed extends JoystickAxisHandler
@@ -358,23 +358,31 @@ public class OperatorSystem
             System.out.println("shootspeed = "+shootspeed);
             ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
             ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
+            DSLog.log(1, "Shooter Speed: "+ String.valueOf(shootspeed));
+        }
+    }
+    class OuterBallArmUp extends ButtonHandler
+    {
+        public void held()
+        {
+                ManipulatorSystem.getInstance().setOuterBallArm(0.5);
+        }
+
+        public void release()
+        {
+                ManipulatorSystem.getInstance().setOuterBallArm(0.0);
         }
     }
     class OuterBallArmDown extends ButtonHandler
     {
-        private boolean toggle = true;
-        public void pressed()
+        public void held()
         {
-            if(toggle)
-            {
-                ManipulatorSystem.getInstance().setOuterBallArm(-.7);
-                toggle = !toggle;
-            }
-            else
-            {
-                ManipulatorSystem.getInstance().setOuterBallArm(0);
-                toggle = !toggle;
-            }
+                ManipulatorSystem.getInstance().setOuterBallArm(-0.5);
+        }
+
+        public void release()
+        {
+                ManipulatorSystem.getInstance().setOuterBallArm(0.0);
         }
     }
     class CameraPositioning extends ButtonHandler
@@ -384,13 +392,14 @@ public class OperatorSystem
         {
             if(!pos.isEnable()) pos.enable();
             System.out.println("PID ENABLED");
-
+            DSLog.log(2, "AUTO-TARGETING");
             pos.setSetpoint(0);
         }
         public void notHeld()
         {
             if(pos.isEnable()) pos.disable();
             System.out.println("PID DISABLED");
+            DSLog. log(2, "targeting disabled");
         }
         public CameraPositioning()
         {
@@ -421,7 +430,7 @@ public class OperatorSystem
     //stuff
     private boolean raw_tank = true;
     private boolean invert = true;
-    private double shootspeed = 0;
+    private double shootspeed = 0.0;
 
     public OperatorSystem()
     {
@@ -433,6 +442,8 @@ public class OperatorSystem
         right.bindB2(new ToggleDrive());
         right.bindB3(new TopLiftBelt());
         right.bindB10(new PrintRate());
+        //right.bindB6(new OuterBallArmUp());
+        //right.bindB6(new OuterBallArmDown());
 
         left.bindY(new LeftAxisY());
         //left.bindY(new TurretRotation()); //Used to test the PS3 controller with the turret motor.

@@ -4,7 +4,6 @@
  */
 package edu.arhs.first1100.r2012.drive;
 
-import edu.arhs.first1100.r2011.camera.CameraSystem;
 //import edu.arhs.first1100.r2012.pid.DriveLeftPID;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;

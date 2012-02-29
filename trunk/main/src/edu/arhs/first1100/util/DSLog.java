@@ -15,20 +15,19 @@ import edu.wpi.first.wpilibj.DigitalModule;
 import edu.wpi.first.wpilibj.Solenoid;
 
 import edu.arhs.first1100.util.SystemBase;
-import edu.arhs.first1100.r2011.robot.RobotMain;
 
 /**
  * The routines for dealing with the driver station are ridiculously complicated
  * and cryptic.  Hopefully this class will simplify the process by replacing them
  * with shorter, more obvious methods.
  */
-public class DriverStationDataFeeder extends SystemBase
+public class DSLog extends SystemBase
 {
     private static int sleepTime = 500;
 
     // going to treat the LCD as a stack, in reverse here because
     // new lines appear on the bottom and scroll upwards (mostly)
-    DriverStationLCD.Line[] lcdLines = {
+    static DriverStationLCD.Line[] lcdLines = {
         DriverStationLCD.Line.kUser6, // bottom line
         DriverStationLCD.Line.kUser5,
         DriverStationLCD.Line.kUser4,
@@ -37,17 +36,16 @@ public class DriverStationDataFeeder extends SystemBase
         DriverStationLCD.Line.kMain6 // top line
     };
 
-    String[] lcdHistory = new String[6];  // array to scroll lcd display
-    String clearLine = "                     "; // 21 spaces to clear a line
+    static String[] lcdHistory = new String[6];  // array to scroll lcd display
+    static String clearLine = "                     "; // 21 spaces to clear a line
 
-    RobotMain robbie;
-
-    public DriverStationDataFeeder()
+    public DSLog()
     {
         for (int i = 0; i < lcdHistory.length;i++){
             lcdHistory[i] = "";
         }
     }
+
 
     /**
      * When run, the class starts a continuous loop to update the dashboard
@@ -66,7 +64,7 @@ public class DriverStationDataFeeder extends SystemBase
      * @param msg  the message to be padded out
      * @return  line  the message line padded out to 21 characters
      */
-    private String padMsg(String msg) {
+    static private String padMsg(String msg) {
         String line = msg;
         if (line.length() < 21)
         {  // if the message is already 21 or more do nothing
@@ -85,7 +83,7 @@ public class DriverStationDataFeeder extends SystemBase
     /**
      * Does just what it says, clears the driver station LCD.
      */
-    public void clearLCD() {
+    public static void clearLCD() {
         for (int i = 0; i < 6; i++)
         {
             lcdHistory[i] = clearLine; // clear the lcd "memory"
@@ -96,34 +94,6 @@ public class DriverStationDataFeeder extends SystemBase
 
     } // end method clearLCD()
 
-    /**
-     * Simplified messages to the LCD, with scrolling; new messages appear at
-     * the bottom of the screen and scroll up.
-     *
-     * @param msg  the message to be sent to the screen
-     */
-    public void sendToLCD(String msg)
-    {
-
-        // scroll down the history;  iterate backwards!
-        for (int i = 5; i > 0; i--) {
-            lcdHistory[i] = clearLine;
-            lcdHistory[i] = lcdHistory[i - 1];
-        }
-
-        lcdHistory[0] = clearLine; // clear the bottom line of the screen
-        lcdHistory[0] = padMsg(msg); // insert new line at the bottom, padded out to 21 chars
-
-        // set up updated screen by rewriting all lines
-        for (int i = 0; i < 6; i++)
-        {
-            DriverStationLCD.getInstance().println(lcdLines[i], 1, lcdHistory[i]);
-            //System.out.println(i);
-        }
-
-        DriverStationLCD.getInstance().updateLCD(); // display the screen
-
-    } // end method sendToLCD()
 
     /**
      * This makes it easier to send message to a specific line.  Takes the
@@ -133,7 +103,7 @@ public class DriverStationDataFeeder extends SystemBase
      * @param line  which line of the LCD the message should be displayed on
      * @param msg   the message to be displayed
      */
-    public void toLCDLine(int line, String msg) {
+    public static void log(int line, String msg) {
 
         int index = 6 - line; // array is set up bottom to top, this reverses it
         DriverStationLCD.getInstance().println(lcdLines[index], 1, padMsg(msg));
@@ -146,7 +116,7 @@ public class DriverStationDataFeeder extends SystemBase
      * Taken from DashboardExampleProject.  I'll try to explain how this is
      * organized.
      *
-     * The LabView dashboard is organized with all the various displays in
+     * sThe LabView dashboard is organized with all the various displays in
      * "clusters".  These clusters are embedded in other clusters, which are
      * embedded in otherwise, and so on.  For example, PWM display 1 is embedded
      * in the cluster for Digital Module 0, which is embedded in Digital
@@ -172,7 +142,7 @@ public class DriverStationDataFeeder extends SystemBase
      * either in an infinite loop or in teleopContinuous() if you use
      * IterativeRobot.  I use an infinite loop running in a separate thread.
      */
-    void updateDashboard() {
+    private void updateDashboard() {
 
         // first, get an instance of the dashboard "packer" file.  This is
         // essentially a map of how the dashboard has the clusters configured.
@@ -329,4 +299,4 @@ public class DriverStationDataFeeder extends SystemBase
 
     } // end method updateDashboard()
 
-} // end class DStation
+}
