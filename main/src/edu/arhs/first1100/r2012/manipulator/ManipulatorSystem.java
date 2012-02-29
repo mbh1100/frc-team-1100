@@ -55,8 +55,8 @@ public class ManipulatorSystem
         intakeRoller = new Victor(2,2);  //ok
         mainLiftBelt = new Victor(1,2);//1, 2  //ok
         neckBelt = new Relay(2,1);   //ok
-        outerBallRoller = new Victor(2,5);
-        outerBallArm = new Victor(2,6);
+        outerBallRoller = new Victor(1,6);
+        outerBallArm = new Victor(2,7);
         //rampArm = new Victor(2,7);
     }
 
@@ -77,7 +77,7 @@ public class ManipulatorSystem
 
     public void setTopShooterWheel(double speed)
     {
-            topShooterWheel.set(-speed*.9);
+            topShooterWheel.set(-speed);
     }
     public void setBottomShooterWheel(double speed)
     {
@@ -85,21 +85,21 @@ public class ManipulatorSystem
     }
 
     /**
-     * Top left shooter belt, cannot drive backwards
+     * Top left shooter belt
      * @param speed
      */
     public void setLeftShooterBelt(double speed)
     {
-        leftShooterBelt.set((speed > 0.0)?speed:0);
+        leftShooterBelt.set(speed);
     }
 
     /**
-     * Top left shooter belt, cannot drive backwards
+     * Top left shooter belt
      * @param speed
      */
     public void setRightShooterBelt(double speed)
     {
-        rightShooterBelt.set((speed > 0.0)?speed:0);
+        rightShooterBelt.set(speed);
     }
 
     public void setLeadScrewTilt(Relay.Value in)
@@ -117,7 +117,7 @@ public class ManipulatorSystem
         {
             turret.set((speed < 0)?0:speed);
         }
-        else if(Math.abs(turretRotation.getValue()) <= TURRET_MIN)
+        else if(turretRotation.getValue() <= TURRET_MIN)
         {
             turret.set((speed > 0)?0:speed);
         }
@@ -125,7 +125,6 @@ public class ManipulatorSystem
         {
             turret.set(speed);
         }
-        System.out.println("Value of turret rotation = " + turretRotation.getValue());
     }
 
     /**
@@ -188,6 +187,7 @@ public class ManipulatorSystem
 
     public void setOuterBallArm(double speed)
     {
+        /*
         if((outerBallArmTopSwitch.get() && speed < 0.0) ||
                 (outerBallArmBottomSwitch.get() && speed > 0.0))
         {
@@ -197,6 +197,8 @@ public class ManipulatorSystem
         {
             outerBallArm.set(speed);
         }
+        */
+        outerBallArm.set(speed);
     }
 
     public void setRampArm(double speed)

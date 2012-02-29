@@ -6,8 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package edu.arhs.first1100.r2012.robot;
 
-import edu.arhs.first1100.r2012.robot.diagnostic.RobotTest;
-import edu.arhs.first1100.r2011.camera.CameraSystem;
+import edu.arhs.first1100.r2012.camera.CameraSystem;
 import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.r2012.routines.JoyGyro;
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -18,7 +17,7 @@ import edu.arhs.first1100.r2012.manipulator.BallCounter;
 public class RobotMain extends SimpleRobot
 {
     OperatorSystem os;
-    CameraSystem cs;
+    //CameraSystem cs;
 
     public void robotInit()
     {
@@ -28,11 +27,10 @@ public class RobotMain extends SimpleRobot
         Log.addClass(CameraSystem.class, 1);
         Log.addClass(OperatorSystem.class, 1);
 
-        Log.addClass(RobotTest.class, 3);
         Log.addClass(BallCounter.class, 2);
 
         os = new OperatorSystem();
-        cs = CameraSystem.getInstance();
+        //cs = CameraSystem.getInstance();
 
         Log.defcon3(this, "Robot Init");
         Log.defcon3(this, "+-------------------------------------+");

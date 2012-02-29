@@ -1,6 +1,7 @@
 package edu.arhs.first1100.r2012.camera;
 
 //util imports
+import edu.arhs.first1100.util.DSLog;
 import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.util.SystemBase;
 
@@ -129,6 +130,9 @@ public class CameraSystem extends SystemBase
                     particle = this.getLowestParticle(filter);
                 }
 
+                if(particle == null) DSLog.log(3, "No Particle");
+                else if(Math.abs(particle.center_mass_x_normalized) < .025) DSLog.log(3, "Locked On");
+
                 cImg.free();
                 bImg.free();
             }
@@ -177,7 +181,7 @@ public class CameraSystem extends SystemBase
                 setThresholdRGB(210,255,210,255,210,255);
                 break;
             case BLUE_THRESHOLD:
-                setThresholdRGB(0,25,230,255,230,255);
+                setThresholdRGB(0,75,100,255,220,255);
                 break;
         }
     }
