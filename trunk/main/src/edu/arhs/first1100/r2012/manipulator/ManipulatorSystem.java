@@ -57,7 +57,7 @@ public class ManipulatorSystem
         neckBelt = new Relay(2,1);   //ok
         outerBallRoller = new Victor(1,6);
         outerBallArm = new Victor(2,7);
-        //rampArm = new Victor(2,7);
+        rampArm = new Victor(1,7);
     }
 
     public static ManipulatorSystem getInstance()
@@ -221,7 +221,7 @@ public class ManipulatorSystem
         this.neckBelt.set(Relay.Value.kOff);
         //this.outerBallArm.set(0);       NULL
         //this.outerBallRoller.set(0);    NULL
-        //this.rampArm.set(0);            NULL
+        this.rampArm.set(0);
         this.turret.set(0);
     }
 }

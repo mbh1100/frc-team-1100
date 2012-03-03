@@ -131,7 +131,7 @@ public class CameraSystem extends SystemBase
                 }
 
                 if(particle == null) DSLog.log(3, "No Particle");
-                else if(Math.abs(particle.center_mass_x_normalized) < .025) DSLog.log(3, "Locked On");
+                else if(Math.abs(particle.center_mass_x_normalized) < .015) DSLog.log(3, "Locked On");
 
                 cImg.free();
                 bImg.free();
