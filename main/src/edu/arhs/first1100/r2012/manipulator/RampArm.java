@@ -16,7 +16,7 @@ public class RampArm extends SystemBase
     DigitalInput upperSwitch;
     DigitalInput lowerSwitch;
 
-    private static final double kRampSpeed = 0.5;
+    private static final double kRampSpeed = 1.0;
 
     private double rampSpeed;
 
@@ -24,8 +24,8 @@ public class RampArm extends SystemBase
     {
         // check switches 10 times per second
         super(100);
-        upperSwitch = new DigitalInput(1,1);
-        lowerSwitch = new DigitalInput(1,2);
+        upperSwitch = new DigitalInput(1,2);
+        lowerSwitch = new DigitalInput(1,1);
     }
 
     public boolean isUpperLimit()
@@ -64,7 +64,7 @@ public class RampArm extends SystemBase
         if (rampSpeed > 0 && !isUpperLimit() ||
             rampSpeed < 0 && !isLowerLimit())
         {
-            ManipulatorSystem.getInstance().setRampArm(rampSpeed);
+            ManipulatorSystem.getInstance().setRampArm(-rampSpeed);
         }
         else
         {

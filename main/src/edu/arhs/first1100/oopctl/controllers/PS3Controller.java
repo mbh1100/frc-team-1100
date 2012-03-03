@@ -75,42 +75,49 @@ public class PS3Controller extends SystemBase
         aY.bind(h);
     }
 
+    public void bindB_Triangle(ButtonHandler h) {bindB1(h);}
     public void bindB1(ButtonHandler h)
     {
         h.setName(prefix+"button 1");
         b1.bind(h);
     }
 
+    public void bindB_Circle(ButtonHandler h)   {bindB2(h);}
     public void bindB2(ButtonHandler h)
     {
         h.setName(prefix+"button 2");
         b2.bind(h);
     }
 
+    public void bindB_X(ButtonHandler h)        {bindB3(h);}
     public void bindB3(ButtonHandler h)
     {
         h.setName(prefix+"button 3");
         b3.bind(h);
     }
 
+    public void bindB_Square(ButtonHandler h)   {bindB4(h);}
     public void bindB4(ButtonHandler h)
     {
         h.setName(prefix+"button 4");
         b4.bind(h);
     }
 
+    public void bindB_L1(ButtonHandler h)       {bindB5(h);}
     public void bindB5(ButtonHandler h)
     {
         h.setName(prefix+"button 5");
         b5.bind(h);
     }
 
+    public void bindB_R1(ButtonHandler h)       {bindB6(h);}
     public void bindB6(ButtonHandler h)
     {
         h.setName(prefix+"button 6");
         b6.bind(h);
     }
 
+    public void bindB_L2(ButtonHandler h)       {bindB7(h);}
     public void bindB7(ButtonHandler h)
     {
         h.setName(prefix+"button 7");
@@ -123,24 +130,28 @@ public class PS3Controller extends SystemBase
         b8.bind(h);
     }
 
+    public void bindB_DUp(ButtonHandler h)      {bindB9(h);}
     public void bindB9(ButtonHandler h)
     {
         h.setName(prefix+"button 9");
         b9.bind(h);
     }
 
+    public void bindB_DRight(ButtonHandler h)   {bindB10(h);}
     public void bindB10(ButtonHandler h)
     {
         h.setName(prefix+"button 10");
         b10.bind(h);
     }
 
+    public void bindB_DDown(ButtonHandler h)    {bindB11(h);}
     public void bindB11 (ButtonHandler h)
     {
         h.setName(prefix+"button 11");
         b11.bind(h);
     }
 
+    public void bindB_DLeft(ButtonHandler h)    {bindB12(h);}
     public void bindB12 (ButtonHandler h)
     {
         h.setName(prefix+"button 12");
@@ -168,57 +179,6 @@ public class PS3Controller extends SystemBase
         //impement later
     }
 
-    public void bindB_Triangle(ButtonHandler h)
-    {
-        bindB1(h);
-    }
-
-    public void bindB_Circle(ButtonHandler h)
-    {
-        bindB2(h);
-    }
-
-    public void bindB_X(ButtonHandler h)
-    {
-        bindB3(h);
-    }
-
-    public void bindB_Square(ButtonHandler h)
-    {
-        bindB4(h);
-    }
-
-    public void bindB_L1(ButtonHandler h)
-    {
-        bindB5(h);
-    }
-
-    public void bindB_R1(ButtonHandler h)
-    {
-        bindB6(h);
-    }
-
-    public void bindB_L2(ButtonHandler h)
-    {
-        bindB7(h);
-    }
-
-    public void bindB_DUp(ButtonHandler h)
-    {
-        bindB9(h);
-    }
-    public void bindB_DRight(ButtonHandler h)
-    {
-        bindB10(h);
-    }
-    public void bindB_DDown(ButtonHandler h)
-    {
-        bindB11(h);
-    }
-    public void bindB_DLeft(ButtonHandler h)
-    {
-        bindB12(h);
-    }
 
     public void tick()
     {
@@ -230,7 +190,7 @@ public class PS3Controller extends SystemBase
         b4.update();
         b5.update();
         b6.update();
-        //b7.update();
+        b7.update();
         //b8.update();
         b9.update();
         b10.update();

@@ -10,6 +10,7 @@ import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.arhs.first1100.r2012.manipulator.BallCounter;
+import edu.arhs.first1100.r2012.manipulator.RampArm;
 import edu.arhs.first1100.r2012.pid.TurretPid;
 import edu.wpi.first.wpilibj.Relay;
 import edu.arhs.first1100.util.DSLog;
@@ -125,7 +126,7 @@ public class OperatorSystem
         {
             ManipulatorSystem.getInstance().setLeftShooterBelt(0.0);
             ManipulatorSystem.getInstance().setRightShooterBelt(0.0);
-            ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
+            ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
         }
     }
 
@@ -212,6 +213,29 @@ public class OperatorSystem
         }
     }
 
+    class EngageWheelieBar extends ButtonHandler
+    {
+        public void pressed()
+        {
+            RampArm.getInstance().moveDown();
+        }
+        public void released()
+        {
+            RampArm.getInstance().dontMove();
+        }
+    }
+
+    class DisengageWheelieBar extends ButtonHandler
+    {
+        public void pressed()
+        {
+            RampArm.getInstance().moveUp();
+        }
+        public void released()
+        {
+            RampArm.getInstance().dontMove();
+        }
+    }
     /**
      * Used for main lift belt system.
      */
@@ -286,7 +310,7 @@ public class OperatorSystem
 
     class ManipulatorToggle extends ButtonHandler
     {
-        public void held()
+        public void pressed()
         {
             invert = true;
         }
@@ -312,14 +336,36 @@ public class OperatorSystem
     }
     class PrintRate extends ButtonHandler
     {
+        int cycle = 0;
+        static private final int kRate = 0;
+        static private final int kSwitch = 1;
+        static private final int kCycleMax = 2;
+        public void released()
+        {
+            if (++cycle >= kCycleMax)
+            {
+                cycle = 0;
+            }
+        }
         public void held()
         {
-            double val = MotorEncoder.getInstance().getLeft();
-            System.out.println("Get left: " + val);
-            val = MotorEncoder.getInstance().getRight();
-            System.out.println("Get right: " + val);
-            System.out.println("Limit Switch on top of the ball counter" + BallCounter.getInstance().getTopSwitch());
-            System.out.println("Limit Switch on bottom of the ball counter" + BallCounter.getInstance().getBottomSwitch());
+            switch (cycle)
+            {
+                case kRate:
+                {
+                    double val = MotorEncoder.getInstance().getLeft();
+                    System.out.println("Left drive rate: " + val);
+                    val = MotorEncoder.getInstance().getRight();
+                    System.out.println("Right drive rate: " + val);
+                }
+                    break;
+                case kSwitch:
+                    System.out.println("Limit Switch on top of the ball counter: " + BallCounter.getInstance().getTopSwitch());
+                    System.out.println("Limit Switch on bottom of the ball counter: " + BallCounter.getInstance().getBottomSwitch());
+                    System.out.println("Ramp arm lower limit: " + RampArm.getInstance().isLowerLimit());
+                    System.out.println("Ramp arm upper limit: " + RampArm.getInstance().isUpperLimit());
+                    break;
+            }
         }
     }
     class ShooterSpeedUp extends ButtonHandler
@@ -341,7 +387,7 @@ public class OperatorSystem
         {
             shootspeed -= .1;
             if(shootspeed>=1) shootspeed = 1;
-            if(shootspeed<=0.0) shootspeed = 0.0;
+            if(shootspeed<0.1) shootspeed = 0.0;
             System.out.println("shootspeed = "+shootspeed);
             ManipulatorSystem.getInstance().setTopShooterWheel(shootspeed);
             ManipulatorSystem.getInstance().setBottomShooterWheel(shootspeed);
@@ -368,7 +414,7 @@ public class OperatorSystem
                 ManipulatorSystem.getInstance().setOuterBallArm(0.5);
         }
 
-        public void release()
+        public void released()
         {
                 ManipulatorSystem.getInstance().setOuterBallArm(0.0);
         }
@@ -380,7 +426,7 @@ public class OperatorSystem
                 ManipulatorSystem.getInstance().setOuterBallArm(-0.5);
         }
 
-        public void release()
+        public void released()
         {
                 ManipulatorSystem.getInstance().setOuterBallArm(0.0);
         }
@@ -448,20 +494,20 @@ public class OperatorSystem
         left.bindY(new LeftAxisY());
         //left.bindY(new TurretRotation()); //Used to test the PS3 controller with the turret motor.
 
-        ps3.bindB_L2(new ManipulatorToggle());
         ps3.bindB_Triangle(new ShooterBelts());
-        ps3.bindB_Circle(new IntakeRoller());
-        ps3.bindB_X(new LiftBelt());
+        //ps3.bindB_Circle(new IntakeRoller());
+        ps3.bindB_Circle(new EngageWheelieBar());
+        //ps3.bindB_X(new LiftBelt());
+        ps3.bindB_X(new DisengageWheelieBar());
+        //ps3.bindB_Square(new CameraPositioning());
         ps3.bindB_L1(new ShooterSpeedUp());
         ps3.bindB_R1(new ShooterSpeedDown());
+        ps3.bindB_L2(new ManipulatorToggle());
+        //ps3.bindA_R2(new AnalogShooterSpeed());
         ps3.bindB_DUp(new LeadScrewUp());
+        ps3.bindB_DRight(new TurretRotationRight());
         ps3.bindB_DDown(new LeadScrewDown());
         ps3.bindB_DLeft(new TurretRotationLeft());
-        ps3.bindB_DRight(new TurretRotationRight());
-        //ps3.bindA_R2(new AnalogShooterSpeed());
-        ps3.bindB_Square(new CameraPositioning());
-
-        //Aiming
         ps3.bindA_LeftX(new AnalogTurretRotation());
         //ps3.bindA_LeftY(new AnalogLeadScrew());
     }

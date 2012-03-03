@@ -40,6 +40,7 @@ public abstract class Routine extends SystemBase
         stop();
         notify();
     }
+
     public synchronized void execute()
     {
         start();
@@ -53,6 +54,7 @@ public abstract class Routine extends SystemBase
         doCancel();
         setDone();
     }
+
     public boolean isCancelled()
     {
         return cancelled;
@@ -60,7 +62,7 @@ public abstract class Routine extends SystemBase
 
     protected void doCancel()
     {}
-    
+
     private static Vector routines = new Vector();
     public static void addRoutine(Routine aRoutine)
     {
@@ -73,4 +75,4 @@ public abstract class Routine extends SystemBase
             ((Routine)routines.elementAt(i)).cancel();
         }
     }
-} //Billy was Here!!!!!!!:0
+}
