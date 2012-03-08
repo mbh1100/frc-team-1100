@@ -85,31 +85,29 @@ public class OperatorSystem {
      */
     class ShooterBelts extends ButtonHandler {
         public void pressed() {
-            ManipulatorSystem.getInstance().setLeftShooterBelt(-1.0);
-            ManipulatorSystem.getInstance().setRightShooterBelt(-1.0);
+            ManipulatorSystem.getInstance().setShooterFeedWheels(-1.0);
             ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
             ManipulatorSystem.getInstance().setMainLiftBelt((invert)?-1.0:1.0);
         }
         public void released() {
-            ManipulatorSystem.getInstance().setLeftShooterBelt(0.0);
-            ManipulatorSystem.getInstance().setRightShooterBelt(0.0);
+            ManipulatorSystem.getInstance().setShooterFeedWheels(0.0);
             ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
         }
     }
     class LeadScrewUp extends ButtonHandler {
         public void held() {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
+            ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
         }
         public void released() {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+            ManipulatorSystem.getInstance().setLeadScrewTilt(0.0);
         }
     }
     class LeadScrewDown extends ButtonHandler {
         public void held() {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
+            ManipulatorSystem.getInstance().setLeadScrewTilt(1.0);
         }
         public void released() {
-            ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+            ManipulatorSystem.getInstance().setLeadScrewTilt(0.0);
         }
     }
     /**
@@ -117,14 +115,14 @@ public class OperatorSystem {
      */
     class AnalogLeadScrew extends JoystickAxisHandler {
         public void setHandleValue(double value) {
-            if (value > 0) {
-                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kForward);
+            if (value > 0.1) {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
             }
-            else if (value < 0) {
-                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kReverse);
+            else if (value < -0.1) {
+                ManipulatorSystem.getInstance().setLeadScrewTilt(1.0);
             }
             else {
-                ManipulatorSystem.getInstance().setLeadScrewTilt(Relay.Value.kOff);
+                ManipulatorSystem.getInstance().setLeadScrewTilt(0.0);
             }
         }
     }

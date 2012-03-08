@@ -37,11 +37,9 @@ public class DriveUpAndShootRoutine extends Routine {
         DriveSystem.getInstance().driveLeft(0.0);
         DriveSystem.getInstance().driveRight(0.0);
         ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
-        ManipulatorSystem.getInstance().setLeftShooterBelt(-1.0);
         Timer.delay(10.0);
         ManipulatorSystem.getInstance().setShooterSpeed(0.0);
         ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
-        ManipulatorSystem.getInstance().setLeftShooterBelt(0.0);
         if(turret.isEnable())turret.disable();
         setDone();
     }
