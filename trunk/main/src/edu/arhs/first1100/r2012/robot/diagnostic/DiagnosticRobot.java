@@ -3,11 +3,11 @@ package edu.arhs.first1100.r2012.robot.diagnostic;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 
-public class DiagnosticRobot
-{
+public class DiagnosticRobot {
+
     static boolean disabled = true;
-    public static void operator()
-    {
+
+    public static void operator() {
         Jaguar j1 = new Jaguar(1, 1);
         Jaguar j2 = new Jaguar(1, 2);
         Jaguar j3 = new Jaguar(1, 3);
@@ -17,8 +17,7 @@ public class DiagnosticRobot
         Joystick jstickl = new Joystick(2);
         disabled = false;
 
-        while(!disabled)
-        {
+        while (!disabled) {
             j1.set(jstickr.getY());
             j3.set(jstickr.getY());
 
@@ -27,6 +26,8 @@ public class DiagnosticRobot
         }
     }
 
-    public static void disable(){disabled = true;}
+    public static void disable() {
+        disabled = true;
+    }
 }
     //Added by Team1100

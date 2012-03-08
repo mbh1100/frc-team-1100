@@ -8,22 +8,21 @@ package edu.arhs.first1100.r2012.robot;
 
 import edu.arhs.first1100.r2012.camera.CameraSystem;
 import edu.arhs.first1100.util.Log;
-import edu.arhs.first1100.r2012.routines.JoyGyro;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.arhs.first1100.util.SystemBase;
 import edu.arhs.first1100.r2012.OperatorControl.OperatorSystem;
 import edu.arhs.first1100.r2012.manipulator.BallCounter;
+import edu.arhs.first1100.r2012.routines.DriveUpAndShootRoutine;
+import edu.arhs.first1100.util.Routine;
 
-public class RobotMain extends SimpleRobot
-{
+public class RobotMain extends SimpleRobot {
+
     OperatorSystem os;
     //CameraSystem cs;
 
-    public void robotInit()
-    {
+    public void robotInit() {
         //Set Loggin' Levels
         Log.addClass(RobotMain.class, 3);
-        Log.addClass(JoyGyro.class, 4);
         Log.addClass(CameraSystem.class, 1);
         Log.addClass(OperatorSystem.class, 1);
 
@@ -38,24 +37,26 @@ public class RobotMain extends SimpleRobot
         Log.defcon3(this, "+-------------------------------------+");
     }
 
-    public void autonomous()
-    {
+    public void autonomous() {
         Log.defcon3(this, "Autonomous Mode Activated");
         SystemBase.enableAll();
+        new DriveUpAndShootRoutine().execute();
+        /*
+         *   Drive forward
+         *   Turn Shooter on
+         */
     }
 
-
-    public void operatorControl()
-    {
+    public void operatorControl() {
         Log.defcon3(this, "Operator Mode Activated\n\n\n");
         SystemBase.enableAll();
         os.start();
     }
 
-    public void disabled()
-    {
+    public void disabled() {
         Log.defcon3(this, "Robot Disabled");
         SystemBase.stopAll();
+        Routine.disableRoutines();
         os.stop();
     }
 }

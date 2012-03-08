@@ -1,12 +1,11 @@
 package edu.arhs.first1100.util;
 
 /**
- * @author   William Dell
- * @author   Team 647
- * @version  v7, January 26, 201
- * @version  FRC Java version 2011.4
+ * @author William Dell
+ * @author Team 647
+ * @version v7, January 26, 201
+ * @version FRC Java version 2011.4
  */
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Dashboard;
@@ -18,13 +17,12 @@ import edu.arhs.first1100.util.SystemBase;
 
 /**
  * The routines for dealing with the driver station are ridiculously complicated
- * and cryptic.  Hopefully this class will simplify the process by replacing them
+ * and cryptic. Hopefully this class will simplify the process by replacing them
  * with shorter, more obvious methods.
  */
-public class DSLog extends SystemBase
-{
-    private static int sleepTime = 500;
+public class DSLog extends SystemBase {
 
+    private static int sleepTime = 500;
     // going to treat the LCD as a stack, in reverse here because
     // new lines appear on the bottom and scroll upwards (mostly)
     static DriverStationLCD.Line[] lcdLines = {
@@ -35,42 +33,36 @@ public class DSLog extends SystemBase
         DriverStationLCD.Line.kUser2,
         DriverStationLCD.Line.kMain6 // top line
     };
-
     static String[] lcdHistory = new String[6];  // array to scroll lcd display
     static String clearLine = "                     "; // 21 spaces to clear a line
 
-    public DSLog()
-    {
-        for (int i = 0; i < lcdHistory.length;i++){
+    public DSLog() {
+        for (int i = 0; i < lcdHistory.length; i++) {
             lcdHistory[i] = "";
         }
     }
 
-
     /**
      * When run, the class starts a continuous loop to update the dashboard
-     * constantly.  This is probably a bad way to do it.
+     * constantly. This is probably a bad way to do it.
      */
-    public void step()
-    {
+    public void step() {
         updateDashboard();
     } // end method run()
 
     /**
-     * Messages to the LCD must be 21 characters long or you get artifacts
-     * from previous lines.  This should pad the desired message out to
-     * the proper length.
+     * Messages to the LCD must be 21 characters long or you get artifacts from
+     * previous lines. This should pad the desired message out to the proper
+     * length.
      *
-     * @param msg  the message to be padded out
-     * @return  line  the message line padded out to 21 characters
+     * @param msg the message to be padded out
+     * @return line the message line padded out to 21 characters
      */
     static private String padMsg(String msg) {
         String line = msg;
-        if (line.length() < 21)
-        {  // if the message is already 21 or more do nothing
+        if (line.length() < 21) {  // if the message is already 21 or more do nothing
             // otherwise tack on however many spaces we are short
-            for (int i = msg.length() + 1; i <= 21; i++)
-            {
+            for (int i = msg.length() + 1; i <= 21; i++) {
                 line += " ";
             }
         }
@@ -84,8 +76,7 @@ public class DSLog extends SystemBase
      * Does just what it says, clears the driver station LCD.
      */
     public static void clearLCD() {
-        for (int i = 0; i < 6; i++)
-        {
+        for (int i = 0; i < 6; i++) {
             lcdHistory[i] = clearLine; // clear the lcd "memory"
             // and then use the cleared memory to clear the actual display
             DriverStationLCD.getInstance().println(lcdLines[i], 1, lcdHistory[i]);
@@ -94,14 +85,13 @@ public class DSLog extends SystemBase
 
     } // end method clearLCD()
 
-
     /**
-     * This makes it easier to send message to a specific line.  Takes the
+     * This makes it easier to send message to a specific line. Takes the
      * desired line number (top to bottom, 1-6) and the message to print as
      * arguments.
      *
-     * @param line  which line of the LCD the message should be displayed on
-     * @param msg   the message to be displayed
+     * @param line which line of the LCD the message should be displayed on
+     * @param msg the message to be displayed
      */
     public static void log(int line, String msg) {
 
@@ -111,36 +101,35 @@ public class DSLog extends SystemBase
 
     } // end method toLCDLine()
 
-
     /**
-     * Taken from DashboardExampleProject.  I'll try to explain how this is
+     * Taken from DashboardExampleProject. I'll try to explain how this is
      * organized.
      *
      * sThe LabView dashboard is organized with all the various displays in
-     * "clusters".  These clusters are embedded in other clusters, which are
-     * embedded in otherwise, and so on.  For example, PWM display 1 is embedded
-     * in the cluster for Digital Module 0, which is embedded in Digital
-     * Cluster 1, which is in the cluster containing all the digital modules,
-     * which is in the cluster containing everything.  Whew.  Basically it's
-     * a tree structure.
+     * "clusters". These clusters are embedded in other clusters, which are
+     * embedded in otherwise, and so on. For example, PWM display 1 is embedded
+     * in the cluster for Digital Module 0, which is embedded in Digital Cluster
+     * 1, which is in the cluster containing all the digital modules, which is
+     * in the cluster containing everything. Whew. Basically it's a tree
+     * structure.
      *
      * To send information to the dashboard, you have to "pack" this tree,
-     * filling in all the various clusters with the correct data, and then
-     * send the whole tree at one time to the dashboard.  You create the
-     * tree by using the addCluster() method, nesting each lower level of the
-     * tree in the higher ones.  When a cluster is loaded you finalize it,
-     * which basically packs up that particular module for shipment to the
-     * dashboard.  After all the clusters are finalized you use the commit()
-     * method to send it to the dashboard.
+     * filling in all the various clusters with the correct data, and then send
+     * the whole tree at one time to the dashboard. You create the tree by using
+     * the addCluster() method, nesting each lower level of the tree in the
+     * higher ones. When a cluster is loaded you finalize it, which basically
+     * packs up that particular module for shipment to the dashboard. After all
+     * the clusters are finalized you use the commit() method to send it to the
+     * dashboard.
      *
      * I've extracted the tree structure from the LabView dashboard code to
-     * interpret what's below.  I'll try to provide enough comments for you
-     * to understand which module is where, and which instrument display it
+     * interpret what's below. I'll try to provide enough comments for you to
+     * understand which module is where, and which instrument display it
      * connects to.
      *
      * To keep the dashboard up to date you have to call this method repeatedly,
      * either in an infinite loop or in teleopContinuous() if you use
-     * IterativeRobot.  I use an infinite loop running in a separate thread.
+     * IterativeRobot. I use an infinite loop running in a separate thread.
      */
     private void updateDashboard() {
 
@@ -169,8 +158,7 @@ public class DSLog extends SystemBase
                     // Here we just iterate through the analog ports, adding
                     // float values containing the average voltage for the given
                     // port.
-                    for (int i = 1; i <= 8; i++)
-                    {
+                    for (int i = 1; i <= 8; i++) {
                         lowDashData.addFloat((float) AnalogModule.getInstance(1).getAverageVoltage(i));
                     }
                 }
@@ -182,8 +170,7 @@ public class DSLog extends SystemBase
                 {
                     // And again, iterate through the voltages for each port
                     // on the module
-                    for (int i = 1; i <= 8; i++)
-                    {
+                    for (int i = 1; i <= 8; i++) {
                         lowDashData.addFloat((float) AnalogModule.getInstance(2).getAverageVoltage(i));
                     }
                 }
@@ -257,8 +244,7 @@ public class DSLog extends SystemBase
                         lowDashData.addCluster();
                         {
                             // iterate through all 10 PWM ports
-                            for (int i = 1; i <= 10; i++)
-                            {
+                            for (int i = 1; i <= 10; i++) {
                                 lowDashData.addByte((byte) DigitalModule.getInstance(module).getPWM(i));
                             }
                         }
@@ -298,5 +284,4 @@ public class DSLog extends SystemBase
         lowDashData.commit(); // commit changes to update dashboard
 
     } // end method updateDashboard()
-
 }

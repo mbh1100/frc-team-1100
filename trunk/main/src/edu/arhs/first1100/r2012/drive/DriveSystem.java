@@ -12,26 +12,21 @@ import edu.wpi.first.wpilibj.RobotDrive;
  *
  * @author Team1100
  */
-public class DriveSystem
-{
+public class DriveSystem {
+
     public Jaguar j1;
     public Jaguar j2;
 
-    private DriveSystem()
-    {
+    private DriveSystem() {
         j1 = new Jaguar(1, 1);
         j2 = new Jaguar(2, 1);
     }
     static DriveSystem instance;
 
-    public static DriveSystem getInstance()
-    {
-        if(instance == null)
-        {
-            synchronized(DriveSystem.class)
-            {
-                if (instance == null)
-                {
+    public static DriveSystem getInstance() {
+        if (instance == null) {
+            synchronized (DriveSystem.class) {
+                if (instance == null) {
                     instance = new DriveSystem();
                 }
             }
@@ -39,12 +34,11 @@ public class DriveSystem
         return instance;
     }
 
-    public void driveLeft(double speed)
-    {
+    public void driveLeft(double speed) {
         j2.set(-speed);
     }
-    public void driveRight(double speed)
-    {
+
+    public void driveRight(double speed) {
         j1.set(speed);
     }
 }

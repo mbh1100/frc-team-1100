@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
  *
  * @author team1100
  */
-public class SystemBase extends Thread
-{
+public class SystemBase extends Thread{
     protected int sleepTime = 100;
     private static boolean stopAll = false;
     private boolean stopThread = true;
@@ -15,76 +14,71 @@ public class SystemBase extends Thread
 
     /**
      * Construct the system base
+     *
      * @param sleep
      */
-    public SystemBase(int sleepTime)
-    {
+    public SystemBase(int sleepTime) {
         this.sleepTime = sleepTime;
     }
+
     /**
      * default constructor, ten ticks per second
      */
-    public SystemBase() { }
+    public SystemBase() {
+    }
 
     /**
      * Start the thread.
      */
-    public void start()
-    {
+    public void start() {
         stopThread = false;
 
-        if(!threadStarted)
-        {
+        if (!threadStarted) {
             super.start();
             threadStarted = true;
+        } else {
+            Log.defcon2(this, "SystemBase thread already started");
         }
-        else Log.defcon2(this, "SystemBase thread already started");
     }
 
     /**
      * Stop the thread.
      */
-    public void stop()
-    {
+    public void stop() {
         stopThread = true;
     }
 
     /**
-     * Run the thread.  Called by start(), do not call directly!
-     * If you need to have code run at the initialization of the thread,
-     * Put it in the constructor or override the rest() method
+     * Run the thread. Called by start(), do not call directly! If you need to
+     * have code run at the initialization of the thread, Put it in the
+     * constructor or override the rest() method
      */
-    public void run()
-    {
-        while(true)
-        {
-            while(!shouldStop())
-            {
+    public void run() {
+        while (true) {
+            while (!shouldStop()) {
                 /*
-                try
-                {*/
+                 * try
+                {
+                 */
 
                 //Log.defcon1(this, "Looping while stopThread is false");
 
                 tick(); // User code
 
-                /*}
-                catch(Exception e)
-                {
-                    log("********************************");
-                    log("  Fatal Thread Error!");
-                    log(e.getMessage());
-                    log(e.toString());
-
-                    log("********************************");
-                    robot.disabled();
-                }*/
+                /*
+                 * }
+                 * catch(Exception e) { log("********************************");
+                 * log(" Fatal Thread Error!"); log(e.getMessage());
+                 * log(e.toString());
+                 *
+                 * log("********************************"); robot.disabled();
+                }
+                 */
 
                 Timer.delay(sleepTime / 1000.0);
             }
 
-            while(shouldStop())
-            {
+            while (shouldStop()) {
                 //Log.defcon1(this, "waiting for stopThread to equal false");
                 Timer.delay(0.1);
             }
@@ -94,36 +88,35 @@ public class SystemBase extends Thread
     /**
      * Put your own code here to run.
      *
-     * This method is called after every sleep cycle.
-     * the delay time is stored in 'sleepTime'.
+     * This method is called after every sleep cycle. the delay time is stored
+     * in 'sleepTime'.
      */
-    public void tick()
-    { }
+    public void tick() {
+    }
 
     /**
      * Set the amount of time that the system should sleep
+     *
      * @param int time How long the component should sleep in milliseconds
      */
-    public void setSleep(int time)
-    {
+    public void setSleep(int time) {
         sleepTime = time;
     }
 
-    public synchronized void imDone()
-    {
+    public synchronized void imDone() {
         notify();
     }
-    public static void stopAll()
-    {
+
+    public static void stopAll() {
         stopAll = true;
     }
-    protected boolean shouldStop()
-    {
+
+    protected boolean shouldStop() {
         //hi
         return stopAll || stopThread;
     }
-    public static void enableAll()
-    {
+
+    public static void enableAll() {
         stopAll = false;
     }
 }
