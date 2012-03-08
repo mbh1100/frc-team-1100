@@ -17,11 +17,8 @@ public class ManipulatorSystem {
     private DigitalInput outerBallArmBottomSwitch;
     private Jaguar topShooterWheel;
     private Jaguar bottomShooterWheel;
-    private Victor leftShooterBelt;
-    private Victor rightShooterBelt;
-    //private PWM leftShooterBelt;
-    //private PWM rightShooterBelt;
-    private Relay leadScrewTilt;
+    private Victor shooterFeedWheels;
+    private Victor leadScrewTilt;
     private Victor turret;
     private Victor intakeRoller;
     private Victor mainLiftBelt;
@@ -41,9 +38,8 @@ public class ManipulatorSystem {
 
         topShooterWheel = new Jaguar(1, 3);  //ok
         bottomShooterWheel = new Jaguar(2, 3);  //ok
-        leftShooterBelt = new Victor(2, 4);   //ok
-        rightShooterBelt = new Victor(1, 4);  //ok
-        leadScrewTilt = new Relay(1, 1);  // ok
+        shooterFeedWheels = new Victor(1, 4);  //ok
+        leadScrewTilt = new Victor(2, 4);  // ok
         turret = new Victor(1, 5);  //ok
         intakeRoller = new Victor(2, 2);  //ok
         mainLiftBelt = new Victor(1, 2);//1, 2  //ok
@@ -75,21 +71,12 @@ public class ManipulatorSystem {
      *
      * @param speed
      */
-    public void setLeftShooterBelt(double speed) {
-        leftShooterBelt.set(-speed);
+    public void setShooterFeedWheels(double speed) {
+        shooterFeedWheels.set(-speed);
     }
 
-    /**
-     * Top left shooter belt
-     *
-     * @param speed
-     */
-    public void setRightShooterBelt(double speed) {
-        rightShooterBelt.set(-speed);
-    }
-
-    public void setLeadScrewTilt(Relay.Value in) {
-        leadScrewTilt.set(in);
+    public void setLeadScrewTilt(double speed) {
+        leadScrewTilt.set(speed);
     }
 
     /**
@@ -173,9 +160,8 @@ public class ManipulatorSystem {
         this.topShooterWheel.set(0);
         this.bottomShooterWheel.set(0);
         this.intakeRoller.set(0);
-        this.leftShooterBelt.set(0.0);
-        this.rightShooterBelt.set(0.0);
-        this.leadScrewTilt.set(Relay.Value.kOff);
+        this.shooterFeedWheels.set(0.0);
+        this.leadScrewTilt.set(0.0);
         this.mainLiftBelt.set(0);
         this.neckBelt.set(Relay.Value.kOff);
         //this.outerBallArm.set(0);       NULL
