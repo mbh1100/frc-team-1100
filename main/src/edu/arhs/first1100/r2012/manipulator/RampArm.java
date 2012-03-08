@@ -11,79 +11,57 @@ import edu.wpi.first.wpilibj.DigitalInput;
  *
  * @author team1100
  */
-public class RampArm extends SystemBase
-{
+public class RampArm extends SystemBase {
+
     DigitalInput upperSwitch;
     DigitalInput lowerSwitch;
-
-    private static final double kRampSpeed = 1.0;
-
     private double rampSpeed;
 
-    private RampArm()
-    {
-        // check switches 10 times per second
-        super(100);
-        upperSwitch = new DigitalInput(1,2);
-        lowerSwitch = new DigitalInput(1,1);
+    private RampArm() {
+        // check switches 100 times per second
+        super(10);
+        upperSwitch = new DigitalInput(1, 2);
+        lowerSwitch = new DigitalInput(1, 1);
     }
 
-    public boolean isUpperLimit()
-    {
+    public boolean isUpperLimit() {
         return !upperSwitch.get();
     }
 
-    public boolean isLowerLimit()
-    {
+    public boolean isLowerLimit() {
         return !lowerSwitch.get();
     }
 
-    public void moveUp()
-    {
-        rampSpeed = kRampSpeed;
+    public void setSpeed(double speed) {
+        rampSpeed = speed;
     }
 
-    public void moveDown()
-    {
-        rampSpeed = -kRampSpeed;
-    }
-
-    public void dontMove()
-    {
+    public void dontMove() {
         rampSpeed = 0;
     }
 
-    public void stop()
-    {
+    public void stop() {
         rampSpeed = 0;
         super.stop();
     }
 
-    public void tick()
-    {
-        if (rampSpeed > 0 && !isUpperLimit() ||
-            rampSpeed < 0 && !isLowerLimit())
-        {
+    public void tick() {
+        if (rampSpeed > 0 && !isUpperLimit()
+                || rampSpeed < 0 && !isLowerLimit()) {
+            System.out.println("POWERING RAMP ARM");
             ManipulatorSystem.getInstance().setRampArm(-rampSpeed);
-        }
-        else
-        {
+        } else {
+            System.out.println("SETTING RAMP ARM TO ZERO");
             ManipulatorSystem.getInstance().setRampArm(0.0);
         }
     }
-
     private static RampArm instance = null;
 
-    public static RampArm getInstance()
-    {
-        if(instance == null)
-        {
+    public static RampArm getInstance() {
+        if (instance == null) {
             instance = new RampArm();
             instance.start();
         }
-
         return instance;
     }
-
-
 }
