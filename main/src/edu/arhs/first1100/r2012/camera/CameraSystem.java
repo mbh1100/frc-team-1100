@@ -1,6 +1,7 @@
 package edu.arhs.first1100.r2012.camera;
 
 //util imports
+import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.util.DSLog;
 import edu.arhs.first1100.util.Log;
 import edu.arhs.first1100.util.SystemBase;
@@ -38,6 +39,7 @@ public class CameraSystem extends SystemBase {
     private ParticleAnalysisReport[] pRep = null; //ordered particleAnalysisReport
     private ParticleAnalysisReport particle = null;
     private static CameraSystem instance;
+    private int lightTicks = 0;
     //SubHeirarchy Objects
 
     private CameraSystem() {
@@ -52,7 +54,7 @@ public class CameraSystem extends SystemBase {
         ac.writeResolution(AxisCamera.ResolutionT.k320x240);
 
         //Defaults
-        setThreshold(BLUE_THRESHOLD);
+        setThreshold(GREEN_THRESHOLD);
 
         setSleep(50);
     }
@@ -113,11 +115,13 @@ public class CameraSystem extends SystemBase {
                     }
                 }
 
-                if (filter == null || filter.length == 0) {
-                    Log.defcon1(this, "No Particles");
-                    particle = null;
-                } else {
-                    particle = this.getMiddlestParticle(filter);
+                synchronized (this) {
+                    if (filter == null || filter.length == 0) {
+                        //Log.defcon1(this, "No Particles");
+                        particle = null;
+                    } else {
+                        particle = this.getMiddlestParticle(filter);
+                    }
                 }
 
                 if (particle == null) {
@@ -132,12 +136,28 @@ public class CameraSystem extends SystemBase {
                 Log.defcon3(this, e.getMessage());
             }
         }
+        
+        if (lightTicks > 0)
+        {
+            if (--lightTicks == 0)
+            {
+                ManipulatorSystem.getInstance().illuminatorOff();
+            }
+            
+        }
     }
 
-    public ParticleAnalysisReport getParticle() {
+    public synchronized ParticleAnalysisReport getParticle() {
+        turnOnLight();
         return particle;
     }
 
+    private void turnOnLight()
+    {
+        lightTicks = 20;
+        ManipulatorSystem.getInstance().illuminatorOn();
+    }
+    
     /**
      * Set the threshold of colors the camera should look for. All parameters
      * must be 0-255.
@@ -166,7 +186,7 @@ public class CameraSystem extends SystemBase {
     private synchronized void setThreshold(int t) {
         switch (t) {
             case GREEN_THRESHOLD:
-                setThresholdRGB(80, 130, 150, 255, 50, 130);
+                setThresholdRGB(0, 130, 150, 255, 50, 255);
                 break;
             case WHITE_THRESHOLD:
                 setThresholdRGB(210, 255, 210, 255, 210, 255);

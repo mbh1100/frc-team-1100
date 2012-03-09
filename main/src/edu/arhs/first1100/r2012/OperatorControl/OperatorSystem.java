@@ -12,6 +12,7 @@ import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.arhs.first1100.r2012.manipulator.BallCounter;
 import edu.arhs.first1100.r2012.manipulator.RampArm;
+import edu.arhs.first1100.r2012.manipulator.IntakeRoller;
 import edu.arhs.first1100.r2012.pid.TurretPid;
 import edu.wpi.first.wpilibj.Relay;
 import edu.arhs.first1100.util.DSLog;
@@ -66,6 +67,8 @@ public class OperatorSystem {
     class ToggleDrive extends ButtonHandler {
         public void pressed() {
             raw_tank = !raw_tank;
+            if(raw_tank)    DSLog.log(5, "Raw Tank");
+            else            DSLog.log(5, "Encoder Drive");
         }
     }
     class StandardDrive extends JoystickAxisHandler {
@@ -85,13 +88,22 @@ public class OperatorSystem {
      */
     class ShooterBelts extends ButtonHandler {
         public void pressed() {
-            ManipulatorSystem.getInstance().setShooterFeedWheels(-1.0);
-            ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
-            ManipulatorSystem.getInstance().setMainLiftBelt((invert)?-1.0:1.0);
+            if(invert){
+                ManipulatorSystem.getInstance().setShooterFeedWheels(1.0);
+                ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kReverse);
+                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+            }
+            else{
+                ManipulatorSystem.getInstance().setShooterFeedWheels(-1.0);
+                ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
+                ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
+            }
         }
         public void released() {
             ManipulatorSystem.getInstance().setShooterFeedWheels(0.0);
             ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
+            ManipulatorSystem.getInstance().setMainLiftBelt(0);
+            
         }
     }
     class LeadScrewUp extends ButtonHandler {
@@ -164,49 +176,38 @@ public class OperatorSystem {
      * Used for main lift belt system.
      */
     class LiftBelt extends ButtonHandler {
-        private boolean toggle = true;
         public void pressed() {
-            if (toggle) {
-                // Sets value when pressed and released.
-                // Makes main lift negative values when inverted and normal when normal.
-                if (invert) {
-                    ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                    //Intake roller - remove
-                    ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
-                    toggle = !toggle;
-                }
-                else {
-                    ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
-                    //Intake roller - remove
-                    ManipulatorSystem.getInstance().setIntakeRoller(0.5);
-                    toggle = !toggle;
-                }
+            // Sets value when pressed and released.
+            // Makes main lift negative values when inverted and normal when normal.
+            if (invert) {
+                ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
+                //Intake roller - remove
+                ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
             }
             else {
-                ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
+                ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
                 //Intake roller - remove
-                ManipulatorSystem.getInstance().setIntakeRoller(0.0);
-                toggle = !toggle;
+                ManipulatorSystem.getInstance().setIntakeRoller(0.5);
             }
         }
+        public void released(){
+            ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
+            //Intake roller - remove
+            ManipulatorSystem.getInstance().setIntakeRoller(0.0);
+            
+        }
     }
-    /**
-     * Sets intake roller and main belt to pull in balls Bound to PS3 Circle
-     */
-    class IntakeRoller extends ButtonHandler {
-        private boolean toggle = true;
+    
+    class IntakeRollerArm extends ButtonHandler {
+       private boolean toggle = true;
         public void pressed() {
             if (toggle) {
                 if (invert) {
-                    ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
-                    ManipulatorSystem.getInstance().setIntakeRoller(-0.7);
-                    ManipulatorSystem.getInstance().setOuterBallRoller(-.7);
+                    edu.arhs.first1100.r2012.manipulator.IntakeRoller.getInstance().setSpeed(-0.7);
                     toggle = !toggle;
                 }
                 else {
-                    ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                    ManipulatorSystem.getInstance().setIntakeRoller(0.7);
-                    ManipulatorSystem.getInstance().setOuterBallRoller(0.7);
+                    edu.arhs.first1100.r2012.manipulator.IntakeRoller.getInstance().setSpeed(0.7);
                     toggle = !toggle;
                 }
             }
@@ -307,27 +308,36 @@ public class OperatorSystem {
     }
     class CameraPositioning extends ButtonHandler {
         TurretPid pos;
-        public void held() {
+        public void pressed() {
             isTargeting = true;
             if (!pos.isEnable()) pos.enable();
             DSLog.log(2, "AUTO-TARGETING");
-            pos.setSetpoint(0);
         }
-        public void notHeld() {
+        public void released() {
             isTargeting = false;
             if (pos.isEnable()) pos.disable();
             DSLog.log(2, "targeting disabled");
         }
         public CameraPositioning() {
             pos = new TurretPid();
-            pos.enable();
             System.out.println("PID Created");
             System.out.println("BOUND");
+        }
+    }
+    
+    class PrintStuff extends ButtonHandler
+    {
+        public void held()
+        {
+            System.out.println("upper limit: " + RampArm.getInstance().isUpperLimit());
+            System.out.println("lower limit: " + RampArm.getInstance().isLowerLimit());
+            System.out.println("turret pot: " + ManipulatorSystem.getInstance().getTurretRotation());
         }
     }
     class TurretRotation extends JoystickAxisHandler {
         public void setHandleValue(double value) {
             if(!isTargeting){
+                System.out.println("turret speed: " + value);
                 ManipulatorSystem.getInstance().setTurretRotationSpeed(value);
             }
         }
@@ -358,31 +368,26 @@ public class OperatorSystem {
 
         right.bindY(new RightAxisY());
         right.bindB2(new ToggleDrive());
-        right.bindB10(new WheelieBarDown());
-        right.bindB11(new WheelieBarUp());
+        //right.bindB10(new WheelieBarDown());
+        //right.bindB11(new WheelieBarUp());
         //right.bindB6(new OuterBallArmUp());
         //right.bindB6(new OuterBallArmDown());
 
         left.bindY(new LeftAxisY());
-        //left.bindY(new TurretRotation()); //Used to test the PS3 controller with the turret motor.
+        left.bindB2(new CameraPositioning());
+        left.bindB10(new PrintStuff());
 
-        xbox.bindB1(new LiftBelt());
-        xbox.bindB2(new IntakeRoller());
-        //xbox.bindB3(new CameraPositioning());
-        xbox.bindB4(new ShooterBelts());
-        xbox.bindB5(new ShooterSpeedDown());
-        xbox.bindB6(new ShooterSpeedUp());
-        xbox.bindB7(new ManipulatorToggle());
-        //xbox.bindB8(null);
-        //xbox.bindB9(null);
-        //xbox.bindB10(null);
+        xbox.bindAbutton(new LiftBelt());
+        xbox.bindXbutton(new IntakeRollerArm());
+        xbox.bindYbutton(new ShooterBelts());
+        xbox.bindLeftBumper(new ShooterSpeedDown());
+        xbox.bindRightBumper(new ShooterSpeedUp());
+        xbox.bindBack(new ManipulatorToggle());
+        xbox.bindStart(new ShooterSpeedSetJump());
 
         xbox.bindX(new TurretRotation());
-        //xbox.bindY(null);
-        //xbox.bindZ(new WheelieBar());
-        //xbox.bindXrot(null);
+        xbox.bindXrot(new WheelieBar());
         xbox.bindYrot(new AnalogLeadScrew());
-        xbox.bindB8(new ShooterSpeedSetJump());
 
     }
 

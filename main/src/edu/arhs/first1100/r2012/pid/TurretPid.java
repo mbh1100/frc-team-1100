@@ -22,29 +22,33 @@ class TurretSource implements PIDSource {
 
     public double pidGet() {
         ParticleAnalysisReport p = CameraSystem.getInstance().getParticle();
-        CameraSystem.getInstance().printParticleAnalysisReport(p);
+        //CameraSystem.getInstance().printParticleAnalysisReport(p);
 
         if (p == null) {
             return 0.0;
         }
-        return -p.center_mass_x_normalized;
+        
+        return p.center_mass_x_normalized;
     }
 }
 
 class TurretOutput implements PIDOutput {
 
     public void pidWrite(double output) {
-        ManipulatorSystem.getInstance().setTurretRotationSpeed(output);
+        System.out.println("Turret PID output: " + output);
+        ManipulatorSystem.getInstance().setTurretRotationSpeed(-output);
     }
 }
 
 public class TurretPid extends edu.wpi.first.wpilibj.PIDController {
 
     static private final double P = 0.5;
-    static private final double I = 0.01;
+    static private final double I = 0.05;
     static private final double D = 0.0;
 
     public TurretPid() {
         super(P, I, D, new TurretSource(), new TurretOutput());
+        this.setSetpoint(0.0);
+        this.setOutputRange(-0.5, 0.5);
     }
 }

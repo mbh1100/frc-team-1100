@@ -47,11 +47,11 @@ public class RampArm extends SystemBase {
 
     public void tick() {
         if (rampSpeed > 0 && !isUpperLimit()
-                || rampSpeed < 0 && !isLowerLimit()) {
-            System.out.println("POWERING RAMP ARM");
+                || rampSpeed < 0 && !isLowerLimit() && IntakeRoller.getInstance().isUpperLimit()) {
+            //System.out.println("POWERING RAMP ARM");
             ManipulatorSystem.getInstance().setRampArm(-rampSpeed);
         } else {
-            System.out.println("SETTING RAMP ARM TO ZERO");
+            //System.out.println("SETTING RAMP ARM TO ZERO");
             ManipulatorSystem.getInstance().setRampArm(0.0);
         }
     }
