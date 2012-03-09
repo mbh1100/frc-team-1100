@@ -148,11 +148,11 @@ public class ManipulatorSystem {
      *
      * @param speed to set the roller.
      */
-    public void setOuterBallRoller(double speed) {
+    void setOuterBallRoller(double speed) {
         outerBallRoller.set(speed);
     }
 
-    public void setOuterBallArm(double speed) {
+    void setOuterBallArm(double speed) {
         /*
          * if((outerBallArmTopSwitch.get() && speed < 0.0) ||
          * (outerBallArmBottomSwitch.get() && speed > 0.0)) {
@@ -161,7 +161,7 @@ public class ManipulatorSystem {
         outerBallArm.set(speed);
     }
 
-    public void setRampArm(double speed) {
+    void setRampArm(double speed) {
         rampArm.set(speed);
     }
     
