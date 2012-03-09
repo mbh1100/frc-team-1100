@@ -26,9 +26,10 @@ public class ManipulatorSystem {
     private Victor outerBallRoller;
     private Victor outerBallArm;
     private Victor rampArm;
+    private Relay illuminator;
 
     private ManipulatorSystem() {
-        BallCounter.getInstance().start();
+        //BallCounter.getInstance().start();
 
         turretRotation = new AnalogChannel(1);
 
@@ -38,8 +39,8 @@ public class ManipulatorSystem {
 
         topShooterWheel = new Jaguar(1, 3);  //ok
         bottomShooterWheel = new Jaguar(2, 3);  //ok
-        shooterFeedWheels = new Victor(1, 4);  //ok
-        leadScrewTilt = new Victor(2, 4);  // ok
+        shooterFeedWheels = new Victor(2, 4);  //ok
+        leadScrewTilt = new Victor(1, 4);  // ok
         turret = new Victor(1, 5);  //ok
         intakeRoller = new Victor(2, 2);  //ok
         mainLiftBelt = new Victor(1, 2);//1, 2  //ok
@@ -47,6 +48,7 @@ public class ManipulatorSystem {
         outerBallRoller = new Victor(1, 6);
         outerBallArm = new Victor(2, 7);
         rampArm = new Victor(1, 7);
+        illuminator = new Relay(1,1);
     }
 
     public static ManipulatorSystem getInstance() {
@@ -62,7 +64,7 @@ public class ManipulatorSystem {
 
     public void setShooterSpeed(double speed){
         topShooterWheel.set(speed);
-        bottomShooterWheel.set(speed);
+        bottomShooterWheel.set(-speed);
 
     }
 
@@ -96,6 +98,10 @@ public class ManipulatorSystem {
         }*/
         turret.set(speed/2);
     }
+    
+    public int getTurretRotation() {
+        return turretRotation.getValue();
+    }
 
     /**
      * Sets the intake roller Intake roller will not intake if BallCounter is
@@ -104,18 +110,21 @@ public class ManipulatorSystem {
      * @param speed (Speed the roller)
      */
     public void setIntakeRoller(double speed) {
-        if (!BallCounter.getInstance().canIntake()) {
+        /*if (!BallCounter.getInstance().canIntake()) {
             intakeRoller.set(-Math.abs(speed));
         } else {
             intakeRoller.set(speed);
         }
+        * 
+        */
+        intakeRoller.set(-speed);
     }
 
     /**
      * Sets the speed of the main lift belt.
      */
     public void setMainLiftBelt(double speed) {
-        mainLiftBelt.set(speed);
+        mainLiftBelt.set(-speed);
     }
 
     /**
@@ -154,6 +163,16 @@ public class ManipulatorSystem {
 
     public void setRampArm(double speed) {
         rampArm.set(speed);
+    }
+    
+    public void illuminatorOn()
+    {
+        illuminator.set(Relay.Value.kForward);
+    }
+    
+    public void illuminatorOff()
+    {
+        illuminator.set(Relay.Value.kOff);
     }
 
     public void stop() {

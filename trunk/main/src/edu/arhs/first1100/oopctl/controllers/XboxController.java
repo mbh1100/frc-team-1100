@@ -53,92 +53,77 @@ public class XboxController extends SystemBase {
     }
 
     public void bindX(JoystickAxisHandler h) {
-        String name = "Attack 3 " + channel + ", X Axis";
         h.setName(prefix + "X-axis");
         x.bind(h);
     }
 
     public void bindY(JoystickAxisHandler h) {
-        String name = "Attack 3 " + channel + ", Y Axis";
-        h.setName(name);
+        h.setName(prefix + "Y-axis");
         y.bind(h);
     }
 
     public void bindZ(JoystickAxisHandler h) {
-        String name = "Attack 3 " + channel + ", X Axis";
-        h.setName(name);
+        h.setName(prefix + "Z-axis");
         z.bind(h);
     }
 
     public void bindXrot(JoystickAxisHandler h) {
-        String name = "Attack 3 " + channel + ", X Axis";
-        h.setName(name);
+        h.setName(prefix + "X-rot");
         xrot.bind(h);
     }
 
     public void bindYrot(JoystickAxisHandler h) {
-        String name = "Attack 3 " + channel + ", X Axis";
-        h.setName(name);
+        h.setName(prefix + "Y-rot");
         yrot.bind(h);
     }
 
-    public void bindB1(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 1";
-        h.setName(name);
+    public void bindAbutton(ButtonHandler h) {
+        h.setName(prefix + "A button");
         b1.bind(h);
     }
 
-    public void bindB2(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 2";
-        h.setName(name);
+    public void bindBbutton(ButtonHandler h) {
+        h.setName(prefix + "B button");
         b2.bind(h);
     }
 
-    public void bindB3(ButtonHandler h) {
-        String name = "Attack3 " + channel + ", button 3";
-        h.setName(name);
+    public void bindXbutton(ButtonHandler h) {
+        h.setName(prefix + "X button");
         b3.bind(h);
     }
 
-    public void bindB4(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 4";
-        h.setName(name);
+    public void bindYbutton(ButtonHandler h) {
+        h.setName(prefix + "Y button");
         b4.bind(h);
     }
 
-    public void bindB5(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 5";
-        h.setName(name);
+    public void bindLeftBumper(ButtonHandler h) {
+        h.setName(prefix + "Left Bumper");
         b5.bind(h);
     }
 
-    public void bindB6(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 6";
-        h.setName(name);
+    public void bindRightBumper(ButtonHandler h) {
+        h.setName(prefix + "Right Bumper");
         b6.bind(h);
     }
 
-    public void bindB7(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 7";
-        h.setName(name);
+    public void bindBack(ButtonHandler h) {
+        h.setName(prefix + "Back button");
         b7.bind(h);
     }
 
-    public void bindB8(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 8";
-        h.setName(name);
+    public void bindStart(ButtonHandler h) {
+        h.setName(prefix + "Start button");
         b8.bind(h);
     }
 
-    public void bindB9(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 9";
-        h.setName(name);
+    public void bindLeftJoystickClick(ButtonHandler h) {
+        h.setName(prefix + "Left Stick Click");
         b9.bind(h);
     }
 
-    public void bindB10(ButtonHandler h) {
-        String name = "Attack 3 " + channel + ", button 10";
-        h.setName(name);
+    public void bindRightJoystickClick(ButtonHandler h) {
+        h.setName(prefix + "Right Stick Click");
         b10.bind(h);
     }
 
@@ -146,6 +131,8 @@ public class XboxController extends SystemBase {
         x.update();
         y.update();
         z.update();
+        xrot.update();
+        yrot.update();
         b1.update();
         b2.update();
         b3.update();

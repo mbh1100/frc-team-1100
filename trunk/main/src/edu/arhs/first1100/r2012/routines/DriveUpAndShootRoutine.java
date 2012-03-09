@@ -28,19 +28,36 @@ public class DriveUpAndShootRoutine extends Routine {
     public void run()
     {
         // TODO: Modify Drive to use encoders
-        DriveSystem.getInstance().driveLeft(0.3);
-        DriveSystem.getInstance().driveRight(0.3);
-        if(!turret.isEnable())turret.enable();
-        turret.setSetpoint(0.0);
+        // Drive forward for a while
+        DriveSystem.getInstance().driveLeft(-0.3);
+        DriveSystem.getInstance().driveRight(-0.3);
+        //if(!turret.isEnable())turret.enable();
+        //turret.setSetpoint(0.0);
+        // Spin up the shooter while we're driving
         ManipulatorSystem.getInstance().setShooterSpeed(0.4);
         Timer.delay(3.1);
+        // stop and shoot
         DriveSystem.getInstance().driveLeft(0.0);
         DriveSystem.getInstance().driveRight(0.0);
         ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kForward);
-        Timer.delay(10.0);
+        ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
+        ManipulatorSystem.getInstance().setShooterFeedWheels(-1.0);
+        // 5 seconds should be long enough to get off a couple of shots
+        Timer.delay(5.0);
         ManipulatorSystem.getInstance().setShooterSpeed(0.0);
         ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
-        if(turret.isEnable())turret.disable();
+        ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
+        ManipulatorSystem.getInstance().setShooterFeedWheels(0.0);
+        //if(turret.isEnable())turret.disable();
+        ManipulatorSystem.getInstance().setTurretRotationSpeed(0.0);
+        // now back up for a few seconds.
+        DriveSystem.getInstance().driveLeft(0.3);
+        DriveSystem.getInstance().driveRight(0.3);
+        Timer.delay(5.0);
+        // and stop.
+        DriveSystem.getInstance().driveLeft(0.0);
+        DriveSystem.getInstance().driveRight(0.0);
+        
         setDone();
     }
 
