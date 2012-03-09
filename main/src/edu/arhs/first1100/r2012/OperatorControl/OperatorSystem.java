@@ -12,7 +12,7 @@ import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
 import edu.arhs.first1100.r2012.manipulator.BallCounter;
 import edu.arhs.first1100.r2012.manipulator.RampArm;
-import edu.arhs.first1100.r2012.manipulator.IntakeRoller;
+import edu.arhs.first1100.r2012.manipulator.BallArm;
 import edu.arhs.first1100.r2012.pid.TurretPid;
 import edu.wpi.first.wpilibj.Relay;
 import edu.arhs.first1100.util.DSLog;
@@ -84,7 +84,7 @@ public class OperatorSystem {
         }
     }
     /**
-     * Sets speed of top feeder belts and neck belt Bound to PS3 Triangle
+     * Sets speed of top feeder belts and neck belt
      */
     class ShooterBelts extends ButtonHandler {
         public void pressed() {
@@ -123,7 +123,7 @@ public class OperatorSystem {
         }
     }
     /**
-     * Control LeadScrew for up/down turret aiming Bound to PS3 Left Analog Y
+     * Control LeadScrew for up/down turret aiming
      */
     class AnalogLeadScrew extends JoystickAxisHandler {
         public void setHandleValue(double value) {
@@ -138,22 +138,7 @@ public class OperatorSystem {
             }
         }
     }
-    class TurretRotationLeft extends ButtonHandler {
-        public void held() {
-            ManipulatorSystem.getInstance().setTurretRotationSpeed(-.35);
-        }
-        public void released() {
-            ManipulatorSystem.getInstance().setTurretRotationSpeed(0);
-        }
-    }
-    class TurretRotationRight extends ButtonHandler {
-        public void held() {
-            ManipulatorSystem.getInstance().setTurretRotationSpeed(.35);
-        }
-        public void released() {
-            ManipulatorSystem.getInstance().setTurretRotationSpeed(0);
-        }
-    }
+ 
 
     class WheelieBar extends JoystickAxisHandler {
         public void setHandleValue(double value) {
@@ -161,17 +146,6 @@ public class OperatorSystem {
         }
     }
 
-    class WheelieBarUp extends ButtonHandler {
-        public void pressed(){
-            RampArm.getInstance().setSpeed(1.0);
-        }
-    }
-
-    class WheelieBarDown extends ButtonHandler {
-        public void pressed(){
-            RampArm.getInstance().setSpeed(-1.0);
-        }
-    }
     /**
      * Used for main lift belt system.
      */
@@ -181,19 +155,19 @@ public class OperatorSystem {
             // Makes main lift negative values when inverted and normal when normal.
             if (invert) {
                 ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
-                //Intake roller - remove
                 ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
+                BallArm.getInstance().enableRoller(true);
             }
             else {
                 ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
-                //Intake roller - remove
                 ManipulatorSystem.getInstance().setIntakeRoller(0.5);
+                BallArm.getInstance().enableRoller(false);
             }
         }
         public void released(){
             ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
-            //Intake roller - remove
             ManipulatorSystem.getInstance().setIntakeRoller(0.0);
+            BallArm.getInstance().disableRoller();
             
         }
     }
@@ -203,16 +177,16 @@ public class OperatorSystem {
         public void pressed() {
             if (toggle) {
                 if (invert) {
-                    edu.arhs.first1100.r2012.manipulator.IntakeRoller.getInstance().setSpeed(-0.7);
+                    BallArm.getInstance().deploy();
                     toggle = !toggle;
                 }
                 else {
-                    edu.arhs.first1100.r2012.manipulator.IntakeRoller.getInstance().setSpeed(0.7);
+                    BallArm.getInstance().undeploy();
                     toggle = !toggle;
                 }
             }
             else {
-                ManipulatorSystem.getInstance().setIntakeRoller(0);
+                BallArm.getInstance().dontMove();
                 toggle = !toggle;
             }
         }
@@ -290,22 +264,7 @@ public class OperatorSystem {
             DSLog.log(1, "Shooter Speed: " + String.valueOf(shootspeed));
         }
     }
-    class OuterBallArmUp extends ButtonHandler {
-        public void held() {
-            ManipulatorSystem.getInstance().setOuterBallArm(0.5);
-        }
-        public void released() {
-            ManipulatorSystem.getInstance().setOuterBallArm(0.0);
-        }
-    }
-    class OuterBallArmDown extends ButtonHandler {
-        public void held() {
-            ManipulatorSystem.getInstance().setOuterBallArm(-0.5);
-        }
-        public void released() {
-            ManipulatorSystem.getInstance().setOuterBallArm(0.0);
-        }
-    }
+
     class CameraPositioning extends ButtonHandler {
         TurretPid pos;
         public void pressed() {
@@ -329,8 +288,10 @@ public class OperatorSystem {
     {
         public void held()
         {
-            System.out.println("upper limit: " + RampArm.getInstance().isUpperLimit());
-            System.out.println("lower limit: " + RampArm.getInstance().isLowerLimit());
+            System.out.println("ramp arm undeploy limit: " + RampArm.getInstance().isFullyUndeployed());
+            System.out.println("ramp arm deploy limit:   " + RampArm.getInstance().isFullyDeployed());
+            System.out.println("ball arm undeploy limit: " + BallArm.getInstance().isFullyUndeployed());
+            System.out.println("ball arm deploy limit:   " + BallArm.getInstance().isFullyDeployed());
             System.out.println("turret pot: " + ManipulatorSystem.getInstance().getTurretRotation());
         }
     }
@@ -363,15 +324,10 @@ public class OperatorSystem {
     public OperatorSystem() {
         right = new AttackThree(JOYSTICK_RIGHT_CHANNEL);
         left = new AttackThree(JOYSTICK_LEFT_CHANNEL);
-        //ps3 = new PS3Controller(PLAYSTATION_CHANNEL);
         xbox = new XboxController(XBOX_CHANNEL);
 
         right.bindY(new RightAxisY());
         right.bindB2(new ToggleDrive());
-        //right.bindB10(new WheelieBarDown());
-        //right.bindB11(new WheelieBarUp());
-        //right.bindB6(new OuterBallArmUp());
-        //right.bindB6(new OuterBallArmDown());
 
         left.bindY(new LeftAxisY());
         left.bindB2(new CameraPositioning());
@@ -388,7 +344,6 @@ public class OperatorSystem {
         xbox.bindX(new TurretRotation());
         xbox.bindXrot(new WheelieBar());
         xbox.bindYrot(new AnalogLeadScrew());
-
     }
 
     public void start() {
