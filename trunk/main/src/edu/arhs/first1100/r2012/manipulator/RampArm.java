@@ -18,26 +18,36 @@ public class RampArm extends SystemBase {
     private double rampSpeed;
 
     private RampArm() {
-        // check switches 100 times per second
-        super(10);
+        // check switches 20 times per second
+        super(50);
         upperSwitch = new DigitalInput(1, 2);
         lowerSwitch = new DigitalInput(1, 1);
     }
 
-    public boolean isUpperLimit() {
+    public boolean isFullyUndeployed() {
         return !upperSwitch.get();
     }
 
-    public boolean isLowerLimit() {
+    public boolean isFullyDeployed() {
         return !lowerSwitch.get();
     }
 
     public void setSpeed(double speed) {
         rampSpeed = speed;
     }
+    
+    public void deploy()
+    {
+        setSpeed(0.5);
+    }
 
+    public void undeploy()
+    {
+        setSpeed(-0.5);
+    }
+    
     public void dontMove() {
-        rampSpeed = 0;
+        setSpeed(0.0);
     }
 
     public void stop() {
@@ -46,10 +56,14 @@ public class RampArm extends SystemBase {
     }
 
     public void tick() {
-        if (rampSpeed > 0 && !isUpperLimit()
-                || rampSpeed < 0 && !isLowerLimit() && IntakeRoller.getInstance().isUpperLimit()) {
+        // rampSpeed > 0 deploys, < 0 undeploys.
+        if (rampSpeed < 0 && !isFullyUndeployed() ||
+            rampSpeed > 0 && !isFullyDeployed() && BallArm.getInstance().isFullyUndeployed()) {
             //System.out.println("POWERING RAMP ARM");
-            ManipulatorSystem.getInstance().setRampArm(-rampSpeed);
+            ManipulatorSystem.getInstance().setRampArm(rampSpeed);
+        } else if (rampSpeed < 0 && !BallArm.getInstance().isFullyUndeployed()) {
+            // move the intake roller first
+            BallArm.getInstance().undeploy();
         } else {
             //System.out.println("SETTING RAMP ARM TO ZERO");
             ManipulatorSystem.getInstance().setRampArm(0.0);
