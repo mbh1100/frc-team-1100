@@ -33,10 +33,6 @@ public class ManipulatorSystem {
 
         turretRotation = new AnalogChannel(1);
 
-        //outerBallArmTopSwitch = new DigitalInput(1, 1);
-        //outerBallArmBottomSwitch = new DigitalInput(1, 1);
-
-
         topShooterWheel = new Jaguar(1, 3);  //ok
         bottomShooterWheel = new Jaguar(2, 3);  //ok
         shooterFeedWheels = new Victor(2, 4);  //ok
@@ -183,8 +179,8 @@ public class ManipulatorSystem {
         this.leadScrewTilt.set(0.0);
         this.mainLiftBelt.set(0);
         this.neckBelt.set(Relay.Value.kOff);
-        //this.outerBallArm.set(0);       NULL
-        //this.outerBallRoller.set(0);    NULL
+        this.outerBallArm.set(0);
+        this.outerBallRoller.set(0);
         this.rampArm.set(0);
         this.turret.set(0);
     }
