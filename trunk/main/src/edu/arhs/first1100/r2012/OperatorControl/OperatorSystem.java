@@ -174,21 +174,33 @@ public class OperatorSystem {
     
     class IntakeRollerArm extends ButtonHandler {
        private boolean toggle = true;
+    
         public void pressed() {
-            if (toggle) {
-                if (invert) {
-                    BallArm.getInstance().deploy();
-                    toggle = !toggle;
-                }
-                else {
-                    BallArm.getInstance().undeploy();
-                    toggle = !toggle;
-                }
+    
+            if (RampArm.getInstance().isFullyUndeployed())
+            {
+                BallArm.getInstance().deploy();
+            } else {
+                RampArm.getInstance().undeploy();
             }
-            else {
-                BallArm.getInstance().dontMove();
-                toggle = !toggle;
+        }
+        public void released() {
+            BallArm.getInstance().dontMove();
+            RampArm.getInstance().dontMove();
+        }
+    }
+    class WheelieBarButton extends ButtonHandler {
+        public void pressed() {
+            if (BallArm.getInstance().isFullyUndeployed())
+            {
+                RampArm.getInstance().deploy();
+            } else {
+                BallArm.getInstance().undeploy();
             }
+        }
+        public void released() {
+            RampArm.getInstance().dontMove();
+            BallArm.getInstance().dontMove();
         }
     }
     class ManipulatorToggle extends ButtonHandler {
@@ -302,6 +314,9 @@ public class OperatorSystem {
                 ManipulatorSystem.getInstance().setTurretRotationSpeed(value);
             }
         }
+        public TurretRotation(){
+            this.setDeadBand(.2);
+        }
     }
 
     //channels
@@ -334,16 +349,20 @@ public class OperatorSystem {
         left.bindB10(new PrintStuff());
 
         xbox.bindAbutton(new LiftBelt());
-        xbox.bindXbutton(new IntakeRollerArm());
+        //xbox.bindBbutton(new IntakeRollerArm());
+        //xbox.bindXbutton(new WheelieBarButton());
         xbox.bindYbutton(new ShooterBelts());
         xbox.bindLeftBumper(new ShooterSpeedDown());
         xbox.bindRightBumper(new ShooterSpeedUp());
         xbox.bindBack(new ManipulatorToggle());
         xbox.bindStart(new ShooterSpeedSetJump());
-
+       
         xbox.bindX(new TurretRotation());
         xbox.bindXrot(new WheelieBar());
         xbox.bindYrot(new AnalogLeadScrew());
+        xbox.bindLeftJoystickClick(new CameraPositioning());
+        
+       
     }
 
     public void start() {

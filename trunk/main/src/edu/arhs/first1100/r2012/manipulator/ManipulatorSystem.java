@@ -23,7 +23,7 @@ public class ManipulatorSystem {
     private Victor intakeRoller;
     private Victor mainLiftBelt;
     private Relay neckBelt;
-    private Victor outerBallRoller;
+    private Relay outerBallRoller;
     private Victor outerBallArm;
     private Victor rampArm;
     private Relay illuminator;
@@ -41,7 +41,7 @@ public class ManipulatorSystem {
         intakeRoller = new Victor(2, 2);  //ok
         mainLiftBelt = new Victor(1, 2);//1, 2  //ok
         neckBelt = new Relay(2, 1);   //ok
-        outerBallRoller = new Victor(1, 6);
+        outerBallRoller = new Relay(1, 2);
         outerBallArm = new Victor(2, 7);
         rampArm = new Victor(1, 7);
         illuminator = new Relay(1,1);
@@ -92,7 +92,7 @@ public class ManipulatorSystem {
         } else {
             turret.set(speed);
         }*/
-        turret.set(speed/2);
+        turret.set(speed/3);
     }
     
     public int getTurretRotation() {
@@ -144,20 +144,21 @@ public class ManipulatorSystem {
      *
      * @param speed to set the roller.
      */
-    void setOuterBallRoller(double speed) {
-        outerBallRoller.set(speed);
+    public void setOuterBallRoller(double speed) {
+        if(speed != 0)outerBallRoller.set(Relay.Value.kForward);
+        if(speed == 0)outerBallRoller.set(Relay.Value.kOff);
     }
 
-    void setOuterBallArm(double speed) {
+    public void setOuterBallArm(double speed) {
         /*
          * if((outerBallArmTopSwitch.get() && speed < 0.0) ||
          * (outerBallArmBottomSwitch.get() && speed > 0.0)) {
          * outerBallArm.set(0.0); } else { outerBallArm.set(speed); }
          */
-        outerBallArm.set(speed);
+        outerBallArm.set(-speed);
     }
 
-    void setRampArm(double speed) {
+    public void setRampArm(double speed) {
         rampArm.set(speed);
     }
     
@@ -180,7 +181,7 @@ public class ManipulatorSystem {
         this.mainLiftBelt.set(0);
         this.neckBelt.set(Relay.Value.kOff);
         this.outerBallArm.set(0);
-        this.outerBallRoller.set(0);
+        this.outerBallRoller.set(Relay.Value.kOff);
         this.rampArm.set(0);
         this.turret.set(0);
     }

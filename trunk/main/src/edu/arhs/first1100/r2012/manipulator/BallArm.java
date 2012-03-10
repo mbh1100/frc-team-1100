@@ -34,19 +34,21 @@ public class BallArm extends SystemBase {
     private BallArm()
     {
         super(50);
-        upperSwitch = new DigitalInput(2,1);
-        lowerSwitch = new DigitalInput(2,2);
+        upperSwitch = new DigitalInput(1,3);
+        lowerSwitch = new DigitalInput(1,4);
         armSpeed = 0;
     }
     
     public boolean isFullyUndeployed() {
-        //upper limit switch wasn't connected at the time.
+        // this switch is wired normally closed, so false when no
+        // actuated.
+        //return upperSwitch.get();
         return true;
-        //return !upperSwitch.get();
     }
 
     public boolean isFullyDeployed() {
-        return !lowerSwitch.get();
+        //return !lowerSwitch.get();
+        return false;
     }
     
     public void deploy()
@@ -82,23 +84,17 @@ public class BallArm extends SystemBase {
     }
     public void tick() {
         // move the arm. ArmSpeed > 0 means deploy. 
-        if (armSpeed < 0 && !isFullyUndeployed() ||
+        /*if (armSpeed < 0 && !isFullyUndeployed() ||
             armSpeed > 0 && !isFullyDeployed() && RampArm.getInstance().isFullyUndeployed()) {
             //System.out.println("POWERING INTAKE ROLLER");
             ManipulatorSystem.getInstance().setOuterBallArm(armSpeed);
-        } else if (armSpeed > 0 && !RampArm.getInstance().isFullyUndeployed()) {
-            RampArm.getInstance().undeploy();
         } else {
             //System.out.println("SETTING RAMP ARM TO ZERO");
             ManipulatorSystem.getInstance().setOuterBallArm(0.0);
         }
-        
-        // spin the roller if the arm is fully deployed
-        if (isFullyDeployed() && rollerSpeed != 0) {
-            ManipulatorSystem.getInstance().setOuterBallRoller(rollerSpeed);
-        } else {
-            ManipulatorSystem.getInstance().setOuterBallRoller(0.0);
-        }
+        * 
+        */
+        ManipulatorSystem.getInstance().setOuterBallRoller(rollerSpeed);
             
     }
 }

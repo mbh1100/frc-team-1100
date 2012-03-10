@@ -61,9 +61,6 @@ public class RampArm extends SystemBase {
             rampSpeed > 0 && !isFullyDeployed() && BallArm.getInstance().isFullyUndeployed()) {
             //System.out.println("POWERING RAMP ARM");
             ManipulatorSystem.getInstance().setRampArm(rampSpeed);
-        } else if (rampSpeed < 0 && !BallArm.getInstance().isFullyUndeployed()) {
-            // move the intake roller first
-            BallArm.getInstance().undeploy();
         } else {
             //System.out.println("SETTING RAMP ARM TO ZERO");
             ManipulatorSystem.getInstance().setRampArm(0.0);
