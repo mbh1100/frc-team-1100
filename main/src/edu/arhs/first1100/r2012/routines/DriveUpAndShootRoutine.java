@@ -34,7 +34,7 @@ public class DriveUpAndShootRoutine extends Routine {
         //if(!turret.isEnable())turret.enable();
         //turret.setSetpoint(0.0);
         // Spin up the shooter while we're driving
-        ManipulatorSystem.getInstance().setShooterSpeed(0.4);
+        ManipulatorSystem.getInstance().setShooterSpeed(0.4);   
         Timer.delay(3.1);
         // stop and shoot
         DriveSystem.getInstance().driveLeft(0.0);

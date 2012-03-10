@@ -16,7 +16,7 @@ public class XboxController extends SystemBase {
     private String prefix;
     private JoystickAxis x;
     private JoystickAxis y;
-    private JoystickAxis z; //weird
+    private JoystickAxis z; //Triggers. Greater than 1 = right trigger. Less than one = left trigger.
     private JoystickAxis xrot;
     private JoystickAxis yrot;
     private Button b1; //A
