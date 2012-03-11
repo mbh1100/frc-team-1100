@@ -94,7 +94,7 @@ public class BallArm extends SystemBase {
         }
         * 
         */
-        ManipulatorSystem.getInstance().setOuterBallRoller(rollerSpeed);
+        //ManipulatorSystem.getInstance().setOuterBallRoller(rollerSpeed);
             
     }
 }
