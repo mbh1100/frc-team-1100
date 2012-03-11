@@ -41,10 +41,10 @@ public class ManipulatorSystem {
         intakeRoller = new Victor(2, 2);  //ok
         mainLiftBelt = new Victor(1, 2);//1, 2  //ok
         neckBelt = new Relay(2, 1);   //ok
-        outerBallRoller = new Relay(1, 2);
+        outerBallRoller = new Relay(1, 1);
         outerBallArm = new Victor(2, 7);
         rampArm = new Victor(1, 7);
-        illuminator = new Relay(1,1);
+        illuminator = new Relay(1,2);
     }
 
     public static ManipulatorSystem getInstance() {
@@ -146,7 +146,15 @@ public class ManipulatorSystem {
      */
     public void setOuterBallRoller(double speed) {
         if(speed != 0)outerBallRoller.set(Relay.Value.kForward);
-        if(speed == 0)outerBallRoller.set(Relay.Value.kOff);
+        else if(speed == 0)outerBallRoller.set(Relay.Value.kOff);
+    }
+    public void setOuterBallRollerOn(){
+        System.out.println("OuterBallRollerOn");
+        outerBallRoller.set(Relay.Value.kForward);
+    }
+    public void setOuterBallRollerOff() {
+        System.out.println("OuterBallRollerOff");
+        outerBallRoller.set(Relay.Value.kOff);
     }
 
     public void setOuterBallArm(double speed) {

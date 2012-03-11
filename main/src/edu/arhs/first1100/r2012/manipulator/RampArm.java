@@ -58,7 +58,7 @@ public class RampArm extends SystemBase {
     public void tick() {
         // rampSpeed > 0 deploys, < 0 undeploys.
         if (rampSpeed < 0 && !isFullyUndeployed() ||
-            rampSpeed > 0 && !isFullyDeployed() && BallArm.getInstance().isFullyUndeployed()) {
+            rampSpeed > 0 && !isFullyDeployed()) {
             //System.out.println("POWERING RAMP ARM");
             ManipulatorSystem.getInstance().setRampArm(rampSpeed);
         } else {

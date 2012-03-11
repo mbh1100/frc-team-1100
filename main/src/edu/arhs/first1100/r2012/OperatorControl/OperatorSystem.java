@@ -156,18 +156,18 @@ public class OperatorSystem {
             if (invert) {
                 ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
-                BallArm.getInstance().enableRoller(true);
+                ManipulatorSystem.getInstance().setOuterBallRollerOn();
             }
             else {
                 ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(0.5);
-                BallArm.getInstance().enableRoller(false);
+                ManipulatorSystem.getInstance().setOuterBallRollerOn();
             }
         }
         public void released(){
             ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
             ManipulatorSystem.getInstance().setIntakeRoller(0.0);
-            BallArm.getInstance().disableRoller();
+            ManipulatorSystem.getInstance().setOuterBallRollerOff();
             
         }
     }
@@ -179,13 +179,13 @@ public class OperatorSystem {
     
             if (RampArm.getInstance().isFullyUndeployed())
             {
-                BallArm.getInstance().deploy();
+                ManipulatorSystem.getInstance().setOuterBallArm(0.7);
             } else {
                 RampArm.getInstance().undeploy();
             }
         }
         public void released() {
-            BallArm.getInstance().dontMove();
+            ManipulatorSystem.getInstance().setOuterBallArm(0.0);
             RampArm.getInstance().dontMove();
         }
     }
@@ -310,7 +310,7 @@ public class OperatorSystem {
     class TurretRotation extends JoystickAxisHandler {
         public void setHandleValue(double value) {
             if(!isTargeting){
-                System.out.println("turret speed: " + value);
+                //System.out.println("turret speed: " + value);
                 ManipulatorSystem.getInstance().setTurretRotationSpeed(value);
             }
         }
@@ -349,7 +349,7 @@ public class OperatorSystem {
         left.bindB10(new PrintStuff());
 
         xbox.bindAbutton(new LiftBelt());
-        //xbox.bindBbutton(new IntakeRollerArm());
+        //xbox.bindBbutton(new IntakeRollerArm()); //Cow Catcher
         //xbox.bindXbutton(new WheelieBarButton());
         xbox.bindYbutton(new ShooterBelts());
         xbox.bindLeftBumper(new ShooterSpeedDown());
