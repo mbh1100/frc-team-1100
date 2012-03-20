@@ -21,6 +21,8 @@ public class JoystickAxis {
         double value = deadBand(js.getAxis(axis));
 
         jah.setHandleValue(value);
+
+        System.out.println(value);
         if (value != last_value) {
             jah.setNewHandleValue(value);
         }

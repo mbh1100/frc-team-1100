@@ -27,7 +27,7 @@ class TurretSource implements PIDSource {
         if (p == null) {
             return 0.0;
         }
-        
+
         return p.center_mass_x_normalized;
     }
 }
@@ -36,13 +36,13 @@ class TurretOutput implements PIDOutput {
 
     public void pidWrite(double output) {
         System.out.println("Turret PID output: " + output);
-        ManipulatorSystem.getInstance().setTurretRotationSpeed(-output);
+        ManipulatorSystem.getInstance().setTurretRotationSpeedAuto(-output);
     }
 }
 
 public class TurretPid extends edu.wpi.first.wpilibj.PIDController {
 
-    static private final double P = 0.5;
+    static private final double P = 1.0;
     static private final double I = 0.05;
     static private final double D = 0.0;
 

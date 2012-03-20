@@ -109,7 +109,7 @@ public class CameraSystem extends SystemBase {
 
                 int index = 0;
                 for (int i = 0; i < pRep.length; i++) {
-                    if (isBigEnough(pRep[i]) && (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD)) {
+                    if (isBigEnough(pRep[i]) /*&& (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD)*/) {
                         filter[index] = pRep[i];
                         index++;
                     }
@@ -124,10 +124,10 @@ public class CameraSystem extends SystemBase {
                     }
                 }
 
-                if (particle == null) {
-                    DSLog.log(3, "No Particle");
-                } else if (Math.abs(particle.center_mass_x_normalized) < .015) {
+                if (Math.abs(particle.center_mass_x_normalized) < .1) {
                     DSLog.log(3, "Locked On");
+                } else if (particle == null) {
+                    DSLog.log(3, "No Target");
                 }
 
                 cImg.free();
@@ -136,28 +136,29 @@ public class CameraSystem extends SystemBase {
                 Log.defcon3(this, e.getMessage());
             }
         }
-        
+
         if (lightTicks > 0)
         {
             if (--lightTicks == 0)
             {
                 ManipulatorSystem.getInstance().illuminatorOff();
             }
-            
+
         }
     }
 
     public synchronized ParticleAnalysisReport getParticle() {
         turnOnLight();
+        DSLog.log(3, "Tracking...");
         return particle;
     }
 
     private void turnOnLight()
     {
-        lightTicks = 20;
+        lightTicks = 50;
         ManipulatorSystem.getInstance().illuminatorOn();
     }
-    
+
     /**
      * Set the threshold of colors the camera should look for. All parameters
      * must be 0-255.

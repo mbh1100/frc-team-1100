@@ -87,7 +87,7 @@ public class OperatorSystem {
      * Sets speed of top feeder belts and neck belt
      */
     class ShooterBelts extends ButtonHandler {
-        public void pressed() {
+        public void held() {
             if(invert){
                 ManipulatorSystem.getInstance().setShooterFeedWheels(1.0);
                 ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kReverse);
@@ -103,7 +103,7 @@ public class OperatorSystem {
             ManipulatorSystem.getInstance().setShooterFeedWheels(0.0);
             ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
             ManipulatorSystem.getInstance().setMainLiftBelt(0);
-            
+
         }
     }
     class LeadScrewUp extends ButtonHandler {
@@ -128,17 +128,17 @@ public class OperatorSystem {
     class AnalogLeadScrew extends JoystickAxisHandler {
         public void setHandleValue(double value) {
             if (value > 0.1) {
-                ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
+                ManipulatorSystem.getInstance().setLeadScrewTilt(1.0);
             }
             else if (value < -0.1) {
-                ManipulatorSystem.getInstance().setLeadScrewTilt(1.0);
+                ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
             }
             else {
                 ManipulatorSystem.getInstance().setLeadScrewTilt(0.0);
             }
         }
     }
- 
+
 
     class WheelieBar extends JoystickAxisHandler {
         public void setHandleValue(double value) {
@@ -168,25 +168,31 @@ public class OperatorSystem {
             ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
             ManipulatorSystem.getInstance().setIntakeRoller(0.0);
             ManipulatorSystem.getInstance().setOuterBallRollerOff();
-            
+
         }
     }
-    
+
     class IntakeRollerArm extends ButtonHandler {
        private boolean toggle = true;
-    
+
         public void pressed() {
-    
+
             if (RampArm.getInstance().isFullyUndeployed())
             {
                 ManipulatorSystem.getInstance().setOuterBallArm(0.7);
+                ManipulatorSystem.getInstance().setIntakeRoller(1.0);
             } else {
                 RampArm.getInstance().undeploy();
+                ManipulatorSystem.getInstance().setIntakeRoller(0.0);
             }
+
         }
         public void released() {
+
             ManipulatorSystem.getInstance().setOuterBallArm(0.0);
             RampArm.getInstance().dontMove();
+
+
         }
     }
     class WheelieBarButton extends ButtonHandler {
@@ -206,9 +212,11 @@ public class OperatorSystem {
     class ManipulatorToggle extends ButtonHandler {
         public void pressed() {
             invert = true;
+            DSLog.log(4, "Manipulator:INVERTED");
         }
         public void released() {
             invert = false;
+            DSLog.log(4, "Manipulator:NORMAL");
         }
     }
 
@@ -225,8 +233,7 @@ public class OperatorSystem {
             if (shootspeed <= 0.3) {
                 shootspeed = 0.3;
             }
-            System.out.println("shootspeed = " + shootspeed);
-            ManipulatorSystem.getInstance().setShooterSpeed(shootspeed);
+            ManipulatorSystem.getInstance().setShooterSpeed((invert?-1:1)*shootspeed);
             DSLog.log(1, "Shooter Speed: " + String.valueOf(shootspeed));
         }
     }
@@ -243,8 +250,7 @@ public class OperatorSystem {
             if (shootspeed < 0.3) {
                 shootspeed = 0.0;
             }
-            System.out.println("shootspeed = " + shootspeed);
-            ManipulatorSystem.getInstance().setShooterSpeed(shootspeed);
+            ManipulatorSystem.getInstance().setShooterSpeed((invert?-1:1)*shootspeed);
             DSLog.log(1, "Shooter Speed: " + String.valueOf(shootspeed));
         }
     }
@@ -271,7 +277,6 @@ public class OperatorSystem {
             if (shootspeed <= 0.0) {
                 shootspeed = 0.0;
             }
-            System.out.println("shootspeed = " + shootspeed);
             ManipulatorSystem.getInstance().setShooterSpeed(shootspeed);
             DSLog.log(1, "Shooter Speed: " + String.valueOf(shootspeed));
         }
@@ -292,19 +297,45 @@ public class OperatorSystem {
         public CameraPositioning() {
             pos = new TurretPid();
             System.out.println("PID Created");
-            System.out.println("BOUND");
         }
     }
-    
+
     class PrintStuff extends ButtonHandler
     {
+        public void pressed()
+        {
+            printmode++;
+        }
+
         public void held()
         {
-            System.out.println("ramp arm undeploy limit: " + RampArm.getInstance().isFullyUndeployed());
-            System.out.println("ramp arm deploy limit:   " + RampArm.getInstance().isFullyDeployed());
-            System.out.println("ball arm undeploy limit: " + BallArm.getInstance().isFullyUndeployed());
-            System.out.println("ball arm deploy limit:   " + BallArm.getInstance().isFullyDeployed());
-            System.out.println("turret pot: " + ManipulatorSystem.getInstance().getTurretRotation());
+            switch(printmode)   {
+                case 0:
+                System.out.println("ramp arm undeploy limit: " + RampArm.getInstance().isFullyUndeployed());
+                break;
+                case 1:
+                System.out.println("ramp arm deploy limit:   " + RampArm.getInstance().isFullyDeployed());
+                break;
+                case 2:
+                System.out.println("ball arm undeploy limit: " + BallArm.getInstance().isFullyUndeployed());
+                break;
+                case 3:
+                System.out.println("ball arm deploy limit:   " + BallArm.getInstance().isFullyDeployed());
+                break;
+                case 4:
+                System.out.println("turret pot: " + ManipulatorSystem.getInstance().getTurretRotation());
+                break;
+                case 5:
+                System.out.println("lead screw UPPER limit switch: " + ManipulatorSystem.getInstance().shootsLowest());
+                break;
+                case 6:
+                System.out.println("lead screw LOWER limit switch: " + ManipulatorSystem.getInstance().shootsHighest());
+                break;
+                default:
+                printmode = 0;
+                break;
+
+            }
         }
     }
     class TurretRotation extends JoystickAxisHandler {
@@ -320,14 +351,14 @@ public class OperatorSystem {
     }
 
     //channels
+    private final int NARDONE_CHANNEL = 4;
     private final int JOYSTICK_LEFT_CHANNEL = 1;
     private final int JOYSTICK_RIGHT_CHANNEL = 2;
-    private final int PLAYSTATION_CHANNEL = 3;
     private final int XBOX_CHANNEL = 3;
+
     //controllers
     private AttackThree left;
     private AttackThree right;
-    private PS3Controller ps3;
     private XboxController xbox;
     //stuff
     private boolean raw_tank = true;
@@ -335,34 +366,35 @@ public class OperatorSystem {
     private double shootspeed = 0.0;
     private boolean shooterJump = false;
     private boolean isTargeting = false;
+    private int printmode;
 
     public OperatorSystem() {
         right = new AttackThree(JOYSTICK_RIGHT_CHANNEL);
-        left = new AttackThree(JOYSTICK_LEFT_CHANNEL);
-        xbox = new XboxController(XBOX_CHANNEL);
+        left  = new AttackThree(JOYSTICK_LEFT_CHANNEL);
+        xbox  = new XboxController(XBOX_CHANNEL);
+
 
         right.bindY(new RightAxisY());
         right.bindB2(new ToggleDrive());
-
         left.bindY(new LeftAxisY());
-        left.bindB2(new CameraPositioning());
         left.bindB10(new PrintStuff());
 
-        xbox.bindAbutton(new LiftBelt());
-        //xbox.bindBbutton(new IntakeRollerArm()); //Cow Catcher
+
+        xbox.bindB_A(new LiftBelt());
+        xbox.bindB_B(new IntakeRollerArm()); //Cow Catcher
         //xbox.bindXbutton(new WheelieBarButton());
-        xbox.bindYbutton(new ShooterBelts());
-        xbox.bindLeftBumper(new ShooterSpeedDown());
-        xbox.bindRightBumper(new ShooterSpeedUp());
-        xbox.bindBack(new ManipulatorToggle());
-        xbox.bindStart(new ShooterSpeedSetJump());
-       
+        xbox.bindB_Y(new ShooterBelts());
+        xbox.bindB_L1(new ShooterSpeedDown());
+        xbox.bindB_R1(new ShooterSpeedUp());
+        xbox.bindB_BACK(new ManipulatorToggle());
+        xbox.bindB_START(new ShooterSpeedSetJump());
+
         xbox.bindX(new TurretRotation());
         xbox.bindXrot(new WheelieBar());
-        xbox.bindYrot(new AnalogLeadScrew());
-        xbox.bindLeftJoystickClick(new CameraPositioning());
-        
-       
+        xbox.bindZ(new AnalogLeadScrew());
+        xbox.bindB_LCLICK(new CameraPositioning());
+
+
     }
 
     public void start() {
