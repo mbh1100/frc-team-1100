@@ -27,6 +27,7 @@ public class DriveUpAndShootRoutine extends Routine {
 
     public void run()
     {
+        System.out.println("");
         // TODO: Modify Drive to use encoders
         // Drive forward for a while
         DriveSystem.getInstance().driveLeft(-0.3);
@@ -34,7 +35,7 @@ public class DriveUpAndShootRoutine extends Routine {
         //if(!turret.isEnable())turret.enable();
         //turret.setSetpoint(0.0);
         // Spin up the shooter while we're driving
-        ManipulatorSystem.getInstance().setShooterSpeed(0.4);   
+        ManipulatorSystem.getInstance().setShooterSpeed(0.3);
         Timer.delay(3.1);
         // stop and shoot
         DriveSystem.getInstance().driveLeft(0.0);
@@ -49,7 +50,7 @@ public class DriveUpAndShootRoutine extends Routine {
         ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
         ManipulatorSystem.getInstance().setShooterFeedWheels(0.0);
         //if(turret.isEnable())turret.disable();
-        ManipulatorSystem.getInstance().setTurretRotationSpeed(0.0);
+        ManipulatorSystem.getInstance().setTurretRotationSpeedAuto(0.0);
         // now back up for a few seconds.
         DriveSystem.getInstance().driveLeft(0.3);
         DriveSystem.getInstance().driveRight(0.3);
@@ -57,8 +58,7 @@ public class DriveUpAndShootRoutine extends Routine {
         // and stop.
         DriveSystem.getInstance().driveLeft(0.0);
         DriveSystem.getInstance().driveRight(0.0);
-        
-        setDone();
+
     }
 
     public void doCancel() {

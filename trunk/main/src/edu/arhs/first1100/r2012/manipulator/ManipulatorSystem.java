@@ -15,6 +15,8 @@ public class ManipulatorSystem {
     private AnalogChannel turretRotation;
     private DigitalInput outerBallArmTopSwitch;
     private DigitalInput outerBallArmBottomSwitch;
+    private DigitalInput leadScrewTopSwitch;
+    private DigitalInput leadScrewBottomSwitch;
     private Jaguar topShooterWheel;
     private Jaguar bottomShooterWheel;
     private Victor shooterFeedWheels;
@@ -35,13 +37,15 @@ public class ManipulatorSystem {
 
         topShooterWheel = new Jaguar(1, 3);  //ok
         bottomShooterWheel = new Jaguar(2, 3);  //ok
-        shooterFeedWheels = new Victor(2, 4);  //ok
-        leadScrewTilt = new Victor(1, 4);  // ok
+        shooterFeedWheels = new Victor(1, 4);  //ok
+        leadScrewTilt = new Victor(2, 4);  // ok
+        leadScrewTopSwitch = new DigitalInput(2, 6); //ok
+        leadScrewBottomSwitch = new DigitalInput(2, 5); //ok
         turret = new Victor(1, 5);  //ok
         intakeRoller = new Victor(2, 2);  //ok
         mainLiftBelt = new Victor(1, 2);//1, 2  //ok
         neckBelt = new Relay(2, 1);   //ok
-        outerBallRoller = new Relay(1, 1);
+        outerBallRoller = new Relay(1, 1); // should be 1,1
         outerBallArm = new Victor(2, 7);
         rampArm = new Victor(1, 7);
         illuminator = new Relay(1,2);
@@ -72,10 +76,29 @@ public class ManipulatorSystem {
     public void setShooterFeedWheels(double speed) {
         shooterFeedWheels.set(-speed);
     }
+    public boolean shootsLowest() {
+        // this switch is wired normally closed, so false when no
+        // actuated.
+        //return upperSwitch.get();
+        return !leadScrewTopSwitch.get();
+    }
+
+    public boolean shootsHighest() {
+        //return !lowerSwitch.get();
+        return !leadScrewBottomSwitch.get();
+    }
 
     public void setLeadScrewTilt(double speed) {
-        leadScrewTilt.set(speed);
+        if((speed < 0 && !shootsLowest()) || (speed > 0 && !shootsHighest())){
+            System.out.println("lEADsCREW :"+speed);
+            leadScrewTilt.set(speed);
+        }
+        else {
+            System.out.println("lEADsCREW : 0");
+            leadScrewTilt.set(0.0);
+        }
     }
+
 
     /**
      * sets the turret rotation as long as it is within the current turret range
@@ -94,7 +117,9 @@ public class ManipulatorSystem {
         }*/
         turret.set(speed/3);
     }
-    
+    public void setTurretRotationSpeedAuto(double speed){
+        turret.set(speed);
+    }
     public int getTurretRotation() {
         return turretRotation.getValue();
     }
@@ -111,7 +136,7 @@ public class ManipulatorSystem {
         } else {
             intakeRoller.set(speed);
         }
-        * 
+        *
         */
         intakeRoller.set(-speed);
     }
@@ -169,12 +194,12 @@ public class ManipulatorSystem {
     public void setRampArm(double speed) {
         rampArm.set(speed);
     }
-    
+
     public void illuminatorOn()
     {
         illuminator.set(Relay.Value.kForward);
     }
-    
+
     public void illuminatorOff()
     {
         illuminator.set(Relay.Value.kOff);
