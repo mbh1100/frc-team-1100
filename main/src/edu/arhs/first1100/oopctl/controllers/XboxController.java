@@ -77,51 +77,81 @@ public class XboxController extends SystemBase {
         yrot.bind(h);
     }
 
+    public void bindB_A(ButtonHandler h) {
+        bindAbutton(h);
+    }
     public void bindAbutton(ButtonHandler h) {
         h.setName(prefix + "A button");
         b1.bind(h);
     }
 
+    public void bindB_B(ButtonHandler h) {
+        bindBbutton(h);
+    }
     public void bindBbutton(ButtonHandler h) {
         h.setName(prefix + "B button");
         b2.bind(h);
     }
 
+    public void bindB_X(ButtonHandler h) {
+        bindXbutton(h);
+    }
     public void bindXbutton(ButtonHandler h) {
         h.setName(prefix + "X button");
         b3.bind(h);
     }
 
+    public void bindB_Y(ButtonHandler h) {
+        bindYbutton(h);
+    }
     public void bindYbutton(ButtonHandler h) {
         h.setName(prefix + "Y button");
         b4.bind(h);
     }
 
+    public void bindB_L1(ButtonHandler h) {
+        bindLeftBumper(h);
+    }
     public void bindLeftBumper(ButtonHandler h) {
         h.setName(prefix + "Left Bumper");
         b5.bind(h);
     }
 
+    public void bindB_R1(ButtonHandler h) {
+        bindRightBumper(h);
+    }
     public void bindRightBumper(ButtonHandler h) {
         h.setName(prefix + "Right Bumper");
         b6.bind(h);
     }
 
+    public void bindB_BACK(ButtonHandler h) {
+        bindBack(h);
+    }
     public void bindBack(ButtonHandler h) {
         h.setName(prefix + "Back button");
         b7.bind(h);
     }
 
+    public void bindB_START(ButtonHandler h) {
+        bindStart(h);
+    }
     public void bindStart(ButtonHandler h) {
         h.setName(prefix + "Start button");
         b8.bind(h);
     }
 
+    public void bindB_LCLICK(ButtonHandler h) {
+        bindLeftJoystickClick(h);
+    }
     public void bindLeftJoystickClick(ButtonHandler h) {
         h.setName(prefix + "Left Stick Click");
         b9.bind(h);
     }
 
+    public void bindB_RCLICK(ButtonHandler h) {
+        bindRightJoystickClick(h);
+    }
     public void bindRightJoystickClick(ButtonHandler h) {
         h.setName(prefix + "Right Stick Click");
         b10.bind(h);
