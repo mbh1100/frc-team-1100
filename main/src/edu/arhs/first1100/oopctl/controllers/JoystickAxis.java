@@ -22,7 +22,7 @@ public class JoystickAxis {
 
         jah.setHandleValue(value);
 
-        System.out.println(value);
+        //System.out.println(value);
         if (value != last_value) {
             jah.setNewHandleValue(value);
         }

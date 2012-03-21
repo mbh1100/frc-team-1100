@@ -22,8 +22,6 @@ class TurretSource implements PIDSource {
 
     public double pidGet() {
         ParticleAnalysisReport p = CameraSystem.getInstance().getParticle();
-        //CameraSystem.getInstance().printParticleAnalysisReport(p);
-
         if (p == null) {
             return 0.0;
         }
@@ -35,20 +33,36 @@ class TurretSource implements PIDSource {
 class TurretOutput implements PIDOutput {
 
     public void pidWrite(double output) {
-        System.out.println("Turret PID output: " + output);
         ManipulatorSystem.getInstance().setTurretRotationSpeedAuto(-output);
     }
 }
 
 public class TurretPid extends edu.wpi.first.wpilibj.PIDController {
 
-    static private final double P = 1.0;
-    static private final double I = 0.05;
-    static private final double D = 0.0;
+    // don't touch these values. Tuned 20/mar/12. mbh
+    static private double P = 0.35;
+    static private double I = 0.016;
+    static private double D = 0.87;
+
+    public void updateP(double newp)
+    {
+       P = newp;
+       this.setPID(P,I,D);
+    }
+    public void updateI(double newi)
+    {
+        I=newi;
+        this.setPID(P, I, D);
+    }
+    public void updateD(double newd)
+    {
+        D=newd;
+        this.setPID(P, I, D);
+    }
 
     public TurretPid() {
         super(P, I, D, new TurretSource(), new TurretOutput());
         this.setSetpoint(0.0);
-        this.setOutputRange(-0.5, 0.5);
+        this.setOutputRange(-1.0, 1.0);
     }
 }

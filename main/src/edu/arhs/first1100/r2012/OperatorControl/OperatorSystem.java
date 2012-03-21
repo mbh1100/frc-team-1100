@@ -283,7 +283,6 @@ public class OperatorSystem {
     }
 
     class CameraPositioning extends ButtonHandler {
-        TurretPid pos;
         public void pressed() {
             isTargeting = true;
             if (!pos.isEnable()) pos.enable();
@@ -295,8 +294,6 @@ public class OperatorSystem {
             DSLog.log(2, "targeting disabled");
         }
         public CameraPositioning() {
-            pos = new TurretPid();
-            System.out.println("PID Created");
         }
     }
 
@@ -310,7 +307,7 @@ public class OperatorSystem {
         public void held()
         {
             switch(printmode)   {
-                case 0:
+                case 7:
                 System.out.println("ramp arm undeploy limit: " + RampArm.getInstance().isFullyUndeployed());
                 break;
                 case 1:
@@ -331,6 +328,9 @@ public class OperatorSystem {
                 case 6:
                 System.out.println("lead screw LOWER limit switch: " + ManipulatorSystem.getInstance().shootsHighest());
                 break;
+                case 0:
+                    System.out.println("turret P,I,D" + pos.getP() + ", " + pos.getI() + ", " + pos.getD());
+                    break;
                 default:
                 printmode = 0;
                 break;
@@ -347,6 +347,22 @@ public class OperatorSystem {
         }
         public TurretRotation(){
             this.setDeadBand(.2);
+        }
+    }
+
+    class TuneTurretP extends JoystickAxisHandler {
+        public void setHandleValue(double value) {
+            pos.updateP(value+1.0/2);
+        }
+    }
+    class TuneTurretI extends JoystickAxisHandler {
+        public void setHandleValue(double value) {
+            pos.updateI(value/10);
+        }
+    }
+    class TuneTurretD extends JoystickAxisHandler {
+        public void setHandleValue(double value) {
+            pos.updateD(value);
         }
     }
 
@@ -367,17 +383,21 @@ public class OperatorSystem {
     private boolean shooterJump = false;
     private boolean isTargeting = false;
     private int printmode;
+    private TurretPid pos;
 
     public OperatorSystem() {
         right = new AttackThree(JOYSTICK_RIGHT_CHANNEL);
         left  = new AttackThree(JOYSTICK_LEFT_CHANNEL);
         xbox  = new XboxController(XBOX_CHANNEL);
 
+        pos = new TurretPid();
 
         right.bindY(new RightAxisY());
         right.bindB2(new ToggleDrive());
         left.bindY(new LeftAxisY());
-        left.bindB10(new PrintStuff());
+        right.bindB10(new PrintStuff());
+        left.bindZ(new TuneTurretD());
+        right.bindZ(new TuneTurretI());
 
 
         xbox.bindB_A(new LiftBelt());

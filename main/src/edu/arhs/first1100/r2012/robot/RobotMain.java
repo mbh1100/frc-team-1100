@@ -18,7 +18,7 @@ import edu.arhs.first1100.util.Routine;
 public class RobotMain extends SimpleRobot {
 
     OperatorSystem os;
-    //CameraSystem cs;
+    CameraSystem cs;
 
     public void robotInit() {
         //Set Loggin' Levels
@@ -29,7 +29,7 @@ public class RobotMain extends SimpleRobot {
         Log.addClass(BallCounter.class, 2);
 
         os = new OperatorSystem();
-        //cs = CameraSystem.getInstance();
+        cs = CameraSystem.getInstance();
 
         Log.defcon3(this, "Robot Init");
         Log.defcon3(this, "+-------------------------------------+");

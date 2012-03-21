@@ -98,7 +98,6 @@ public class DSLog extends SystemBase {
         int index = 6 - line; // array is set up bottom to top, this reverses it
         DriverStationLCD.getInstance().println(lcdLines[index], 1, padMsg(msg));
         DriverStationLCD.getInstance().updateLCD(); // keep forgetting this, d'oh!
-
     } // end method toLCDLine()
 
     /**

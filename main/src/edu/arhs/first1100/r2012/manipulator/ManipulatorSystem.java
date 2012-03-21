@@ -90,11 +90,9 @@ public class ManipulatorSystem {
 
     public void setLeadScrewTilt(double speed) {
         if((speed < 0 && !shootsLowest()) || (speed > 0 && !shootsHighest())){
-            System.out.println("lEADsCREW :"+speed);
             leadScrewTilt.set(speed);
         }
         else {
-            System.out.println("lEADsCREW : 0");
             leadScrewTilt.set(0.0);
         }
     }

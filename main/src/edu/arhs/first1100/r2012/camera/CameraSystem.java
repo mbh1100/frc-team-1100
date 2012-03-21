@@ -23,7 +23,7 @@ public class CameraSystem extends SystemBase {
     private final int BRIGHTNESS = 50;
     private final int COMPRESSION = 0;
     private final double IN_LINE_THRESHOLD = .20; //Threshold to see if two particles are in line
-    private final int SIZE_THRESHOLD = 35;
+    private final int SIZE_THRESHOLD = 350;
     private final double WHITESPACE_THRESHOLD = .55;
     //RGB Threshold
     private int minRed = 0;
@@ -56,7 +56,7 @@ public class CameraSystem extends SystemBase {
         //Defaults
         setThreshold(GREEN_THRESHOLD);
 
-        setSleep(50);
+        setSleep(80);
     }
 
     public static CameraSystem getInstance() {
@@ -88,13 +88,14 @@ public class CameraSystem extends SystemBase {
                 cImg = ac.getImage();
                 bImg = cImg.thresholdRGB(minRed, maxRed, minGreen, maxGreen, minBlue, maxBlue);
 
-                pRep = bImg.getOrderedParticleAnalysisReports();
-
+                if (bImg != null) {
+                    pRep = bImg.getOrderedParticleAnalysisReports();
+                }
 
                 //find number of particles in thresholds
                 int filter_number = 0;
                 for (int i = 0; i < pRep.length; i++) {
-                    if (isBigEnough(pRep[i]) && (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD)) {
+                    if (isBigEnough(pRep[i]) /*&& (getWhiteSpace(pRep[i]) < WHITESPACE_THRESHOLD)*/) {
                         filter_number++;
                     }
                 }
@@ -120,9 +121,13 @@ public class CameraSystem extends SystemBase {
                         //Log.defcon1(this, "No Particles");
                         particle = null;
                     } else {
-                        particle = this.getMiddlestParticle(filter);
+                        particle = this.getHighestParticle(filter);
                     }
                 }
+                DSLog.log(1, "=" +
+                        (particle == null? "null":
+                        ("y="+new Double(particle.center_mass_y_normalized).toString().substring(0, 5) +
+                        "; x=" + new Double(particle.center_mass_x_normalized).toString().substring(0,5))));
 
                 if (Math.abs(particle.center_mass_x_normalized) < .1) {
                     DSLog.log(3, "Locked On");
@@ -133,7 +138,16 @@ public class CameraSystem extends SystemBase {
                 cImg.free();
                 bImg.free();
             } catch (Exception e) {
-                Log.defcon3(this, e.getMessage());
+                try
+                {
+                    cImg.free();
+                    bImg.free();
+                }
+                catch(Exception e2)
+                {
+                }
+
+                //Log.defcon3(this, e.getMessage());
             }
         }
 
@@ -238,7 +252,7 @@ public class CameraSystem extends SystemBase {
     public ParticleAnalysisReport getHighestParticle(ParticleAnalysisReport[] p) {
         if (p != null && p.length != 0) {
             ParticleAnalysisReport highest = p[0];
-            for (int i = 0; i < p.length; i++) {
+            for (int i = 1; i < p.length; i++) {
                 if (p[i].center_mass_y_normalized < highest.center_mass_y_normalized) {
                     highest = p[i];
                 }
@@ -256,7 +270,7 @@ public class CameraSystem extends SystemBase {
     public ParticleAnalysisReport getLowestParticle(ParticleAnalysisReport[] p) {
         if (p != null && p.length != 0) {
             ParticleAnalysisReport lowest = p[0];
-            for (int i = 0; i < p.length; i++) {
+            for (int i = 1; i < p.length; i++) {
                 if (p[i].center_mass_y_normalized > lowest.center_mass_y_normalized) {
                     lowest = p[i];
                 }
@@ -274,7 +288,7 @@ public class CameraSystem extends SystemBase {
     public ParticleAnalysisReport getMiddlestParticle(ParticleAnalysisReport[] p){
         if(p != null && p.length != 0){
             ParticleAnalysisReport middlest = p[0];
-            for(int i = 0; i < p.length; i++){
+            for(int i = 1; i < p.length; i++){
                 if(Math.abs(p[i].center_mass_x_normalized) < Math.abs(middlest.center_mass_x_normalized)){
                     middlest = p[i];
                 }
