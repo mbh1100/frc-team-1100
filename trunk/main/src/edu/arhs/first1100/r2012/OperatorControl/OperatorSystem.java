@@ -396,8 +396,8 @@ public class OperatorSystem {
         right.bindB2(new ToggleDrive());
         left.bindY(new LeftAxisY());
         right.bindB10(new PrintStuff());
-        left.bindZ(new TuneTurretD());
-        right.bindZ(new TuneTurretI());
+        //left.bindZ(new TuneTurretD());
+        //right.bindZ(new TuneTurretI());
 
 
         xbox.bindB_A(new LiftBelt());
@@ -420,7 +420,7 @@ public class OperatorSystem {
     public void start() {
         right.start();
         left.start();
-       // ps3.start();
+        // ps3.start();
         xbox.start();
     }
 
