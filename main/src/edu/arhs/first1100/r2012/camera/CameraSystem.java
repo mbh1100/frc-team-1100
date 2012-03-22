@@ -78,6 +78,7 @@ public class CameraSystem extends SystemBase {
      * Tick
      */
     public void tick() {
+        turnOnLight();
 
         /**
          * Gets an image from the camera to find particles within the camera's
@@ -162,7 +163,6 @@ public class CameraSystem extends SystemBase {
     }
 
     public synchronized ParticleAnalysisReport getParticle() {
-        turnOnLight();
         DSLog.log(3, "Tracking...");
         return particle;
     }
