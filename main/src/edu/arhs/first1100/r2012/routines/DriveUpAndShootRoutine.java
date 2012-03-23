@@ -34,8 +34,10 @@ public class DriveUpAndShootRoutine extends Routine {
         DriveSystem.getInstance().driveRight(-0.3);
         //if(!turret.isEnable())turret.enable();
         //turret.setSetpoint(0.0);
+        //move the lead screw up all the way
+        ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
         // Spin up the shooter while we're driving
-        ManipulatorSystem.getInstance().setShooterSpeed(0.3);
+        ManipulatorSystem.getInstance().setShooterSpeed(0.4);
         Timer.delay(3.1);
         // stop and shoot
         DriveSystem.getInstance().driveLeft(0.0);
@@ -44,6 +46,7 @@ public class DriveUpAndShootRoutine extends Routine {
         ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
         ManipulatorSystem.getInstance().setShooterFeedWheels(-1.0);
         // 5 seconds should be long enough to get off a couple of shots
+        // Akshay : at some time we could make it wait until the limit switch has been pressed 2 times
         Timer.delay(5.0);
         ManipulatorSystem.getInstance().setShooterSpeed(0.0);
         ManipulatorSystem.getInstance().setNeckBelt(Relay.Value.kOff);
@@ -58,6 +61,7 @@ public class DriveUpAndShootRoutine extends Routine {
         // and stop.
         DriveSystem.getInstance().driveLeft(0.0);
         DriveSystem.getInstance().driveRight(0.0);
+        setDone();
 
     }
 

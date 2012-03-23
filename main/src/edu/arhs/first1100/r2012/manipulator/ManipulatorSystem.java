@@ -39,7 +39,7 @@ public class ManipulatorSystem {
         bottomShooterWheel = new Jaguar(2, 3);  //ok
         shooterFeedWheels = new Victor(1, 4);  //ok
         leadScrewTilt = new Victor(2, 4);  // ok
-        leadScrewTopSwitch = new DigitalInput(2, 6); //ok
+        leadScrewTopSwitch = new DigitalInput(2, 7); //ok
         leadScrewBottomSwitch = new DigitalInput(2, 5); //ok
         turret = new Victor(1, 5);  //ok
         intakeRoller = new Victor(2, 2);  //ok
@@ -168,12 +168,12 @@ public class ManipulatorSystem {
      * @param speed to set the roller.
      */
     public void setOuterBallRoller(double speed) {
-        if(speed != 0)outerBallRoller.set(Relay.Value.kForward);
+        if(speed != 0)outerBallRoller.set(Relay.Value.kReverse);
         else if(speed == 0)outerBallRoller.set(Relay.Value.kOff);
     }
     public void setOuterBallRollerOn(){
         System.out.println("OuterBallRollerOn");
-        outerBallRoller.set(Relay.Value.kForward);
+        outerBallRoller.set(Relay.Value.kReverse);
     }
     public void setOuterBallRollerOff() {
         System.out.println("OuterBallRollerOff");
