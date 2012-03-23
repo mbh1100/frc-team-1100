@@ -125,7 +125,7 @@ public class CameraSystem extends SystemBase {
                         particle = this.getHighestParticle(filter);
                     }
                 }
-                DSLog.log(1, "=" +
+                DSLog.log(6, "=" +
                         (particle == null? "null":
                         ("y="+new Double(particle.center_mass_y_normalized).toString().substring(0, 5) +
                         "; x=" + new Double(particle.center_mass_x_normalized).toString().substring(0,5))));

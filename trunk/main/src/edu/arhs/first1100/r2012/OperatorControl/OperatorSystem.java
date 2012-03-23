@@ -65,10 +65,13 @@ public class OperatorSystem {
      * Right Joystick, Button 2
      */
     class ToggleDrive extends ButtonHandler {
+        
+        public ToggleDrive(){
+            DSLog.log(5, raw_tank?"Raw Tank":"Encoder Drive");
+        }
         public void pressed() {
             raw_tank = !raw_tank;
-            if(raw_tank)    DSLog.log(5, "Raw Tank");
-            else            DSLog.log(5, "Encoder Drive");
+            DSLog.log(5, raw_tank?"Raw Tank":"Encoder Drive");
         }
     }
     class StandardDrive extends JoystickAxisHandler {
@@ -150,7 +153,7 @@ public class OperatorSystem {
      * Used for main lift belt system.
      */
     class LiftBelt extends ButtonHandler {
-        public void pressed() {
+        public void held() {
             // Sets value when pressed and released.
             // Makes main lift negative values when inverted and normal when normal.
             if (invert) {
@@ -172,31 +175,46 @@ public class OperatorSystem {
         }
     }
 
-    class IntakeRollerArm extends ButtonHandler {
-       private boolean toggle = true;
+    class IntakeRollerArmDown extends ButtonHandler {
 
-        public void pressed() {
+        public void held() {
 
             if (RampArm.getInstance().isFullyUndeployed())
             {
-                ManipulatorSystem.getInstance().setOuterBallArm(0.7);
-                ManipulatorSystem.getInstance().setIntakeRoller(1.0);
+                ManipulatorSystem.getInstance().setOuterBallArm(0.4);
+                //ManipulatorSystem.getInstance().setIntakeRoller(1.0);
             } else {
                 RampArm.getInstance().undeploy();
-                ManipulatorSystem.getInstance().setIntakeRoller(0.0);
+                //ManipulatorSystem.getInstance().setIntakeRoller(0.0);
             }
 
         }
         public void released() {
 
             ManipulatorSystem.getInstance().setOuterBallArm(0.0);
+            //ManipulatorSystem.getInstance().setIntakeRoller(0.0);
             RampArm.getInstance().dontMove();
 
 
         }
     }
-    class WheelieBarButton extends ButtonHandler {
+    
+    class IntakeRollerArmUp extends ButtonHandler {
+
         public void pressed() {
+
+            ManipulatorSystem.getInstance().setOuterBallArm(-0.4);
+
+        }
+        public void released() {
+
+            ManipulatorSystem.getInstance().setOuterBallArm(0.0);
+ 
+        }
+    }
+    
+    class WheelieBarButton extends ButtonHandler {
+        public void held() {
             if (BallArm.getInstance().isFullyUndeployed())
             {
                 RampArm.getInstance().deploy();
@@ -225,7 +243,7 @@ public class OperatorSystem {
             if(shooterJump){
                 shootspeed = 1.0;
             } else {
-                shootspeed += .1;
+                shootspeed += .05;
             }
             if (shootspeed >= 1) {
                 shootspeed = 1;
@@ -242,7 +260,7 @@ public class OperatorSystem {
             if(shooterJump){
                 shootspeed = 0.0;
             } else {
-                shootspeed -= .1;
+                shootspeed -= .05;
             }
             if (shootspeed >= 1) {
                 shootspeed = 1;
@@ -367,7 +385,6 @@ public class OperatorSystem {
     }
 
     //channels
-    private final int NARDONE_CHANNEL = 4;
     private final int JOYSTICK_LEFT_CHANNEL = 1;
     private final int JOYSTICK_RIGHT_CHANNEL = 2;
     private final int XBOX_CHANNEL = 3;
@@ -401,8 +418,8 @@ public class OperatorSystem {
 
 
         xbox.bindB_A(new LiftBelt());
-        xbox.bindB_B(new IntakeRollerArm()); //Cow Catcher
-        //xbox.bindXbutton(new WheelieBarButton());
+        xbox.bindB_B(new IntakeRollerArmDown()); //Cow Catcher
+        xbox.bindXbutton(new IntakeRollerArmUp());
         xbox.bindB_Y(new ShooterBelts());
         xbox.bindB_L1(new ShooterSpeedDown());
         xbox.bindB_R1(new ShooterSpeedUp());
