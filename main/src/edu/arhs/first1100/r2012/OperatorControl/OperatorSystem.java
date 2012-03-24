@@ -159,18 +159,18 @@ public class OperatorSystem {
             if (invert) {
                 ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
-                ManipulatorSystem.getInstance().setOuterBallRollerOn();
+                //ManipulatorSystem.getInstance().setOuterBallRollerOn();
             }
             else {
                 ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(0.5);
-                ManipulatorSystem.getInstance().setOuterBallRollerOn();
+                //ManipulatorSystem.getInstance().setOuterBallRollerOn();
             }
         }
         public void released(){
             ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
             ManipulatorSystem.getInstance().setIntakeRoller(0.0);
-            ManipulatorSystem.getInstance().setOuterBallRollerOff();
+            //ManipulatorSystem.getInstance().setOuterBallRollerOff();
 
         }
     }
@@ -178,23 +178,22 @@ public class OperatorSystem {
     class IntakeRollerArmDown extends ButtonHandler {
 
         public void held() {
-
-            if (RampArm.getInstance().isFullyUndeployed())
+            ManipulatorSystem.getInstance().setOuterBallArm(0.4);
+            /*if (RampArm.getInstance().isFullyUndeployed())
             {
                 ManipulatorSystem.getInstance().setOuterBallArm(0.4);
                 //ManipulatorSystem.getInstance().setIntakeRoller(1.0);
             } else {
                 RampArm.getInstance().undeploy();
                 //ManipulatorSystem.getInstance().setIntakeRoller(0.0);
-            }
+            }*/
 
         }
         public void released() {
 
             ManipulatorSystem.getInstance().setOuterBallArm(0.0);
             //ManipulatorSystem.getInstance().setIntakeRoller(0.0);
-            RampArm.getInstance().dontMove();
-
+            //RampArm.getInstance().dontMove();
 
         }
     }
@@ -230,11 +229,11 @@ public class OperatorSystem {
     class ManipulatorToggle extends ButtonHandler {
         public void pressed() {
             invert = true;
-            DSLog.log(4, "Manipulator:INVERTED");
+            //DSLog.log(4, "Manipulator:INVERTED");
         }
         public void released() {
             invert = false;
-            DSLog.log(4, "Manipulator:NORMAL");
+            //DSLog.log(4, "Manipulator:NORMAL");
         }
     }
 
@@ -243,7 +242,7 @@ public class OperatorSystem {
             if(shooterJump){
                 shootspeed = 1.0;
             } else {
-                shootspeed += .05;
+                shootspeed += .1;
             }
             if (shootspeed >= 1) {
                 shootspeed = 1;
@@ -260,7 +259,7 @@ public class OperatorSystem {
             if(shooterJump){
                 shootspeed = 0.0;
             } else {
-                shootspeed -= .05;
+                shootspeed -= .1;
             }
             if (shootspeed >= 1) {
                 shootspeed = 1;
@@ -304,12 +303,12 @@ public class OperatorSystem {
         public void pressed() {
             isTargeting = true;
             if (!pos.isEnable()) pos.enable();
-            DSLog.log(2, "AUTO-TARGETING");
+            //DSLog.log(2, "AUTO-TARGETING");
         }
         public void released() {
             isTargeting = false;
             if (pos.isEnable()) pos.disable();
-            DSLog.log(2, "targeting disabled");
+            //DSLog.log(2, "targeting disabled");
         }
         public CameraPositioning() {
         }
@@ -393,6 +392,7 @@ public class OperatorSystem {
     private AttackThree left;
     private AttackThree right;
     private XboxController xbox;
+    
     //stuff
     private boolean raw_tank = true;
     private boolean invert = false;
@@ -418,8 +418,8 @@ public class OperatorSystem {
 
 
         xbox.bindB_A(new LiftBelt());
-        xbox.bindB_B(new IntakeRollerArmDown()); //Cow Catcher
-        xbox.bindXbutton(new IntakeRollerArmUp());
+        //xbox.bindB_B(new IntakeRollerArmDown()); //Cow Catcher
+        //xbox.bindXbutton(new IntakeRollerArmUp());
         xbox.bindB_Y(new ShooterBelts());
         xbox.bindB_L1(new ShooterSpeedDown());
         xbox.bindB_R1(new ShooterSpeedUp());
