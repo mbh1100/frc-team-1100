@@ -16,13 +16,13 @@ import edu.wpi.first.wpilibj.Kinect;
  */
 public class AutonomousSystem extends SystemBase {
 
-    TurretPid tp;
+    //TurretPid tp;
     private final double SPEED = .85;
     private boolean kinect;
     private static AutonomousSystem instance = null;
 
     public AutonomousSystem() {
-        tp = new TurretPid();
+       //tp = new TurretPid();
         kinect = false;
     }
 

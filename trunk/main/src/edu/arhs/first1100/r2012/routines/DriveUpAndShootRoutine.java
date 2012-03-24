@@ -10,13 +10,15 @@ import edu.arhs.first1100.util.Routine;
 import edu.arhs.first1100.r2012.pid.TurretPid;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  *
  * @author team1100
  */
 public class DriveUpAndShootRoutine extends Routine {
-
+    
+    final int AUTO_PWR_CHANNEL = 1;
     TurretPid turret;
 
     public DriveUpAndShootRoutine()
@@ -35,9 +37,9 @@ public class DriveUpAndShootRoutine extends Routine {
         //if(!turret.isEnable())turret.enable();
         //turret.setSetpoint(0.0);
         //move the lead screw up all the way
-        ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
+        //ManipulatorSystem.getInstance().setLeadScrewTilt(-1.0);
         // Spin up the shooter while we're driving
-        ManipulatorSystem.getInstance().setShooterSpeed(0.4);
+        ManipulatorSystem.getInstance().setShooterSpeed(DriverStation.getInstance().getAnalogIn(AUTO_PWR_CHANNEL));
         Timer.delay(3.1);
         // stop and shoot
         DriveSystem.getInstance().driveLeft(0.0);

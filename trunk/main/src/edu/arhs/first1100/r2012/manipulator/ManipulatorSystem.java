@@ -105,6 +105,7 @@ public class ManipulatorSystem {
      * @param speed (speed of the turret)
      */
     public void setTurretRotationSpeed(double speed) {
+        //System.out.println("TURRET:"+speed);
        /* System.out.println("turret rotation: " + turretRotation.getValue());
         if (Math.abs(turretRotation.getValue()) >= TURRET_MAX) {
             turret.set((speed < 0) ? 0 : speed);
@@ -116,6 +117,7 @@ public class ManipulatorSystem {
         turret.set(speed/3);
     }
     public void setTurretRotationSpeedAuto(double speed){
+        System.out.println("TURRETAUTO:"+speed);
         turret.set(speed);
     }
     public int getTurretRotation() {
@@ -172,11 +174,11 @@ public class ManipulatorSystem {
         else if(speed == 0)outerBallRoller.set(Relay.Value.kOff);
     }
     public void setOuterBallRollerOn(){
-        System.out.println("OuterBallRollerOn");
+        //System.out.println("OuterBallRollerOn");
         outerBallRoller.set(Relay.Value.kReverse);
     }
     public void setOuterBallRollerOff() {
-        System.out.println("OuterBallRollerOff");
+        //System.out.println("OuterBallRollerOff");
         outerBallRoller.set(Relay.Value.kOff);
     }
 

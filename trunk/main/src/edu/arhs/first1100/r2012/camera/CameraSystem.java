@@ -122,18 +122,20 @@ public class CameraSystem extends SystemBase {
                         //Log.defcon1(this, "No Particles");
                         particle = null;
                     } else {
-                        particle = this.getHighestParticle(filter);
+                        particle = this.getLowestParticle(filter);
                     }
                 }
                 DSLog.log(6, "=" +
                         (particle == null? "null":
                         ("y="+new Double(particle.center_mass_y_normalized).toString().substring(0, 5) +
                         "; x=" + new Double(particle.center_mass_x_normalized).toString().substring(0,5))));
-
+                        
                 if (Math.abs(particle.center_mass_x_normalized) < .1) {
                     DSLog.log(3, "Locked On");
                 } else if (particle == null) {
                     DSLog.log(3, "No Target");
+                } else {
+                    DSLog.log(3, "Searching...");
                 }
 
                 cImg.free();
@@ -163,8 +165,10 @@ public class CameraSystem extends SystemBase {
     }
 
     public synchronized ParticleAnalysisReport getParticle() {
-        DSLog.log(3, "Tracking...");
-        return particle;
+        //DSLog.log(3, "Tracking...");
+        ParticleAnalysisReport temp = particle;
+        particle = null;
+        return temp;
     }
 
     private void turnOnLight()
@@ -201,7 +205,7 @@ public class CameraSystem extends SystemBase {
     private synchronized void setThreshold(int t) {
         switch (t) {
             case GREEN_THRESHOLD:
-                setThresholdRGB(0, 130, 150, 255, 50, 255);
+                setThresholdRGB(0, 200, 150, 255, 50, 255);
                 break;
             case WHITE_THRESHOLD:
                 setThresholdRGB(210, 255, 210, 255, 210, 255);
