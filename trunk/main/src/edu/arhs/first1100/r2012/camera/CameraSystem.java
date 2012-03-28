@@ -167,7 +167,7 @@ public class CameraSystem extends SystemBase {
     public synchronized ParticleAnalysisReport getParticle() {
         //DSLog.log(3, "Tracking...");
         ParticleAnalysisReport temp = particle;
-        particle = null;
+        //particle = null;
         return temp;
     }
 
