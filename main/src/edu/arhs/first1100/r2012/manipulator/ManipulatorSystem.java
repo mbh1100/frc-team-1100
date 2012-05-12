@@ -170,12 +170,12 @@ public class ManipulatorSystem {
      * @param speed to set the roller.
      */
     public void setOuterBallRoller(double speed) {
-        if(speed != 0)outerBallRoller.set(Relay.Value.kReverse);
+        if(speed != 0)outerBallRoller.set(Relay.Value.kForward);
         else if(speed == 0)outerBallRoller.set(Relay.Value.kOff);
     }
     public void setOuterBallRollerOn(){
         //System.out.println("OuterBallRollerOn");
-        outerBallRoller.set(Relay.Value.kReverse);
+        outerBallRoller.set(Relay.Value.kForward);
     }
     public void setOuterBallRollerOff() {
         //System.out.println("OuterBallRollerOff");
