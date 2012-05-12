@@ -1,19 +1,18 @@
 package edu.arhs.first1100.r2012.OperatorControl;
 
 import edu.arhs.first1100.r2012.drive.DriveSystem;
-import edu.arhs.first1100.oopctl.controllers.PS3Controller;
 import edu.arhs.first1100.r2012.pid.EncoderPIDLeft;
 import edu.arhs.first1100.r2012.pid.EncoderPIDRight;
-import edu.arhs.first1100.r2012.sensors.MotorEncoder;
 import edu.arhs.first1100.oopctl.controllers.AttackThree;
 import edu.arhs.first1100.oopctl.controllers.XboxController;
 import edu.arhs.first1100.oopctl.handlers.ButtonHandler;
 import edu.arhs.first1100.r2012.manipulator.ManipulatorSystem;
 import edu.arhs.first1100.oopctl.handlers.JoystickAxisHandler;
-import edu.arhs.first1100.r2012.manipulator.BallCounter;
 import edu.arhs.first1100.r2012.manipulator.RampArm;
 import edu.arhs.first1100.r2012.manipulator.BallArm;
+import edu.arhs.first1100.r2012.pid.ShooterPID;
 import edu.arhs.first1100.r2012.pid.TurretPid;
+import edu.arhs.first1100.r2012.sensors.ShooterSpin;
 import edu.wpi.first.wpilibj.Relay;
 import edu.arhs.first1100.util.DSLog;
 
@@ -39,6 +38,12 @@ public class OperatorSystem {
             super.setDeadBand(0.05);
         }
     }
+    
+    class IPodDriveLeft extends JoystickAxisHandler {
+        public void setHandleValue(double value) {
+            DriveSystem.getInstance().driveLeft(-value);
+        }
+    }
     /**
      * Drives Right Side of the Robot
      */
@@ -58,6 +63,12 @@ public class OperatorSystem {
             r = new EncoderPIDRight();
             r.setOutputRange(-0.5, 0.5);
             setDeadBand(0.05);
+        }
+    }
+
+    class IPodDriveRight extends JoystickAxisHandler {
+        public void setHandleValue(double value) {
+            DriveSystem.getInstance().driveRight(-value);
         }
     }
     /**
@@ -159,18 +170,18 @@ public class OperatorSystem {
             if (invert) {
                 ManipulatorSystem.getInstance().setMainLiftBelt(-1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(-0.5);
-                //ManipulatorSystem.getInstance().setOuterBallRollerOn();
+                ManipulatorSystem.getInstance().setOuterBallRollerOn();
             }
             else {
                 ManipulatorSystem.getInstance().setMainLiftBelt(1.0);
                 ManipulatorSystem.getInstance().setIntakeRoller(0.5);
-                //ManipulatorSystem.getInstance().setOuterBallRollerOn();
+                ManipulatorSystem.getInstance().setOuterBallRollerOn();
             }
         }
         public void released(){
             ManipulatorSystem.getInstance().setMainLiftBelt(0.0);
             ManipulatorSystem.getInstance().setIntakeRoller(0.0);
-            //ManipulatorSystem.getInstance().setOuterBallRollerOff();
+            ManipulatorSystem.getInstance().setOuterBallRollerOff();
 
         }
     }
@@ -250,7 +261,8 @@ public class OperatorSystem {
             if (shootspeed <= 0.3) {
                 shootspeed = 0.3;
             }
-            ManipulatorSystem.getInstance().setShooterSpeed((invert?-1:1)*shootspeed);
+            ManipulatorSystem.getInstance().setShooterSpeed(shootspeed);
+            // shooterPid.setRPM(Double.valueOf(10000 * shootspeed).intValue());
             DSLog.log(1, "Shooter Speed: " + String.valueOf(shootspeed));
         }
     }
@@ -267,7 +279,8 @@ public class OperatorSystem {
             if (shootspeed < 0.3) {
                 shootspeed = 0.0;
             }
-            ManipulatorSystem.getInstance().setShooterSpeed((invert?-1:1)*shootspeed);
+            ManipulatorSystem.getInstance().setShooterSpeed(shootspeed);
+            // shooterPid.setRPM(Double.valueOf(10000 * shootspeed).intValue());
             DSLog.log(1, "Shooter Speed: " + String.valueOf(shootspeed));
         }
     }
@@ -324,6 +337,9 @@ public class OperatorSystem {
         public void held()
         {
             switch(printmode)   {
+                case 8:
+                    System.out.println("shooter period: " + ShooterSpin.getInstance().getRPM());
+                    break;
                 case 7:
                 System.out.println("ramp arm undeploy limit: " + RampArm.getInstance().isFullyUndeployed());
                 break;
@@ -387,12 +403,13 @@ public class OperatorSystem {
     private final int JOYSTICK_LEFT_CHANNEL = 1;
     private final int JOYSTICK_RIGHT_CHANNEL = 2;
     private final int XBOX_CHANNEL = 3;
+    private final int IPOD_CHANNEL = 4;
 
     //controllers
     private AttackThree left;
     private AttackThree right;
     private XboxController xbox;
-    
+    private XboxController ipod;
     //stuff
     private boolean raw_tank = true;
     private boolean invert = false;
@@ -401,25 +418,28 @@ public class OperatorSystem {
     private boolean isTargeting = false;
     private int printmode;
     private TurretPid pos;
+    private ShooterPID shooterPid;
 
     public OperatorSystem() {
         right = new AttackThree(JOYSTICK_RIGHT_CHANNEL);
         left  = new AttackThree(JOYSTICK_LEFT_CHANNEL);
         xbox  = new XboxController(XBOX_CHANNEL);
-
         pos = new TurretPid();
+        shooterPid = new ShooterPID();
+        // shooterPid.enable();
 
         right.bindY(new RightAxisY());
         right.bindB2(new ToggleDrive());
         left.bindY(new LeftAxisY());
         right.bindB10(new PrintStuff());
-        //left.bindZ(new TuneTurretD());
-        //right.bindZ(new TuneTurretI());
-
-
+/*
+        ipod = new XboxController(IPOD_CHANNEL);
+        ipod.bindYrot(new IPodDriveRight());
+        ipod.bindY(new IPodDriveLeft());
+*/
         xbox.bindB_A(new LiftBelt());
-        //xbox.bindB_B(new IntakeRollerArmDown()); //Cow Catcher
-        //xbox.bindXbutton(new IntakeRollerArmUp());
+        xbox.bindB_B(new IntakeRollerArmDown()); //Cow Catcher
+        xbox.bindXbutton(new IntakeRollerArmUp());
         xbox.bindB_Y(new ShooterBelts());
         xbox.bindB_L1(new ShooterSpeedDown());
         xbox.bindB_R1(new ShooterSpeedUp());
