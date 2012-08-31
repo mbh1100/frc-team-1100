@@ -31,7 +31,7 @@ public class CameraSystem extends SystemBase
     private int maxBlue = 0;
 
     //Image related
-    AxisCamera ac;
+    AxisCamera ac = null;
     ColorImage cImg;
     BinaryImage bImg;
     ParticleAnalysisReport[] pRep = null;
@@ -39,19 +39,21 @@ public class CameraSystem extends SystemBase
 
     public CameraSystem() 
     {
-        ac = AxisCamera.getInstance();
+        //ac = AxisCamera.getInstance();
         cImg = null;
         bImg = null;
         sleepTime = 200;
         light = new Light(3);
 
         //Camera Settings
-        ac.writeCompression(0);
-        ac.writeBrightness(10);
-        ac.writeExposureControl(AxisCamera.ExposureT.hold);
-        ac.writeRotation(AxisCamera.RotationT.k0);
-        ac.writeResolution(AxisCamera.ResolutionT.k160x120);
-
+        if (ac != null)
+        {
+            ac.writeCompression(0);
+            ac.writeBrightness(10);
+            ac.writeExposureControl(AxisCamera.ExposureT.hold);
+            ac.writeRotation(AxisCamera.RotationT.k0);
+            ac.writeResolution(AxisCamera.ResolutionT.k160x120);
+        }
         setThreshold(GREEN_THRESHOLD);
     }
 
@@ -75,7 +77,7 @@ public class CameraSystem extends SystemBase
         * Gets an image from the camera to find particles within the camera's
         * RGB threshold.
         */
-        if (ac.freshImage())
+        if (ac != null && ac.freshImage())
         {
             try
             {
@@ -99,7 +101,7 @@ public class CameraSystem extends SystemBase
      */
     public void setBrightness(int b)
     {
-        ac.writeBrightness(b);
+        if (ac != null) ac.writeBrightness(b);
     }
 
     /**

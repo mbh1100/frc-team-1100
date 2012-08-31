@@ -98,7 +98,7 @@ public class RobotMain extends SimpleRobot
         Log.defcon3(this, "+-------------------------------------+");
 
         OperatorSystem.getInstance().dsPrint(6, "Autonomous : "+((autonomousWithCamera) ? "" : "NO ") + "CAMERA");
-        CameraSystem.getInstance().start();
+        //CameraSystem.getInstance().start();
     }
     
     public void autonomous()

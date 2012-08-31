@@ -64,7 +64,7 @@ public class ManipulatorSystem extends SystemBase
     public ManipulatorSystem()
     {
         //Lift Constructers
-        liftJaguar = new AdvJaguar(4, 6, true);
+        liftJaguar = new AdvJaguar(1, 6, true);
         
         liftEncoder = new Encoder(8, 9);
         liftEncoder.start();
@@ -78,7 +78,7 @@ public class ManipulatorSystem extends SystemBase
 
 
         //Arm Constructers
-        armJaguar = new AdvJaguar(4, 8, false);
+        armJaguar = new AdvJaguar(1, 8, false);
 
         armEncoder = new Encoder(10, 11);
         armEncoder.start();
@@ -88,8 +88,8 @@ public class ManipulatorSystem extends SystemBase
         
         //armBackLimitSwitch = new DigitalInput(12);
         
-        rollerTop = new AdvJaguar(4, 9, false);
-        rollerBottom = new AdvJaguar(4, 10, false);
+        rollerTop = new AdvJaguar(1, 9, false);
+        rollerBottom = new AdvJaguar(1, 10, false);
 
         //Other
         liftCamPID = new LiftCamPid();
