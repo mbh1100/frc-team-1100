@@ -286,7 +286,7 @@ public class OperatorSystem extends SystemBase
             double rightSpeed = -rightJoystick.getStickY();
             
             DriveSystem.getInstance().setTankSpeed(leftSpeed * getLeftTrim(),
-                                                   rightSpeed* getRightTrim());
+                                                   rightSpeed * getRightTrim());
         }
     }
 

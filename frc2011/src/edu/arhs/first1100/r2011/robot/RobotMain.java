@@ -39,7 +39,6 @@ public class RobotMain extends SimpleRobot
     {        
         //added by Akshay
         Log.addClass(RobotMain.class, 3);
-        Log.addClass(OperatorSystem.class, 4);
         Log.defcon3(this, "Robot Init");
         
         autonomousModeSwitch = new DigitalInput(13);
@@ -51,7 +50,7 @@ public class RobotMain extends SimpleRobot
             //Set Logging Levels
             Log.addClass(MinibotSystem.class, 4);
             Log.addClass(OperatorSystem.class, 4);
-            Log.addClass(ManipulatorSystem.class, 1 );
+            Log.addClass(ManipulatorSystem.class, 4 );
             Log.addClass(DriveSystem.class, 1);
             Log.addClass(AutonomousSystem.class, 1);
             Log.addClass(LineSystem.class, 4);
@@ -118,7 +117,7 @@ public class RobotMain extends SimpleRobot
             DriveSystem.getInstance().start();
             ManipulatorSystem.getInstance().start();
 
-            CameraSystem.getInstance().start();
+            //CameraSystem.getInstance().start();
             LineSystem.getInstance().start();
 
             MinibotSystem.getInstance().start();
@@ -137,7 +136,7 @@ public class RobotMain extends SimpleRobot
             DriveSystem.getInstance().start();
             ManipulatorSystem.getInstance().start();
 
-            CameraSystem.getInstance().start();
+            //CameraSystem.getInstance().start();
             //LineSystem.getInstance().start();
             
             MinibotSystem.getInstance().start();
